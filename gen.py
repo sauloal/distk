@@ -6,6 +6,9 @@ import struct
 import time
 import mmap
 
+DEBUG = True
+DEBUG = False
+
 ALPHA = 'ACGT'
 
 def seconds_to_time(seconds):
@@ -102,7 +105,7 @@ def gen_kmer(kmer_size, verbose=False, block_size=5000000):
 
     file_size  = max_i * 8
 
-    fmt       = "{}Q".format(block_size)
+    fmt       = ">{}Q".format(block_size)
 
     print "file size {:18,d}".format(file_size)
 
@@ -157,7 +160,7 @@ def gen_kmer(kmer_size, verbose=False, block_size=5000000):
                 j += 1
 
         flen = (i % block_size) + 1
-        fmt  = '{:d}Q'.format(flen)
+        fmt  = '>{:d}Q'.format(flen)
         seg  = vals[:flen]
 
         if verbose:
@@ -183,8 +186,11 @@ def read_bin(fhd):
         return None, None
 
     else:
-        num = struct.unpack("Q", val)[0]
+        num = struct.unpack(">Q", val)[0]
         return val, num
+
+def s_to_h(s):
+    return ":".join("{:03d}".format(ord(c)) for c in s)
 
 def read_kmer(kmer_size):
     fn         = 'key_{:02d}.key'.format(kmer_size)
@@ -194,22 +200,26 @@ def read_kmer(kmer_size):
         i        = 1
 
         if val is not None:
-            print "{:18,d} {:35s} {:12,d}".format(i, repr(val), num)
+            print "{:18,d} {:31s} {:12,d}".format(i, s_to_h(val), num)
 
         while val is not None:
             i += 1
             val, num = read_bin(fhd)
             if val is not None:
-                print "{:18,d} {:35s} {:12,d}".format(i, repr(val), num)
+                print "{:18,d} {:31s} {:12,d}".format(i, s_to_h(val), num)
 
 def main():
     verbose   = False
+
+    if DEBUG:
+        verbose = True
 
     kmer_size = int(sys.argv[1])
 
     gen_kmer(kmer_size, verbose=verbose)
     
-    #read_kmer(kmer_size)
+    if DEBUG:
+        read_kmer(kmer_size)
 
 
 if __name__ == '__main__':

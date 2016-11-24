@@ -8,6 +8,12 @@ import mmap
 
 ALPHA = 'ACGT'
 
+def seconds_to_time(seconds):
+    m, s = divmod(seconds, 60)
+    h, m = divmod(m      , 60)
+    t    = "%3d:%02d:%02d" % (h, m, s)
+    return t
+
 def kmer_gen(kmer_size, curr=None, seqs=None, raws=None, vals=None, part=None, verbose=False):
     #print "kmer_gen", kmer_size, curr, seqs, vals, part
 
@@ -16,13 +22,13 @@ def kmer_gen(kmer_size, curr=None, seqs=None, raws=None, vals=None, part=None, v
         curr = 0
 
         if verbose:
-            seqs = [[None] * kmer_size, [None] * kmer_size]
-            raws = [[None] * kmer_size, [None] * kmer_size]
-            vals = [[None] * kmer_size, [None] * kmer_size]
+            seqs = [[None, None] for x in xrange(kmer_size)]
+            raws = [[None, None] for x in xrange(kmer_size)]
+            vals = [[None, None] for x in xrange(kmer_size)]
 
-        part = [[None] * kmer_size, [None] * kmer_size]
+        part = [[None, None] for x in xrange(kmer_size)]
 
-    for ac in (0,1,2,3):
+    for ac in xrange(len(ALPHA)):
         #print "curr {} c {}".format(curr, c),
         ad = 3 - ac
 
@@ -30,18 +36,18 @@ def kmer_gen(kmer_size, curr=None, seqs=None, raws=None, vals=None, part=None, v
             c = ALPHA[ac]
             d = ALPHA[ad]
 
-            seqs[0][ curr                 ] = c
-            seqs[1][ kmer_size - curr - 1 ] = d
+            seqs[ curr                 ][0] = c
+            seqs[ kmer_size - curr - 1 ][1] = d
 
-            raws[0][ curr                 ] = ac
-            raws[1][ kmer_size - curr - 1 ] = ad
+            raws[ curr                 ][0] = ac
+            raws[ kmer_size - curr - 1 ][1] = ad
 
         prev_sum_f    = 0
         prev_sum_r    = 0
 
         if curr > 0:
-            prev_sum_f = part[0][ curr - 1 ]
-            prev_sum_r = part[1][ curr - 1 ]
+            prev_sum_f = part[ curr - 1 ][0]
+            prev_sum_r = part[ curr - 1 ][1]
 
         curr_val_f    = ((4 ** (kmer_size - curr - 1)) * ac)
         curr_sum_f    = prev_sum_f + curr_val_f
@@ -50,11 +56,9 @@ def kmer_gen(kmer_size, curr=None, seqs=None, raws=None, vals=None, part=None, v
         curr_sum_r    = prev_sum_r + curr_val_r
 
         if verbose:
-            vals[0][curr] = curr_val_f
-            vals[1][curr] = curr_val_r
+            vals[curr] = [ curr_val_f, curr_val_r ]
 
-        part[0][curr] = curr_sum_f
-        part[1][curr] = curr_sum_r
+        part[curr] = [ curr_sum_f, curr_sum_r ]
 
         if verbose:
             print " prev_sum_f {} curr_val_f {} curr_sum_f {} prev_sum_r {} curr_val_r {} curr_sum_r {}".format(prev_sum_f, curr_val_f, curr_sum_f, prev_sum_r, curr_val_r, curr_sum_r)
@@ -62,15 +66,15 @@ def kmer_gen(kmer_size, curr=None, seqs=None, raws=None, vals=None, part=None, v
         if curr == kmer_size - 1:
             if verbose:
                 print " curr", curr
-                print " seqs F", " ".join(["{:>12s}".format(e) for e in          seqs[0] ]), "{:>12s}".format("SUM")
-                print " raws F", " ".join(["{:12,d}".format(e) for e in          raws[0] ])
-                print " vals F", " ".join(["{:12,d}".format(e) for e in          vals[0] ])
-                print " part F", " ".join(["{:12,d}".format(e) for e in          part[0] ]), "{:12,d}".format(curr_sum_f)
+                print " seqs F", " ".join(["{:>12s}".format(e[0]) for e in          seqs ]), "{:>12s}".format("SUM")
+                print " raws F", " ".join(["{:12,d}".format(e[0]) for e in          raws ])
+                print " vals F", " ".join(["{:12,d}".format(e[0]) for e in          vals ])
+                print " part F", " ".join(["{:12,d}".format(e[0]) for e in          part ]), "{:12,d}".format(curr_sum_f)
                 print
-                print " seqs R", " ".join(["{:>12s}".format(e) for e in          seqs[1] ]), "{:>12s}".format("SUM")
-                print " raws R", " ".join(["{:12,d}".format(e) for e in          raws[1] ])
-                print " vals R", " ".join(["{:12,d}".format(e) for e in reversed(vals[1])])
-                print " part R", " ".join(["{:12,d}".format(e) for e in reversed(part[1])]), "{:12,d}".format(curr_sum_r)
+                print " seqs R", " ".join(["{:>12s}".format(e[1]) for e in          seqs ]), "{:>12s}".format("SUM")
+                print " raws R", " ".join(["{:12,d}".format(e[1]) for e in          raws ])
+                print " vals R", " ".join(["{:12,d}".format(e[1]) for e in reversed(vals)])
+                print " part R", " ".join(["{:12,d}".format(e[1]) for e in reversed(part)]), "{:12,d}".format(curr_sum_r)
                 print
             yield (curr_sum_f, curr_sum_r)
 
@@ -106,16 +110,19 @@ def gen_kmer(kmer_size, verbose=False, block_size=5000000):
         print "creating buffer"
         sys.stdout.flush()
 
-        fhd.write((max_i*8)*b'\0')
+        #fhd.write((file_size)*b'\0')
+        fhd.seek(file_size-1)
+        fhd.write("\0")
         fhd.seek(0)
         nums         = mmap.mmap(fhd.fileno(), 0, access=mmap.ACCESS_WRITE)
-        #nums        = [None] * block_size
+        vals         = [None] * block_size
 
         print "processing"
         sys.stdout.flush()
 
         j           = 0
         t_prev      = time.time()
+        i_prev      = 0
 
         for i, (f,r) in enumerate(kmer_gen(kmer_size, verbose=verbose)):
             m = f
@@ -133,40 +140,38 @@ def gen_kmer(kmer_size, verbose=False, block_size=5000000):
                 if speed != 0:
                     t_eta  = (max_i - i) / speed
             
-                    print " {:18,d} / {:18,d} ({:6.2f}% ela {:10,.0f} s speed {:12,.0f} k/s eta {:10,.0f} s) J {:12,d} M {:12,d} - F {:12,d} R {:12,d}".format(i+1, max_i, i_perc, t_ela, speed, t_eta, j, m, f, r)
+                    print " {:18,d} / {:18,d} ({:6.2f}% ela {} speed {:12,.0f} k/s eta {}) J {:12,d} M {:12,d} - F {:12,d} R {:12,d}".format(i+1, max_i, i_perc, seconds_to_time(t_ela), speed, seconds_to_time(t_eta), j, m, f, r)
 
-                #if verbose:
-                #    print "block_size", block_size
-                #    print "fmt       ", fmt
-                #    print "seg begin ", nums[   :10]
-                #    print "sef end   ", nums[-10:  ]
-
-                #fhd.write(struct.pack(fmt, *nums))
+                j = ( i_prev * 8 )
+                k = ( i_prev * 8 ) + ( block_size * 8 )
+                #print "j {} k {} l {} b {} f {}".format( j, k, len(nums), block_size, fmt )
+                nums[ j: k ] = struct.pack(fmt, *vals)
+                i_prev = i
 
             if verbose:
                 print " {:18,d} / {:18,d} ({:6.2f}% J {:12,d} M {:12,d} - F {:12,d} R {:12,d}".format(i+1, max_i, i_perc, j, m, f, r)
 
-            #nums[ i % block_size ] = m
-            j = ( i * 8 )
-            k = ( i * 8 ) + 8
-            #print "j {} k {} l {}".format( j, k, len(nums) )
-            nums[ j: k ] = struct.pack('Q', m)
+            vals[ i % block_size ] = m
 
             if f < r:
                 j += 1
 
-        #flen = (i % block_size) + 1
-        #fmt  = '{:d}Q'.format(flen)
-        #seg  = nums[:flen]
+        flen = (i % block_size) + 1
+        fmt  = '{:d}Q'.format(flen)
+        seg  = vals[:flen]
 
-        #if verbose:
-        #    print "block_size", block_size
-        #    print "remaining ", flen
-        #    print "fmt       ", fmt
-        #    print "seg begin ", seg[   :10]
-        #    print "sef end   ", seg[-10:  ]
+        if verbose:
+            print "block_size", block_size
+            print "remaining ", flen
+            print "fmt       ", fmt
+            print "seg begin ", seg[   :10]
+            print "sef end   ", seg[-10:  ]
 
-        #fhd.write( struct.pack( fmt, *seg ) )
+        j = ( i_prev * 8 )
+        k = ( i_prev * 8 ) + ( flen * 8 )
+        #print "j {} k {} l {} b {} f {}".format( j, k, len(nums), flen, fmt ), "seg", seg
+        nums[ j: k ] = struct.pack(fmt, *seg)
+
         nums.flush()
 
     os.rename(fn+'.tmp', fn)
@@ -198,9 +203,12 @@ def read_kmer(kmer_size):
                 print "{:18,d} {:35s} {:12,d}".format(i, repr(val), num)
 
 def main():
-    verbose = False
+    verbose   = False
+
     kmer_size = int(sys.argv[1])
+
     gen_kmer(kmer_size, verbose=verbose)
+    
     #read_kmer(kmer_size)
 
 

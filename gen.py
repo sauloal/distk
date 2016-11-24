@@ -6,10 +6,13 @@ import struct
 import time
 import mmap
 
-DEBUG = True
-DEBUG = False
+DEBUG      = True
+DEBUG      = False
 
-ALPHA = 'ACGT'
+BIN_SIZE   = 8
+
+ALPHA      = 'ACGT'
+BLOCK_SIZE = 5000000
 
 def seconds_to_time(seconds):
     m, s = divmod(seconds, 60)
@@ -85,7 +88,7 @@ def kmer_gen(kmer_size, curr=None, seqs=None, raws=None, vals=None, part=None, v
             for k in kmer_gen(kmer_size, curr=curr+1, seqs=seqs, raws=raws, vals=vals, part=part, verbose=verbose):
                 yield k
 
-def gen_kmer(kmer_size, verbose=False, block_size=5000000):
+def gen_kmer(kmer_size, block_size=BLOCK_SIZE, verbose=False):
     fn         = 'key_{:02d}.key'.format(kmer_size)
 
     print "filename", fn
@@ -97,15 +100,14 @@ def gen_kmer(kmer_size, verbose=False, block_size=5000000):
         os.remove(fn + '.tmp')
 
     max_i      = (4 ** (kmer_size))
+    file_size  = max_i * BIN_SIZE
 
     if max_i < (block_size * 100):
         block_size = max_i / 100
         if block_size == 0:
             block_size = 1
 
-    file_size  = max_i * 8
-
-    fmt       = ">{}Q".format(block_size)
+    fmt        = struct.Struct(">{}Q".format(block_size))
 
     print "file size {:18,d}".format(file_size)
 
@@ -145,10 +147,10 @@ def gen_kmer(kmer_size, verbose=False, block_size=5000000):
             
                     print " {:18,d} / {:18,d} ({:6.2f}% ela {} speed {:12,.0f} k/s eta {}) J {:12,d} M {:12,d} - F {:12,d} R {:12,d}".format(i+1, max_i, i_perc, seconds_to_time(t_ela), speed, seconds_to_time(t_eta), j, m, f, r)
 
-                j = ( i_prev * 8 )
-                k = ( i_prev * 8 ) + ( block_size * 8 )
+                j =     ( i_prev     * BIN_SIZE )
+                k = j + ( block_size * BIN_SIZE )
                 #print "j {} k {} l {} b {} f {}".format( j, k, len(nums), block_size, fmt )
-                nums[ j: k ] = struct.pack(fmt, *vals)
+                nums[ j: k ] = fmt.pack(*vals)
                 i_prev = i
 
             if verbose:
@@ -160,27 +162,27 @@ def gen_kmer(kmer_size, verbose=False, block_size=5000000):
                 j += 1
 
         flen = (i % block_size) + 1
-        fmt  = '>{:d}Q'.format(flen)
+        fmt  = struct.Struct('>{:d}Q'.format(flen))
         seg  = vals[:flen]
 
         if verbose:
             print "block_size", block_size
             print "remaining ", flen
-            print "fmt       ", fmt
+            print "fmt       ", fmt.format
             print "seg begin ", seg[   :10]
             print "sef end   ", seg[-10:  ]
 
-        j = ( i_prev * 8 )
-        k = ( i_prev * 8 ) + ( flen * 8 )
+        j =     ( i_prev * BIN_SIZE )
+        k = j + ( flen   * BIN_SIZE )
         #print "j {} k {} l {} b {} f {}".format( j, k, len(nums), flen, fmt ), "seg", seg
-        nums[ j: k ] = struct.pack(fmt, *seg)
+        nums[ j: k ] = fmt.pack(*seg)
 
         nums.flush()
 
     os.rename(fn+'.tmp', fn)
 
 def read_bin(fhd):
-    val = fhd.read(8)
+    val = fhd.read(BIN_SIZE)
 
     if val == '':
         return None, None
@@ -203,8 +205,9 @@ def read_kmer(kmer_size):
             print "{:18,d} {:31s} {:12,d}".format(i, s_to_h(val), num)
 
         while val is not None:
-            i += 1
-            val, num = read_bin(fhd)
+            i        += 1
+            val, num  = read_bin(fhd)
+
             if val is not None:
                 print "{:18,d} {:31s} {:12,d}".format(i, s_to_h(val), num)
 
@@ -216,7 +219,7 @@ def main():
 
     kmer_size = int(sys.argv[1])
 
-    gen_kmer(kmer_size, verbose=verbose)
+    gen_kmer(kmer_size, block_size=BLOCK_SIZE, verbose=verbose)
     
     if DEBUG:
         read_kmer(kmer_size)

@@ -163,6 +163,8 @@ class kmer_gen(_object):
         this = _kmer_gen.new_kmer_gen(*args)
         try: self.this.append(this)
         except: self.this = this
+    def set_verbosity(self, *args): return _kmer_gen.kmer_gen_set_verbosity(self, *args)
+    def next(self): return _kmer_gen.kmer_gen_next(self)
     __swig_destroy__ = _kmer_gen.delete_kmer_gen
     __del__ = lambda self : None;
 kmer_gen_swigregister = _kmer_gen.kmer_gen_swigregister

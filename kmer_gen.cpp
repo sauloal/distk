@@ -42,6 +42,10 @@ kmer_gen::kmer_gen(int ks) {
 
     kmer_size = ks;
     curr      = 0;
+    verbose   = false;
+    finished  = false;
+
+    acs.resize(kmer_size);
 
     seqs_f.resize(kmer_size);
     seqs_r.resize(kmer_size);
@@ -56,75 +60,144 @@ kmer_gen::kmer_gen(int ks) {
     part_r.resize(kmer_size);
 }
 
-/*
-int kmer_gen(int kmer_size, int curr, seqs=None, raws=None, vals=None, part=None, verbose=False):
-    #print "kmer_gen", kmer_size, curr, seqs, vals, part
+void kmer_gen::set_verbosity(bool v) {
+    verbose = v;
+}
 
-    if curr is None:
-        #print "curr is None\n"
-        curr = 0
 
-        if verbose:
-            seqs = [[None, None] for x in xrange(kmer_size)]
-            raws = [[None, None] for x in xrange(kmer_size)]
-            vals = [[None, None] for x in xrange(kmer_size)]
+//http://stackoverflow.com/questions/10750057/how-to-print-out-the-contents-of-a-vector
+template <typename T>
+std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
+  if ( !v.empty() ) {
+    out << '[';
+    std::copy (v.begin(), v.end(), std::ostream_iterator<T>(out, ", "));
+    out << "\b\b]";
+  }
+  return out;
+}
 
-        part = [[None, None] for x in xrange(kmer_size)]
 
-    for ac in xrange(len(ALPHA)):
-        #print "curr {} c {}".format(curr, c),
-        ad = 3 - ac
+template <typename T>
+std::vector<T> reversed(std::vector<T> v) {
+    std::vector<T> w(v.begin(), v.end());
+    std::reverse(w.begin(),w.end());
+    return w;
+}
 
-        if verbose:
-            c = ALPHA[ac]
-            d = ALPHA[ad]
+long kmer_gen::next() {
+#ifdef DEBUG
+        std::cout << "curr " << curr << std::endl;
+#endif
 
-            seqs[ curr                 ][0] = c
-            seqs[ kmer_size - curr - 1 ][1] = d
+        if ( finished ) {
+#ifdef DEBUG
+            std::cout << "finished" << std::endl;
+#endif
+            return -1;
+        }
 
-            raws[ curr                 ][0] = ac
-            raws[ kmer_size - curr - 1 ][1] = ad
+        int ac = acs[curr];
+        int ad = ALPHA_LEN - ac - 1;
 
-        prev_sum_f    = 0
-        prev_sum_r    = 0
+        if ( ac == ALPHA_LEN ) { //if last char
+#ifdef DEBUG
+            std::cout << "ac == ALPHA_LEN = reset curr pos and goes up" << std::endl;
+#endif
+            acs[curr] = 0;       // reset current position char
+            curr--;              // goes to previous
 
-        if curr > 0:
-            prev_sum_f = part[ curr - 1 ][0]
-            prev_sum_r = part[ curr - 1 ][1]
+            if ( curr == -1 ) {  // if previous is invalid position, quit
+#ifdef DEBUG
+                std::cout << "ac == ALPHA_LEN | curr == -1 = previous is invalid. quitting" << std::endl;
+#endif
+                finished = true;
+                return -1;
+            } else {             // if previous is valid position
+#ifdef DEBUG
+                std::cout << "ac == ALPHA_LEN | curr != -1 = previous is valid. incrementing and iterating" << std::endl;
+#endif
+                acs[curr]++;     //  increment previous
+                return next();   //  run again
+            }
+        }
 
-        curr_val_f    = ((4 ** (kmer_size - curr - 1)) * ac)
-        curr_sum_f    = prev_sum_f + curr_val_f
+        if ( verbose ) {
+            char c = ALPHA[ac];
+            char d = ALPHA[ad];
 
-        curr_val_r    = ((4 ** (            curr    )) * ad)
-        curr_sum_r    = prev_sum_r + curr_val_r
+            seqs_f[ curr                 ] = c;
+            seqs_r[ kmer_size - curr - 1 ] = d;
 
-        if verbose:
-            vals[curr] = [ curr_val_f, curr_val_r ]
+            raws_f[ curr                 ] = ac;
+            raws_r[ kmer_size - curr - 1 ] = ad;
+        }
 
-        part[curr] = [ curr_sum_f, curr_sum_r ]
+        ulong prev_sum_f    = 0;
+        ulong prev_sum_r    = 0;
 
-        if verbose:
-            print " prev_sum_f {} curr_val_f {} curr_sum_f {} prev_sum_r {} curr_val_r {} curr_sum_r {}".format(prev_sum_f, curr_val_f, curr_sum_f, prev_sum_r, curr_val_r, curr_sum_r)
+        if ( curr > 0 ) {
+            prev_sum_f = part_f[ curr - 1 ];
+            prev_sum_r = part_r[ curr - 1 ];
+        }
 
-        if curr == kmer_size - 1:
-            if verbose:
-                print " curr", curr
-                print " seqs F", " ".join(["{:>12s}".format(e[0]) for e in          seqs ]), "{:>12s}".format("SUM")
-                print " raws F", " ".join(["{:12,d}".format(e[0]) for e in          raws ])
-                print " vals F", " ".join(["{:12,d}".format(e[0]) for e in          vals ])
-                print " part F", " ".join(["{:12,d}".format(e[0]) for e in          part ]), "{:12,d}".format(curr_sum_f)
-                print
-                print " seqs R", " ".join(["{:>12s}".format(e[1]) for e in          seqs ]), "{:>12s}".format("SUM")
-                print " raws R", " ".join(["{:12,d}".format(e[1]) for e in          raws ])
-                print " vals R", " ".join(["{:12,d}".format(e[1]) for e in reversed(vals)])
-                print " part R", " ".join(["{:12,d}".format(e[1]) for e in reversed(part)]), "{:12,d}".format(curr_sum_r)
-                print
-            yield (curr_sum_f, curr_sum_r)
+        ulong curr_val_f    = (pow(4, (kmer_size - curr - 1)) * ac);
+        ulong curr_sum_f    = prev_sum_f + curr_val_f;
 
-        else:
-            for k in kmer_gen(kmer_size, curr=curr+1, seqs=seqs, raws=raws, vals=vals, part=part, verbose=verbose):
-                yield k
-*/
+        ulong curr_val_r    = (pow(4, (            curr    )) * ad);
+        ulong curr_sum_r    = prev_sum_r + curr_val_r;
+
+        if ( verbose ) {
+            vals_f[curr] = curr_val_f;
+            vals_r[curr] = curr_val_r;
+        }
+
+        part_f[curr] = curr_sum_f;
+        part_r[curr] = curr_sum_r;
+
+        if ( verbose ) {
+            std::cout << " prev_sum_f " << prev_sum_f << " curr_val_f " << curr_val_f << " curr_sum_f " << curr_sum_f << " prev_sum_r " << prev_sum_r << " curr_val_r " << curr_val_r << " curr_sum_r " << curr_sum_r << std::endl;
+
+            if ( curr == (kmer_size - 1) ) {
+                std::cout << " curr  " << curr                           << std::endl;
+                std::cout << " seqs F" <<          seqs_f  << "SUM"      << std::endl;
+                std::cout << " raws F" <<          raws_f                << std::endl;
+                std::cout << " vals F" <<          vals_f                << std::endl;
+                std::cout << " part F" <<          part_f  << curr_sum_f << std::endl;
+                std::cout                                                << std::endl;
+                std::cout << " seqs R" <<          seqs_r  << "SUM"      << std::endl;
+                std::cout << " raws R" <<          raws_r                << std::endl;
+                std::cout << " vals R" << reversed(vals_r)               << std::endl;
+                std::cout << " part R" << reversed(part_r) << curr_sum_r << std::endl;
+                std::cout << std::endl;
+            }
+        }
+
+        if ( curr == (kmer_size - 1) ) { //last position
+#ifdef DEBUG
+            std::cout << "curr == (kmer_size - 1) = incrementing and returning" << std::endl;
+#endif
+            acs[curr]++;     //  increment current
+
+            if ( curr_sum_f <= curr_sum_r ) {
+#ifdef DEBUG
+                std::cout << "curr == (kmer_size - 1) | curr_sum_f <= curr_sum_r = returning" << std::endl;
+#endif
+                return curr_sum_f;
+            } else {
+#ifdef DEBUG
+                std::cout << "curr == (kmer_size - 1) | curr_sum_r <  curr_sum_f = returning" << std::endl;
+#endif
+                return curr_sum_r;
+            }
+
+        } else {           //not last position
+#ifdef DEBUG
+            std::cout << "curr != (kmer_size - 1) = advancing and iterating" << std::endl;
+#endif
+            curr++;        //advance cursor
+            return next(); //iterate
+        }
+}
 
 
 

@@ -4739,6 +4739,17 @@ SWIG_FromCharPtr(const char *cptr)
   return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
 }
 
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  int r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -7569,6 +7580,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_kmer_gen_set_verbosity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  kmer_gen *arg1 = (kmer_gen *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:kmer_gen_set_verbosity",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kmer_gen, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "kmer_gen_set_verbosity" "', argument " "1"" of type '" "kmer_gen *""'"); 
+  }
+  arg1 = reinterpret_cast< kmer_gen * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "kmer_gen_set_verbosity" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  (arg1)->set_verbosity(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_kmer_gen_next(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  kmer_gen *arg1 = (kmer_gen *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  long result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:kmer_gen_next",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kmer_gen, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "kmer_gen_next" "', argument " "1"" of type '" "kmer_gen *""'"); 
+  }
+  arg1 = reinterpret_cast< kmer_gen * >(argp1);
+  result = (long)(arg1)->next();
+  resultobj = SWIG_From_long(static_cast< long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_kmer_gen(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   kmer_gen *arg1 = (kmer_gen *) 0 ;
@@ -7654,6 +7717,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"fact", _wrap_fact, METH_VARARGS, NULL},
 	 { (char *)"version", _wrap_version, METH_VARARGS, NULL},
 	 { (char *)"new_kmer_gen", _wrap_new_kmer_gen, METH_VARARGS, NULL},
+	 { (char *)"kmer_gen_set_verbosity", _wrap_kmer_gen_set_verbosity, METH_VARARGS, NULL},
+	 { (char *)"kmer_gen_next", _wrap_kmer_gen_next, METH_VARARGS, NULL},
 	 { (char *)"delete_kmer_gen", _wrap_delete_kmer_gen, METH_VARARGS, NULL},
 	 { (char *)"kmer_gen_swigregister", kmer_gen_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

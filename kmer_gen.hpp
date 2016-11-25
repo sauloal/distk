@@ -2,7 +2,11 @@
 #define __H_KMER_GEN__
 
 #include <iostream>
+#include <algorithm>    // std::reverse
+#include <sstream>
+#include <iterator>
 #include <stdint.h>
+#include <math.h>
 #include <vector>
 
 using namespace std;
@@ -17,11 +21,14 @@ typedef unsigned long ulong;
 typedef vector<ulong> vint;
 typedef vector<char>  vcha;
 
-class kmer_gen
-{
+class kmer_gen {
 private:
-    int kmer_size;
-    int curr;
+    int  kmer_size;
+    int  curr;
+    bool verbose;
+    bool finished;
+
+    vint acs;
 
     vcha seqs_f;
     vcha seqs_r;
@@ -36,6 +43,8 @@ private:
     vint part_r;
 public:
     kmer_gen(int ks);
+    void set_verbosity(bool v);
+    long next();
 };
 
 #endif //__H_KMER_GEN__

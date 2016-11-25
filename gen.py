@@ -6,6 +6,14 @@ import struct
 import time
 import mmap
 
+import kmer_gen
+
+print dir(kmer_gen)
+print kmer_gen.fact(3)
+kmer_gen.version()
+kmer_gen.kmer_gen(3)
+exit(0)
+
 DEBUG      = True
 DEBUG      = False
 

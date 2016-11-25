@@ -1,3 +1,5 @@
 *.tmp
 *.key
 *.pyc
+*.swp
+*.o

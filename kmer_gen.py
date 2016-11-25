@@ -173,6 +173,14 @@ cvar = _kmer_gen.cvar
 ALPHA = cvar.ALPHA
 ALPHA_LEN = cvar.ALPHA_LEN
 
+
+def kmer_gen_m(*args):
+  return _kmer_gen.kmer_gen_m(*args)
+kmer_gen_m = _kmer_gen.kmer_gen_m
+
+def kmer_gen_f(*args):
+  return _kmer_gen.kmer_gen_f(*args)
+kmer_gen_f = _kmer_gen.kmer_gen_f
 # This file is compatible with both classic and new-style classes.
 
 

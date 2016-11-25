@@ -1,12 +1,6 @@
 #ifndef __H_KMER_GEN__
 #define __H_KMER_GEN__
 
-#include <iostream>
-#include <algorithm>    // std::reverse
-#include <sstream>
-#include <iterator>
-#include <stdint.h>
-#include <math.h>
 #include <vector>
 
 using namespace std;
@@ -46,5 +40,9 @@ public:
     void set_verbosity(bool v);
     long next();
 };
+
+int kmer_gen_m(int ks);
+
+int kmer_gen_f(int ks);
 
 #endif //__H_KMER_GEN__

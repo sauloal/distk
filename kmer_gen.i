@@ -1,6 +1,7 @@
 %module kmer_gen
 
 %include "std_vector.i"
+%include <std_string.i>
 
 namespace std {
    //%template(vectors) vector<string>;

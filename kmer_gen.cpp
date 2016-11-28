@@ -249,6 +249,7 @@ int kmer_gen_m(int ks) {
     int    fd;
     outint  result;
     outint *map;  /* mmapped array of int's */
+    outint *mapR;  /* mmapped array of int's */
 
     outint  max_i     = pow(4, ks);
     outint  filesize  = max_i * sizeof(outint);
@@ -302,55 +303,37 @@ int kmer_gen_m(int ks) {
     /* Now the file is ready to be mmapped.
      */
     //map = (outint*)mmap(0, filesize, PROT_READ | PROT_WRITE | MAP_HUGETLB | MAP_HUGE_1GB, MAP_SHARED, fd, 0);
-    map = (outint*)mmap(0, filesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    map = (outint*)mmap(0, filesize, PROT_READ | PROT_WRITE | MAP_POPULATE, MAP_SHARED, fd, 0);
     if (map == MAP_FAILED) {
     close(fd);
     perror("Error mmapping the W file");
     exit(EXIT_FAILURE);
     }
+    mapR = (outint*)mmap(0, filesize, PROT_READ, MAP_SHARED, fd, 0);
+    if (mapR == MAP_FAILED) {
+    close(fd);
+    perror("Error mmapping the R file");
+    exit(EXIT_FAILURE);
+    }
 
     /* Now write int's to the file as if it were memory (an array of ints).
      */
-    /*
-    for (i = 1; i <=NUMINTS; ++i) {
-    map[i] = 2 * i;
-    }
-    */
-    /*
-    auto  begin = std::chrono::steady_clock::now();
-    auto  curr  = std::chrono::steady_clock::now();
-    outint ela   = 1;
-    outint eta   = 0;
-    outint speed = 0;
-    */
     ulong     I = 0;
     ulong     J = 0;
-    ulong     K = 0;
     outint    m = 0;
     doubleVal v = kg.next();
     while (v.valid) {
         //std::cout << "I " << I << " J " << J << " FWD " << v.fwd << " REV " << v.rev << std::endl;
 
         if ( v.fwd <= v.rev ) {
-            //mapW[I] = bswap_64(J); //little endian
-            map[I] = J; //little endian
+            map[I] = J;
             J++;
         } else {
-            K = map[v.rev];
-            map[I] = K;
+            map[I] = mapR[v.rev];
         }
 
         if ( (I != 0) && (I % 5000000 == 0) ) {
             progress.print( I );
-            /*
-            curr  = std::chrono::steady_clock::now();
-            ela   = std::chrono::duration_cast<std::chrono::seconds>(curr - begin).count();
-            speed = I / ela;
-            eta   = (max_i - I) / speed;
-            std::cout << "I " << I << " ela " << ela << " speed " << speed << " eta " << eta << std::endl;
-            */
-            //std::cout << "I " << I << " ela " << ela << " speed " << speed << std::endl;
-            //std::cout << "I " << I << " ela " << ela << std::endl;
         }
 
         I++;
@@ -365,6 +348,10 @@ int kmer_gen_m(int ks) {
     perror("Error un-mmapping the W file");
     /* Decide here whether to close(fd) and exit() or not. Depends... */
     }
+    if (munmap(mapR, filesize) == -1) {
+    perror("Error un-mmapping the R file");
+    /* Decide here whether to close(fd) and exit() or not. Depends... */
+    }
 
     /* Un-mmaping doesn't close the file, so we still need to do that.
      */
@@ -372,6 +359,12 @@ int kmer_gen_m(int ks) {
     close(fd);
     return 0;
 }
+
+
+
+
+
+
 
 #include <fstream>
 
@@ -470,3 +463,31 @@ int kmer_gen_f(int ks) {
     close(fd);
     return 0;
 }
+
+
+
+
+
+//http://www.cplusplus.com/reference/valarray/slice/
+#include <cstddef>      // std::size_t
+#include <valarray>     // std::valarray, std::slice
+void extract_kmers(const std::string infile, int kmer_size) {
+    std::ifstream infhd(infile);
+    std::valarray<char> kmer;
+
+    if(infhd.is_open()) {
+        std::string line;
+        //std::valarray<const char *> l;
+
+        while (getline(infhd,line)) {
+            std::cout << "Line: " << line << endl;
+            for (int i = 0; i < line.length(); i++) {
+                auto kmer = line.c_str() + i;
+                std::cout << " KMER: " << kmer << endl;
+            }
+        }
+    } else {
+        perror("Error reading file");
+    }
+}
+

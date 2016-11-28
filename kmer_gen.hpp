@@ -2,6 +2,7 @@
 #define __H_KMER_GEN__
 
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -51,5 +52,7 @@ public:
 int kmer_gen_m(int ks);
 
 int kmer_gen_f(int ks);
+
+void extract_kmers(std::string infile, int kmer_size);
 
 #endif //__H_KMER_GEN__

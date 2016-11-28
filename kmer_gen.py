@@ -205,6 +205,10 @@ kmer_gen_m = _kmer_gen.kmer_gen_m
 def kmer_gen_f(*args):
   return _kmer_gen.kmer_gen_f(*args)
 kmer_gen_f = _kmer_gen.kmer_gen_f
+
+def extract_kmers(*args):
+  return _kmer_gen.extract_kmers(*args)
+extract_kmers = _kmer_gen.extract_kmers
 # This file is compatible with both classic and new-style classes.
 
 

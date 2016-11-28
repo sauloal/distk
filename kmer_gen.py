@@ -153,6 +153,33 @@ fact = _kmer_gen.fact
 def version():
   return _kmer_gen.version()
 version = _kmer_gen.version
+class doubleVal(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, doubleVal, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, doubleVal, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["valid"] = _kmer_gen.doubleVal_valid_set
+    __swig_getmethods__["valid"] = _kmer_gen.doubleVal_valid_get
+    if _newclass:valid = _swig_property(_kmer_gen.doubleVal_valid_get, _kmer_gen.doubleVal_valid_set)
+    __swig_setmethods__["fwd"] = _kmer_gen.doubleVal_fwd_set
+    __swig_getmethods__["fwd"] = _kmer_gen.doubleVal_fwd_get
+    if _newclass:fwd = _swig_property(_kmer_gen.doubleVal_fwd_get, _kmer_gen.doubleVal_fwd_set)
+    __swig_setmethods__["rev"] = _kmer_gen.doubleVal_rev_set
+    __swig_getmethods__["rev"] = _kmer_gen.doubleVal_rev_get
+    if _newclass:rev = _swig_property(_kmer_gen.doubleVal_rev_get, _kmer_gen.doubleVal_rev_set)
+    def __init__(self): 
+        this = _kmer_gen.new_doubleVal()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _kmer_gen.delete_doubleVal
+    __del__ = lambda self : None;
+doubleVal_swigregister = _kmer_gen.doubleVal_swigregister
+doubleVal_swigregister(doubleVal)
+cvar = _kmer_gen.cvar
+ALPHA = cvar.ALPHA
+ALPHA_LEN = cvar.ALPHA_LEN
+
 class kmer_gen(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, kmer_gen, name, value)
@@ -169,9 +196,6 @@ class kmer_gen(_object):
     __del__ = lambda self : None;
 kmer_gen_swigregister = _kmer_gen.kmer_gen_swigregister
 kmer_gen_swigregister(kmer_gen)
-cvar = _kmer_gen.cvar
-ALPHA = cvar.ALPHA
-ALPHA_LEN = cvar.ALPHA_LEN
 
 
 def kmer_gen_m(*args):

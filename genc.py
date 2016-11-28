@@ -41,7 +41,7 @@ def read_bin(fhd):
         return None, None
 
     else:
-        num = struct.unpack(">Q", val)[0]
+        num = struct.unpack("Q", val)[0]
         return val, num
 
 def s_to_h(s):
@@ -55,14 +55,14 @@ def read_kmer(kmer_size):
         i        = 1
 
         if val is not None:
-            print "{:18,d} {:31s} {:12,d}".format(i, s_to_h(val), num)
+            print "{:18,d} {:31s} {:30,d}".format(i, s_to_h(val), num)
 
         while val is not None:
             i        += 1
             val, num  = read_bin(fhd)
 
             if val is not None:
-                print "{:18,d} {:31s} {:12,d}".format(i, s_to_h(val), num)
+                print "{:18,d} {:31s} {:30,d}".format(i, s_to_h(val), num)
 
 def main():
     verbose   = False
@@ -74,7 +74,7 @@ def main():
 
     gen_kmer(kmer_size, verbose=verbose)
     
-    if DEBUG:
+    if DEBUG and kmer_size <= 5:
         read_kmer(kmer_size)
 
 

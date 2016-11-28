@@ -97,16 +97,19 @@ void kmer_gen::set_verbosity(bool v) {
     verbose = v;
 }
 
-long kmer_gen::next() {
+
+doubleVal kmer_gen::next() {
 #ifdef DEBUG
         std::cout << "curr " << curr << std::endl;
 #endif
+
+        doubleVal err = { false, 0, 0 };
 
         if ( finished ) {
 #ifdef DEBUG
             std::cout << "finished" << std::endl;
 #endif
-            return -1;
+            return err;
         }
 
         int ac = acs[curr];
@@ -124,7 +127,7 @@ long kmer_gen::next() {
                 std::cout << "ac == ALPHA_LEN | curr == -1 = previous is invalid. quitting" << std::endl;
 #endif
                 finished = true;
-                return -1;
+                return err;
             } else {             // if previous is valid position
 #ifdef DEBUG
                 std::cout << "ac == ALPHA_LEN | curr != -1 = previous is valid. incrementing and iterating" << std::endl;
@@ -145,19 +148,19 @@ long kmer_gen::next() {
             raws_r[ kmer_size - curr - 1 ] = ad;
         }
 
-        ulong prev_sum_f    = 0;
-        ulong prev_sum_r    = 0;
+        outint prev_sum_f    = 0;
+        outint prev_sum_r    = 0;
 
         if ( curr > 0 ) {
             prev_sum_f = part_f[ curr - 1 ];
             prev_sum_r = part_r[ curr - 1 ];
         }
 
-        ulong curr_val_f    = (pow(4, (kmer_size - curr - 1)) * ac);
-        ulong curr_sum_f    = prev_sum_f + curr_val_f;
+        outint curr_val_f    = (pow(4, (kmer_size - curr - 1)) * ac);
+        outint curr_sum_f    = prev_sum_f + curr_val_f;
 
-        ulong curr_val_r    = (pow(4, (            curr    )) * ad);
-        ulong curr_sum_r    = prev_sum_r + curr_val_r;
+        outint curr_val_r    = (pow(4, (            curr    )) * ad);
+        outint curr_sum_r    = prev_sum_r + curr_val_r;
 
         if ( verbose ) {
             vals_f[curr] = curr_val_f;
@@ -195,12 +198,12 @@ long kmer_gen::next() {
 #ifdef DEBUG
                 std::cout << "curr == (kmer_size - 1) | curr_sum_f <= curr_sum_r = returning" << std::endl;
 #endif
-                return curr_sum_f;
+                return {true, curr_sum_f, curr_sum_r};
             } else {
 #ifdef DEBUG
                 std::cout << "curr == (kmer_size - 1) | curr_sum_r <  curr_sum_f = returning" << std::endl;
 #endif
-                return curr_sum_r;
+                return {true, curr_sum_f, curr_sum_r};
             }
 
         } else {           //not last position
@@ -211,6 +214,10 @@ long kmer_gen::next() {
             return next(); //iterate
         }
 }
+
+
+
+
 
 
 //http://www.linuxquestions.org/questions/programming-9/mmap-tutorial-c-c-511265/
@@ -231,7 +238,7 @@ long kmer_gen::next() {
 */
 
 //http://man7.org/linux/man-pages/man2/mmap.2.html
-#define MAP_HUGE_1GB    (30 << MAP_HUGE_SHIFT)
+//#define MAP_HUGE_1GB    (30 << MAP_HUGE_SHIFT)
 
 #include "progressbar.hpp"
 
@@ -240,11 +247,11 @@ int kmer_gen_m(int ks) {
 
     int    i;
     int    fd;
-    ulong  result;
-    ulong *map;  /* mmapped array of int's */
+    outint  result;
+    outint *map;  /* mmapped array of int's */
 
-    ulong  max_i     = pow(4, ks);
-    ulong  filesize  = max_i * sizeof(ulong);
+    outint  max_i     = pow(4, ks);
+    outint  filesize  = max_i * sizeof(outint);
 
     std::string filepath = "key_";
     filepath += std::to_string(ks);
@@ -294,10 +301,11 @@ int kmer_gen_m(int ks) {
 
     /* Now the file is ready to be mmapped.
      */
-    map = (ulong*)mmap(0, filesize, PROT_READ | PROT_WRITE | MAP_HUGETLB | MAP_HUGE_1GB, MAP_SHARED, fd, 0);
+    //map = (outint*)mmap(0, filesize, PROT_READ | PROT_WRITE | MAP_HUGETLB | MAP_HUGE_1GB, MAP_SHARED, fd, 0);
+    map = (outint*)mmap(0, filesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (map == MAP_FAILED) {
     close(fd);
-    perror("Error mmapping the file");
+    perror("Error mmapping the W file");
     exit(EXIT_FAILURE);
     }
 
@@ -308,24 +316,31 @@ int kmer_gen_m(int ks) {
     map[i] = 2 * i;
     }
     */
-    long m = kg.next();
-    long I = 0;
-
     /*
     auto  begin = std::chrono::steady_clock::now();
     auto  curr  = std::chrono::steady_clock::now();
-    ulong ela   = 1;
-    ulong eta   = 0;
-    ulong speed = 0;
+    outint ela   = 1;
+    outint eta   = 0;
+    outint speed = 0;
     */
-    ulong ela   = 1;
+    ulong     I = 0;
+    ulong     J = 0;
+    ulong     K = 0;
+    outint    m = 0;
+    doubleVal v = kg.next();
+    while (v.valid) {
+        //std::cout << "I " << I << " J " << J << " FWD " << v.fwd << " REV " << v.rev << std::endl;
 
-    while (m != -1) {
-        //std::cout << "I " << I << " M " << m << std::endl;
+        if ( v.fwd <= v.rev ) {
+            //mapW[I] = bswap_64(J); //little endian
+            map[I] = J; //little endian
+            J++;
+        } else {
+            K = map[v.rev];
+            map[I] = K;
+        }
 
-        map[I] = bswap_64(m);
-
-        if ( (I != 0) && (ela !=0) && (I % 5000000 == 0) ) {
+        if ( (I != 0) && (I % 5000000 == 0) ) {
             progress.print( I );
             /*
             curr  = std::chrono::steady_clock::now();
@@ -337,14 +352,17 @@ int kmer_gen_m(int ks) {
             //std::cout << "I " << I << " ela " << ela << " speed " << speed << std::endl;
             //std::cout << "I " << I << " ela " << ela << std::endl;
         }
+
         I++;
-        m = kg.next();
+        v = kg.next();
     }
+
+    std::cout << "MAX I " << I << " MAX J " << J << " LAST VAL " << map[I-1] << std::endl;
 
     /* Don't forget to free the mmapped memory
      */
     if (munmap(map, filesize) == -1) {
-    perror("Error un-mmapping the file");
+    perror("Error un-mmapping the W file");
     /* Decide here whether to close(fd) and exit() or not. Depends... */
     }
 
@@ -360,11 +378,11 @@ int kmer_gen_m(int ks) {
 int kmer_gen_f(int ks) {
     int    i;
     int    fd;
-    ulong  result;
-    ulong *map;  /* mmapped array of int's */
+    outint  result;
+    outint *map;  /* mmapped array of int's */
 
-    ulong  max_i     = pow(4, ks);
-    ulong  filesize  = max_i * sizeof(ulong);
+    outint  max_i     = pow(4, ks);
+    outint  filesize  = max_i * sizeof(outint);
 
     std::string filepath = "key_";
     filepath += std::to_string(ks);
@@ -426,11 +444,18 @@ int kmer_gen_f(int ks) {
 
     kmer_gen kg(ks);
 
-    long m = kg.next();
-    long I = 0;
+    doubleVal m = kg.next();
+    outint    o = 0;
+    ulong     I = 0;
 
-    while (m != -1) {
-        myFile.write((char*)reinterpret_cast<const char *>(&m), sizeof(m));
+    while (m.valid) {
+        if ( m.fwd <= m.rev ) {
+            o = m.fwd;
+        } else {
+            o = m.rev;
+        }
+
+        myFile.write((char*)reinterpret_cast<const char *>(&o), sizeof(o));
 
         if ( (I != 0) && (I % 5000000 == 0) ) {
             progress.print( I );

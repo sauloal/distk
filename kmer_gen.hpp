@@ -11,9 +11,16 @@ void version ();
 const char ALPHA[]   = "ACGT";
 const int  ALPHA_LEN = 4;
 
-typedef unsigned long ulong;
-typedef vector<ulong> vint;
-typedef vector<char>  vcha;
+typedef unsigned long  ulong;
+typedef ulong          outint;
+typedef vector<outint> vint;
+typedef vector<char>   vcha;
+
+struct doubleVal {
+    bool   valid;
+    outint fwd;
+    outint rev;
+};
 
 class kmer_gen {
 private:
@@ -37,8 +44,8 @@ private:
     vint part_r;
 public:
     kmer_gen(int ks);
-    void set_verbosity(bool v);
-    long next();
+    void      set_verbosity(bool v);
+    doubleVal next();
 };
 
 int kmer_gen_m(int ks);

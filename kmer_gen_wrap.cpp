@@ -2940,19 +2940,20 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_allocator_type swig_types[0]
 #define SWIGTYPE_p_char swig_types[1]
 #define SWIGTYPE_p_difference_type swig_types[2]
-#define SWIGTYPE_p_kmer_gen swig_types[3]
-#define SWIGTYPE_p_p_PyObject swig_types[4]
-#define SWIGTYPE_p_size_type swig_types[5]
-#define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[6]
-#define SWIGTYPE_p_std__invalid_argument swig_types[7]
-#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[8]
-#define SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t swig_types[9]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[10]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[11]
-#define SWIGTYPE_p_unsigned_long swig_types[12]
-#define SWIGTYPE_p_value_type swig_types[13]
-static swig_type_info *swig_types[15];
-static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
+#define SWIGTYPE_p_doubleVal swig_types[3]
+#define SWIGTYPE_p_kmer_gen swig_types[4]
+#define SWIGTYPE_p_p_PyObject swig_types[5]
+#define SWIGTYPE_p_size_type swig_types[6]
+#define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[7]
+#define SWIGTYPE_p_std__invalid_argument swig_types[8]
+#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[9]
+#define SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t swig_types[10]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[11]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[12]
+#define SWIGTYPE_p_unsigned_long swig_types[13]
+#define SWIGTYPE_p_value_type swig_types[14]
+static swig_type_info *swig_types[16];
+static swig_module_info swig_module = {swig_types, 15, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -7558,6 +7559,203 @@ SWIGINTERN PyObject *Swig_var_ALPHA_LEN_get(void) {
 }
 
 
+SWIGINTERN PyObject *_wrap_doubleVal_valid_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  doubleVal *arg1 = (doubleVal *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:doubleVal_valid_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_doubleVal, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "doubleVal_valid_set" "', argument " "1"" of type '" "doubleVal *""'"); 
+  }
+  arg1 = reinterpret_cast< doubleVal * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "doubleVal_valid_set" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  if (arg1) (arg1)->valid = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_doubleVal_valid_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  doubleVal *arg1 = (doubleVal *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:doubleVal_valid_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_doubleVal, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "doubleVal_valid_get" "', argument " "1"" of type '" "doubleVal *""'"); 
+  }
+  arg1 = reinterpret_cast< doubleVal * >(argp1);
+  result = (bool) ((arg1)->valid);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_doubleVal_fwd_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  doubleVal *arg1 = (doubleVal *) 0 ;
+  outint arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:doubleVal_fwd_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_doubleVal, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "doubleVal_fwd_set" "', argument " "1"" of type '" "doubleVal *""'"); 
+  }
+  arg1 = reinterpret_cast< doubleVal * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "doubleVal_fwd_set" "', argument " "2"" of type '" "outint""'");
+  } 
+  arg2 = static_cast< outint >(val2);
+  if (arg1) (arg1)->fwd = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_doubleVal_fwd_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  doubleVal *arg1 = (doubleVal *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  outint result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:doubleVal_fwd_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_doubleVal, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "doubleVal_fwd_get" "', argument " "1"" of type '" "doubleVal *""'"); 
+  }
+  arg1 = reinterpret_cast< doubleVal * >(argp1);
+  result = (outint) ((arg1)->fwd);
+  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_doubleVal_rev_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  doubleVal *arg1 = (doubleVal *) 0 ;
+  outint arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:doubleVal_rev_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_doubleVal, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "doubleVal_rev_set" "', argument " "1"" of type '" "doubleVal *""'"); 
+  }
+  arg1 = reinterpret_cast< doubleVal * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "doubleVal_rev_set" "', argument " "2"" of type '" "outint""'");
+  } 
+  arg2 = static_cast< outint >(val2);
+  if (arg1) (arg1)->rev = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_doubleVal_rev_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  doubleVal *arg1 = (doubleVal *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  outint result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:doubleVal_rev_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_doubleVal, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "doubleVal_rev_get" "', argument " "1"" of type '" "doubleVal *""'"); 
+  }
+  arg1 = reinterpret_cast< doubleVal * >(argp1);
+  result = (outint) ((arg1)->rev);
+  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_doubleVal(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  doubleVal *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_doubleVal")) SWIG_fail;
+  result = (doubleVal *)new doubleVal();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_doubleVal, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_doubleVal(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  doubleVal *arg1 = (doubleVal *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_doubleVal",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_doubleVal, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_doubleVal" "', argument " "1"" of type '" "doubleVal *""'"); 
+  }
+  arg1 = reinterpret_cast< doubleVal * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *doubleVal_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_doubleVal, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_kmer_gen(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
@@ -7616,7 +7814,7 @@ SWIGINTERN PyObject *_wrap_kmer_gen_next(PyObject *SWIGUNUSEDPARM(self), PyObjec
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  long result;
+  doubleVal result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:kmer_gen_next",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kmer_gen, 0 |  0 );
@@ -7624,8 +7822,8 @@ SWIGINTERN PyObject *_wrap_kmer_gen_next(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "kmer_gen_next" "', argument " "1"" of type '" "kmer_gen *""'"); 
   }
   arg1 = reinterpret_cast< kmer_gen * >(argp1);
-  result = (long)(arg1)->next();
-  resultobj = SWIG_From_long(static_cast< long >(result));
+  result = (arg1)->next();
+  resultobj = SWIG_NewPointerObj((new doubleVal(static_cast< const doubleVal& >(result))), SWIGTYPE_p_doubleVal, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7760,6 +7958,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"vectori_swigregister", vectori_swigregister, METH_VARARGS, NULL},
 	 { (char *)"fact", _wrap_fact, METH_VARARGS, NULL},
 	 { (char *)"version", _wrap_version, METH_VARARGS, NULL},
+	 { (char *)"doubleVal_valid_set", _wrap_doubleVal_valid_set, METH_VARARGS, NULL},
+	 { (char *)"doubleVal_valid_get", _wrap_doubleVal_valid_get, METH_VARARGS, NULL},
+	 { (char *)"doubleVal_fwd_set", _wrap_doubleVal_fwd_set, METH_VARARGS, NULL},
+	 { (char *)"doubleVal_fwd_get", _wrap_doubleVal_fwd_get, METH_VARARGS, NULL},
+	 { (char *)"doubleVal_rev_set", _wrap_doubleVal_rev_set, METH_VARARGS, NULL},
+	 { (char *)"doubleVal_rev_get", _wrap_doubleVal_rev_get, METH_VARARGS, NULL},
+	 { (char *)"new_doubleVal", _wrap_new_doubleVal, METH_VARARGS, NULL},
+	 { (char *)"delete_doubleVal", _wrap_delete_doubleVal, METH_VARARGS, NULL},
+	 { (char *)"doubleVal_swigregister", doubleVal_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_kmer_gen", _wrap_new_kmer_gen, METH_VARARGS, NULL},
 	 { (char *)"kmer_gen_set_verbosity", _wrap_kmer_gen_set_verbosity, METH_VARARGS, NULL},
 	 { (char *)"kmer_gen_next", _wrap_kmer_gen_next, METH_VARARGS, NULL},
@@ -7776,6 +7983,7 @@ static PyMethodDef SwigMethods[] = {
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_doubleVal = {"_p_doubleVal", "doubleVal *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_kmer_gen = {"_p_kmer_gen", "kmer_gen *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
@@ -7785,13 +7993,14 @@ static swig_type_info _swigt__p_std__vectorT__Tp__Alloc_t = {"_p_std__vectorT__T
 static swig_type_info _swigt__p_std__vectorT_char_std__allocatorT_char_t_t = {"_p_std__vectorT_char_std__allocatorT_char_t_t", "std::vector< char,std::allocator< char > > *|vcha *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t = {"_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t", "std::vector< unsigned long,std::allocator< unsigned long > > *|std::vector< unsigned long > *|vint *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "ulong *|unsigned long *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "ulong *|unsigned long *|outint *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_allocator_type,
   &_swigt__p_char,
   &_swigt__p_difference_type,
+  &_swigt__p_doubleVal,
   &_swigt__p_kmer_gen,
   &_swigt__p_p_PyObject,
   &_swigt__p_size_type,
@@ -7808,6 +8017,7 @@ static swig_type_info *swig_type_initial[] = {
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_doubleVal[] = {  {&_swigt__p_doubleVal, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_kmer_gen[] = {  {&_swigt__p_kmer_gen, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
@@ -7824,6 +8034,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_allocator_type,
   _swigc__p_char,
   _swigc__p_difference_type,
+  _swigc__p_doubleVal,
   _swigc__p_kmer_gen,
   _swigc__p_p_PyObject,
   _swigc__p_size_type,

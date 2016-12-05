@@ -58,6 +58,33 @@ std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
   return out;
 }
 
+#include <valarray>     // std::valarray, std::slice
+//template <typename T>
+std::ostream& operator<< (std::ostream& out, const std::valarray<char>& v) {
+  if ( v.size() != 0 ) {
+    out << '[';
+    std::copy (std::begin(v), std::end(v), std::ostream_iterator<char>(out, ", "));
+    out << "\b\b]";
+  }
+  return out;
+}
+std::ostream& operator<< (std::ostream& out, const std::valarray<int>& v) {
+  if ( v.size() != 0 ) {
+    out << '[';
+    std::copy (std::begin(v), std::end(v), std::ostream_iterator<int>(out, ", "));
+    out << "\b\b]";
+  }
+  return out;
+}
+std::ostream& operator<< (std::ostream& out, const std::valarray<outint>& v) {
+  if ( v.size() != 0 ) {
+    out << '[';
+    std::copy (std::begin(v), std::end(v), std::ostream_iterator<outint>(out, ", "));
+    out << "\b\b]";
+  }
+  return out;
+}
+
 
 template <typename T>
 std::vector<T> reversed(std::vector<T> v) {
@@ -240,16 +267,39 @@ doubleVal kmer_gen::next() {
 //http://man7.org/linux/man-pages/man2/mmap.2.html
 //#define MAP_HUGE_1GB    (30 << MAP_HUGE_SHIFT)
 
+
+#ifndef _PRINT_PROGRESS_EVERY_
+#define _PRINT_PROGRESS_EVERY_ 5000000
+#endif
+
+//#define _REGULAR_FLUSH_
+
+#ifndef _FLUSH_MMAP_EVERY_
+#ifndef DEBUG
+#define _FLUSH_MMAP_EVERY_ 100000000
+#else
+#define _FLUSH_MMAP_EVERY_ 1000000
+#endif
+#endif
+
+#define _MMAP_W_OPTS_ PROT_READ | PROT_WRITE | O_DIRECT | MAP_GROWSDOWN | MAP_HUGETLB | MAP_POPULATE
+
+
 #include "progressbar.hpp"
 
 int kmer_gen_m(int ks) {
+#ifdef DEBUG
+    std::cout << "DEBUG MODE" << std::endl;
+#endif
+
     kmer_gen kg(ks);
 
-    int    i;
-    int    fd;
+    int     i;
+    int     fd;
+    int     fdR;
     outint  result;
     outint *map;  /* mmapped array of int's */
-    outint *mapR;  /* mmapped array of int's */
+    outint *mapR; /* mmapped array of int's */
 
     outint  max_i     = pow(4, ks);
     outint  filesize  = max_i * sizeof(outint);
@@ -258,7 +308,9 @@ int kmer_gen_m(int ks) {
     filepath += std::to_string(ks);
     filepath += ".key";
 
-    std::cout << "filename " << filepath << " size " << filesize << " max_i " << max_i << std::endl;
+    long pagesize = sysconf(_SC_PAGE_SIZE);
+
+    std::cout << "filename " << filepath << " size " << filesize << " max_i " << max_i << " page size " << pagesize << std::endl;
 
     progressBar progress("filepath", 0, max_i);
 
@@ -271,6 +323,12 @@ int kmer_gen_m(int ks) {
     fd = open(filepath.c_str(), O_RDWR | O_CREAT | O_TRUNC, (mode_t)0600);
     if (fd == -1) {
     perror("Error opening file for writing");
+    exit(EXIT_FAILURE);
+    }
+
+    fdR = open(filepath.c_str(), O_RDONLY, (mode_t)0600);
+    if (fdR == -1) {
+    perror("Error opening file R for writing");
     exit(EXIT_FAILURE);
     }
 
@@ -300,18 +358,19 @@ int kmer_gen_m(int ks) {
     exit(EXIT_FAILURE);
     }
 
+
     /* Now the file is ready to be mmapped.
      */
-    //map = (outint*)mmap(0, filesize, PROT_READ | PROT_WRITE | MAP_HUGETLB | MAP_HUGE_1GB, MAP_SHARED, fd, 0);
-    map = (outint*)mmap(0, filesize, PROT_READ | PROT_WRITE | MAP_POPULATE, MAP_SHARED, fd, 0);
+    //map = (outint*)mmap(0, filesize, PROT_READ | PROT_WRITE | MAP_POPULATE | MAP_HUGETLB | MAP_HUGE_1GB, MAP_SHARED, fd, 0);
+    map = (outint*)mmap(0, filesize, _MMAP_W_OPTS_ | O_TRUNC, MAP_SHARED, fd, 0);
     if (map == MAP_FAILED) {
     close(fd);
     perror("Error mmapping the W file");
     exit(EXIT_FAILURE);
     }
-    mapR = (outint*)mmap(0, filesize, PROT_READ, MAP_SHARED, fd, 0);
+    mapR = (outint*)mmap(0, filesize, PROT_READ, MAP_SHARED, fdR, 0);
     if (mapR == MAP_FAILED) {
-    close(fd);
+    close(fdR);
     perror("Error mmapping the R file");
     exit(EXIT_FAILURE);
     }
@@ -332,15 +391,73 @@ int kmer_gen_m(int ks) {
             map[I] = mapR[v.rev];
         }
 
-        if ( (I != 0) && (I % 5000000 == 0) ) {
+        if ( ( I != 0 ) && ( I % _PRINT_PROGRESS_EVERY_ == 0 ) ) {
             progress.print( I );
         }
+
+#ifdef _REGULAR_FLUSH_
+        if ( ( I != 0 ) && ( I %  _FLUSH_MMAP_EVERY_ == 0) ) {
+#ifdef DEBUG
+            std::cout << "FLUSHING" << std::endl;
+#endif
+
+            msync(map, filesize, MS_SYNC);
+            if (munmap(map, filesize) == -1) {
+            perror("Error un-mmapping the W file");
+            /* Decide here whether to close(fd) and exit() or not. Depends... */
+            }
+
+            close(fd);
+
+            fd = open(filepath.c_str(), O_RDWR | O_DIRECT, (mode_t)0600);
+            if (fd == -1) {
+            perror("Error opening file for writing");
+            exit(EXIT_FAILURE);
+            }
+
+            map = (outint*)mmap(0, filesize, _MMAP_W_OPTS_, MAP_SHARED, fd, 0);
+            if (map == MAP_FAILED) {
+            close(fd);
+            perror("Error mmapping the W file");
+            exit(EXIT_FAILURE);
+            }
+
+
+
+            //msync(mapR, filesize, MS_SYNC);
+            //if (munmap(mapR, filesize) == -1) {
+            //perror("Error un-mmapping the R file");
+            /* Decide here whether to close(fd) and exit() or not. Depends... */
+            //}
+
+            /*
+            close(fdR);
+
+            fdR = open(filepath.c_str(), O_RDONLY, (mode_t)0600);
+            if (fdR == -1) {
+            perror("Error opening file R for writing");
+            exit(EXIT_FAILURE);
+            }
+
+            mapR = (outint*)mmap(0, filesize, PROT_READ, MAP_SHARED, fdR, 0);
+            if (mapR == MAP_FAILED) {
+            close(fdR);
+            perror("Error mmapping the R file");
+            exit(EXIT_FAILURE);
+            */
+            }
+
+#ifdef DEBUG
+            std::cout << "FLUSHED" << std::endl;
+#endif
+        }
+#endif
 
         I++;
         v = kg.next();
     }
 
-    std::cout << "MAX I " << I << " MAX J " << J << " LAST VAL " << map[I-1] << std::endl;
+    std::cout << "MAX I " << I << " MAX J " << J << " LAST VAL " << mapR[I-1] << std::endl;
 
     /* Don't forget to free the mmapped memory
      */
@@ -355,10 +472,19 @@ int kmer_gen_m(int ks) {
 
     /* Un-mmaping doesn't close the file, so we still need to do that.
      */
+#ifdef DEBUG
     std::cout << "CLOSING" << std::endl;
+#endif
     close(fd);
+    close(fdR);
     return 0;
 }
+
+
+
+
+
+
 
 
 
@@ -468,10 +594,48 @@ int kmer_gen_f(int ks) {
 
 
 
+
+
+
+
+
+typedef std::valarray<char>   charValArr;
+typedef std::valarray<outint> oIntValArr;
+typedef std::valarray<int>    intValArr;
+
+//http://en.cppreference.com/w/cpp/numeric/valarray/apply
+//http://en.cppreference.com/w/cpp/algorithm/for_each
+struct KmerSum
+{
+    KmerSum(oIntValArr &vals): sum{0} { }
+    void operator()(int n) { sum += n; pos += 1; }
+    int sum;
+    int pos;
+};
+
+
 //http://www.cplusplus.com/reference/valarray/slice/
 #include <cstddef>      // std::size_t
 #include <valarray>     // std::valarray, std::slice
 void extract_kmers(const std::string infile, int kmer_size) {
+    char dict[256];
+
+    for ( int i = 0; i < 256; i++ ) {
+        dict[i] = 127;
+    }
+
+    dict['a'] = 0;
+    dict['A'] = 0;
+
+    dict['c'] = 1;
+    dict['C'] = 1;
+
+    dict['g'] = 2;
+    dict['G'] = 2;
+
+    dict['t'] = 3;
+    dict['T'] = 3;
+
     std::ifstream infhd(infile);
     std::valarray<char> kmer;
 
@@ -481,9 +645,62 @@ void extract_kmers(const std::string infile, int kmer_size) {
 
         while (getline(infhd,line)) {
             std::cout << "Line: " << line << endl;
-            for (int i = 0; i < line.length(); i++) {
-                auto kmer = line.c_str() + i;
-                std::cout << " KMER: " << kmer << endl;
+            if ( line.length() >= kmer_size ) {
+                auto lc     = charValArr(line.c_str(), line.length());
+                auto vals   = oIntValArr(              line.length());
+                auto valids = intValArr(               line.length());
+
+                ulong ll = line.length();
+
+                for (ulong i = 0; i < ll; i++) {
+                    const char n = lc[i];
+                    char  v      = dict[n];
+
+                    vals[i]      = v;
+#ifdef DEBUG
+                    std::cout << "i " << i << " n " << n << " v " << v << "(" << ((int)v) << ")" << std::endl;
+#endif
+                    if (((int)v) == 127) {
+#ifdef DEBUG
+                        std::cout << "BAD" << std::endl;
+#endif
+
+                        long js = (long)i - kmer_size + 1;
+                        long je = (long)i + 1;
+
+                        if ( js < 0  ) { js =  0; }
+                        if ( je > ll ) { js = ll; }
+
+#ifdef DEBUG
+                        std::cout << "js " << js << " je " << je << std::endl;
+#endif
+
+                        for ( long j = js; j < je; j++ ) {
+                            valids[j] = 1;
+#ifdef DEBUG
+                            std::cout << "js " << js << " je " << je << " j " << j << valids << std::endl;
+#endif
+                        }
+                    }
+                }
+
+                std::cout << " SEQ   : " << lc     << endl;
+                std::cout << " VALS  : " << vals   << endl;
+                std::cout << " VALIDS: " << valids << endl;
+
+                for (ulong i = 0; i < (line.length() - kmer_size - 1); i++) {
+                    auto kmer = lc[    std::slice(i, kmer_size, 1)];
+                    auto kval = vals[  std::slice(i, kmer_size, 1)];
+                    bool val  = valids[i];
+
+                    if ( val == 0 ) {
+                        std::cout << " I: "    << i;
+                        std::cout << " KMER: " << kmer;
+                        std::cout << " VALS: " << kval << endl;
+
+                        //auto res = kmer.apply(KmerSum(kval));
+                    }
+                }
             }
         }
     } else {

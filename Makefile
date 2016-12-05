@@ -4,8 +4,16 @@ KMER_GEN_VERSION=$(shell git rev-parse HEAD)
 COMP_DATE=$(shell date)
 
 CPP_INCL=-I/usr/include/python2.7
-CPP_OPTS=-fPIC -O3 -std=c++11
+CPP_OPTS=-fPIC -std=c++11
 CPP_VARS=-D__KMER_GEN_VERSION__="$(KMER_GEN_VERSION)" -D__DATE__="$(COMP_DATE)"
+
+ifeq ($(DEBUG),)
+#no debug
+CPP_OPTS+=-O3
+else
+#debug
+CPP_OPTS+=-O0 -g -DDEBUG
+endif
 
 CPP=g++
 

@@ -1,9 +1,9 @@
-BASE=kmer_gen
+BASE=kmer_tree
 
 KMER_GEN_VERSION=$(shell git rev-parse HEAD)
 COMP_DATE=$(shell date)
 
-CPP_INCL=-I/usr/include/python2.7
+CPP_INCL=-I/usr/include/python2.7 -Itree-3.1/src/
 CPP_OPTS=-fPIC -std=c++11
 CPP_VARS=-D__KMER_GEN_VERSION__="$(KMER_GEN_VERSION)" -D__DATE__="$(COMP_DATE)"
 

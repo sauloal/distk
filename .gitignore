@@ -3,6 +3,7 @@
 *.pyc
 *.swp
 *.o
+*.tar.gz
 .nfs*
 core
 rand1.data

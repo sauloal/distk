@@ -23,6 +23,10 @@
 */
 
 
+#ifdef __TREE_SIMPLE__
+#include "simple_tree.hpp"
+#else
+
 #ifndef tree_hh_
 #define tree_hh_
 
@@ -2950,6 +2954,7 @@ typename tree<T, tree_node_allocator>::leaf_iterator& tree<T, tree_node_allocato
    return (*this);
    }
 
+#endif //__TREE_SIMPLE__
 #endif
 
 // Local variables:

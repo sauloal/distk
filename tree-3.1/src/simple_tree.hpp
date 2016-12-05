@@ -7,7 +7,7 @@
 //# removed a lot of member functions from tree and iterators
 //# changed set_head() to set_root()
 //# added root() member function
-//# added reparent_roo() member function
+//# added reparent_root() member function
 //# changed implementation of operator = ()
 //# changed some member functions about getting iterators
 //# tested all member functions
@@ -32,6 +32,7 @@ available.
 #ifndef tree_hh_
 #define tree_hh_
 
+#include <cstddef>
 #include <cassert>
 #include <memory>
 #include <stdexcept>

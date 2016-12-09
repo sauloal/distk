@@ -1,4 +1,4 @@
-%module kmer_tree
+%module kmer_set
 %include "std_vector.i"
 %include <std_string.i>
 namespace std {
@@ -7,7 +7,7 @@ namespace std {
    %template(vectori) vector<long unsigned int>;
 };
 %{
-#include "kmer_tree.hpp"
+#include "kmer_set.hpp"
 %}
-%include "kmer_tree.hpp"
+%include "kmer_set.hpp"
 //int fact(int n);

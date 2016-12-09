@@ -1,4 +1,4 @@
-BASE=kmer_tree
+BASE=kmer_set
 
 KMER_GEN_VERSION=$(shell git rev-parse HEAD)
 COMP_DATE=$(shell date)

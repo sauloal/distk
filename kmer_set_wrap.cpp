@@ -2962,16 +2962,16 @@ static swig_module_info swig_module = {swig_types, 11, 0, 0, 0, 0};
 #endif
 
 /*-----------------------------------------------
-              @(target):= _kmer_tree.so
+              @(target):= _kmer_set.so
   ------------------------------------------------*/
 #if PY_VERSION_HEX >= 0x03000000
-#  define SWIG_init    PyInit__kmer_tree
+#  define SWIG_init    PyInit__kmer_set
 
 #else
-#  define SWIG_init    init_kmer_tree
+#  define SWIG_init    init_kmer_set
 
 #endif
-#define SWIG_name    "_kmer_tree"
+#define SWIG_name    "_kmer_set"
 
 #define SWIGVERSION 0x020011 
 #define SWIG_VERSION SWIGVERSION
@@ -4663,7 +4663,7 @@ SWIGINTERN void std_vector_Sl_unsigned_SS_long_Sg__append(std::vector< unsigned 
       self->push_back(x);
     }
 
-#include "kmer_tree.hpp"
+#include "kmer_set.hpp"
 
 
 #include <limits.h>

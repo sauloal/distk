@@ -140,53 +140,68 @@ template<class T> using max_set  = std::set<T, std::greater<T> >;
 template<class T> using min_set  = std::set<T, std::less<T> >;
 
 void extract_kmers(const std::string infile, int kmer_size) {
-    char dict[256];
+    int dictF[256];
 
     for ( int i = 0; i < 256; i++ ) {
-        dict[i] = 127;
+        dictF[i] = 127;
     }
 
-    dict['a'] = 0;
-    dict['A'] = 0;
-    dict['c'] = 1;
-    dict['C'] = 1;
-    dict['g'] = 2;
-    dict['G'] = 2;
-    dict['t'] = 3;
-    dict['T'] = 3;
+    dictF['a'] = 0;
+    dictF['A'] = 0;
+    dictF['c'] = 1;
+    dictF['C'] = 1;
+    dictF['g'] = 2;
+    dictF['G'] = 2;
+    dictF['t'] = 3;
+    dictF['T'] = 3;
 
     std::ifstream infhd(infile);
     std::valarray<char> kmer;
     min_set<ulong>  q;
 
+    ulong pows[32] = {};
+
+    for ( int pos = 0; pos < kmer_size; pos++ ) {
+        ulong ind = (kmer_size-pos-1);
+        pows[pos] = std::pow(4, ind);
+    }
+
+
     if(infhd.is_open()) {
         std::string line;
         //std::valarray<const char *> l;
         while (getline(infhd,line)) {
+
 #ifdef _DEBUG_
             std::cout << "Line: " << line << endl;
 #endif
-            if ( line.length() >= kmer_size ) {
-                charValArr lc     = charValArr(line.c_str(), line.length());
-                oIntValArr vals   = oIntValArr(              line.length());
-                intValArr  valids = intValArr(               line.length());
-                ulong ll = line.length();
 
+            if ( line.length() >= kmer_size ) {
+                ulong      ll    = line.length();
+
+                charValArr charF = charValArr(line.c_str(), ll);
+                oIntValArr intsF = oIntValArr(              ll);
+                intValArr  valsF = intValArr(               ll);
+
+                char c;
+                int  vF;
                 for (ulong i = 0; i < ll; i++) {
-                    const char n = lc[i];
-                    char  v      = dict[n];
-                    vals[i]      = v;
+                    c        = charF[i];
+                    vF       = dictF[c];
+                    intsF[i] = vF;
 
 #ifdef _DEBUG_
-                    std::cout << "i " << i << " n " << n << " v " << v << "(" << ((int)v) << ")" << std::endl;
+                    std::cout << "i " << i << " c " << c << " vF " << vF << "(" << vF << ")" << std::endl;
 #endif
 
-                    if (((int)v) == 127) {
+                    ulong js;
+                    ulong je;
+                    if ( vF == 127 ) {
 #ifdef _DEBUG_
                         std::cout << "BAD" << std::endl;
 #endif
-                        long js = (long)i - kmer_size + 1;
-                        long je = (long)i + 1;
+                        js = i - kmer_size + 1;
+                        je = i             + 1;
 
                         if ( js < 0  ) { js =  0; }
                         if ( je > ll ) { js = ll; }
@@ -194,47 +209,105 @@ void extract_kmers(const std::string infile, int kmer_size) {
                         std::cout << "js " << js << " je " << je << std::endl;
 #endif
 
-                        for ( long j = js; j < je; j++ ) {
-                            valids[j] = 1;
+                        for ( ulong j = js; j < je; j++ ) {
+                            valsF[j] = 1;
 #ifdef _DEBUG_
-                            std::cout << "js " << js << " je " << je << " j " << j << valids << std::endl;
+                            std::cout << "js " << js << " je " << je << " j " << j << valsF << std::endl;
 #endif
                         }
                     }
                 }
 
+/*
 #ifdef _DEBUG_
-                std::cout << " SEQ   : " << lc     << endl;
-                std::cout << " VALS  : " << vals   << endl;
-                std::cout << " VALIDS: " << valids << endl;
+                std::cout << " SEQ   : " << charF << endl;
+                std::cout << " INTS  : " << intsF << endl;
+                std::cout << " VALIDS: " << valsF << endl;
 #endif
+*/
 
-                for (ulong i = 0; i < (line.length() - kmer_size - 1); i++) {
-                    charValArr kmer = lc[     std::slice(i, kmer_size, 1) ];
-                    oIntValArr kval = vals[   std::slice(i, kmer_size, 1) ];
-                    bool       val  = valids[ i                           ];
+                ulong resF = 0;
+                ulong resR = 0;
+                ulong resM = 0;
 
-                    if ( val == 0 ) {
+                ulong kcF  = 0;
+                ulong pvF  = 0;
+                ulong cvF  = 0;
+
+                ulong kcR  = 0;
+                ulong pvR  = 0;
+                ulong cvR  = 0;
+
+                for ( ulong i = 0; i < (line.length() - kmer_size + 1); i++ ) {
+                    std::slice sl    = std::slice(i, kmer_size, 1);
+                    charValArr kmerF = charF[ sl ];
+                    oIntValArr kvalF = intsF[ sl ];
+                    bool       valF  = valsF[ i  ];
+
+                    if ( valF == 0 ) {
 #ifdef _DEBUG_
                         std::cout << " I   : " << i;
-                        std::cout << " KMER: " << kmer;
-                        std::cout << " VALS: " << kval;
+                        std::cout << " KMER: " << kmerF;
+                        std::cout << " VALS: " << kvalF;
+                        std::cout << "\n";
 #endif
 
+                        /*
                         //auto res = kval.apply( KmerSum(kval) );
                         KmerSum s   = std::for_each(std::begin(kval), std::end(kval), KmerSum(kmer_size));
                         auto    res = s.sum;
                         //auto res = KmerSummer(kval);
-                        q.insert(res);
+                        */
+
+                        resF = 0;
+                        resR = 0;
+                        resM = 0;
+
+                        kcF  = 0;
+                        pvF  = 0;
+                        cvF  = 0;
+
+                        kcR  = 0;
+                        pvR  = 0;
+                        cvR  = 0;
+
+                        for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
+                            kcF   = kvalF[             pos     ];
+                            kcR   = 3 - kcF;
+                            pvF   = pows[              pos     ];
+                            pvR   = pows[  kmer_size - pos - 1 ];
 
 #ifdef _DEBUG_
-                        std::cout << "RES : " << res << endl;
+                            std::cout << "POS : "    << (pos+1)
+                                      << " SUM BF: " << resF << " SUM BR: " << resR
+                                      << " KCF: "    << kcF  << " KCR: "    << kcR
+                                      << " PVF: "    << pvF  << " PVR: "    << pvR;
+#endif
+                            cvF   = kcF * pvF;
+                            cvR   = kcR * pvR;
+
+                            resF += cvF;
+                            resR += cvR;
+
+#ifdef _DEBUG_
+                            std::cout << " VALF: "   << cvF  << " VALR: "   << cvR
+                                      << " SUM AF: " << resF << " SUM AR: " << resR << endl;
+#endif
+                        }
+
+                        resM = resF <= resR ? resF : resR;
+
+                        q.insert(resM);
+
+#ifdef _DEBUG_
+                        std::cout << "RESF: " << resF  << " RESR: " << resR << " RESM: " << resM << "\n" << endl;
 #endif
                     }
                 }
             }
         }
 
+        std::cout << "TOTAL: " << q.size() << endl;
         for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
 //#ifdef _DEBUG_
             std::cout << ' ' << *it;

@@ -3386,6 +3386,27 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_extract_kmers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_extract_kmers",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_extract_kmers" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_extract_kmers_read_file(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
@@ -3577,27 +3598,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_extract_kmers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_extract_kmers",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_extract_kmers" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *extract_kmers_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
@@ -3610,13 +3610,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"fact", _wrap_fact, METH_VARARGS, NULL},
 	 { (char *)"version", _wrap_version, METH_VARARGS, NULL},
 	 { (char *)"new_extract_kmers", _wrap_new_extract_kmers, METH_VARARGS, NULL},
+	 { (char *)"delete_extract_kmers", _wrap_delete_extract_kmers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_file", _wrap_extract_kmers_read_file, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_parse_line", _wrap_extract_kmers_parse_line, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_save_kmer", _wrap_extract_kmers_save_kmer, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_kmer", _wrap_extract_kmers_read_kmer, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_get_total", _wrap_extract_kmers_get_total, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_print_all", _wrap_extract_kmers_print_all, METH_VARARGS, NULL},
-	 { (char *)"delete_extract_kmers", _wrap_delete_extract_kmers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_swigregister", extract_kmers_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
@@ -3628,7 +3628,7 @@ static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_extract_kmers = {"_p_extract_kmers", "extract_kmers *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_t = {"_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_t", "std::set< unsigned long,std::less< unsigned long > > *|setLongLess *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_char_t = {"_p_std__valarrayT_char_t", "std::valarray< char > *|charValArr *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__valarrayT_int_t = {"_p_std__valarrayT_int_t", "intValArr *|std::valarray< int > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__valarrayT_int_t = {"_p_std__valarrayT_int_t", "intValArr *|boolValArr *|std::valarray< int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_unsigned_long_t = {"_p_std__valarrayT_unsigned_long_t", "std::valarray< unsigned long > *|uIntValArr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "ulong *|unsigned long *", 0, 0, (void*)0, 0};
 

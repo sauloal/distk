@@ -12,7 +12,7 @@ ifeq ($(DEBUG),)
 CPP_OPTS+=-Ofast
 else
 #debug
-CPP_OPTS+=-O0 -g -D_DEBUG_
+CPP_OPTS+=-Og -g -D_DEBUG_
 endif
 
 CPP=g++

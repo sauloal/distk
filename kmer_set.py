@@ -87,14 +87,14 @@ class extract_kmers(_object):
         this = _kmer_set.new_extract_kmers(*args)
         try: self.this.append(this)
         except: self.this = this
+    __swig_destroy__ = _kmer_set.delete_extract_kmers
+    __del__ = lambda self : None;
     def read_file(self, *args): return _kmer_set.extract_kmers_read_file(self, *args)
     def parse_line(self, *args): return _kmer_set.extract_kmers_parse_line(self, *args)
     def save_kmer(self, *args): return _kmer_set.extract_kmers_save_kmer(self, *args)
     def read_kmer(self, *args): return _kmer_set.extract_kmers_read_kmer(self, *args)
     def get_total(self): return _kmer_set.extract_kmers_get_total(self)
     def print_all(self): return _kmer_set.extract_kmers_print_all(self)
-    __swig_destroy__ = _kmer_set.delete_extract_kmers
-    __del__ = lambda self : None;
 extract_kmers_swigregister = _kmer_set.extract_kmers_swigregister
 extract_kmers_swigregister(extract_kmers)
 

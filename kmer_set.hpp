@@ -24,6 +24,7 @@ void version ();
 typedef std::valarray<char>                charValArr;
 typedef std::valarray<ulong>               uIntValArr;
 typedef std::valarray<int>                 intValArr;
+typedef std::valarray<int>                 boolValArr;
 
 class extract_kmers {
     private:
@@ -52,10 +53,14 @@ class extract_kmers {
 
         charValArr charF;
         uIntValArr intsF;
-        intValArr  valsF;
+        boolValArr valsF;
+
+        charValArr kchaF;
+        uIntValArr kintF;
 
     public:
         extract_kmers(    const int ks);
+        ~extract_kmers();
         void  read_file(  const std::string &infile  );
         void  parse_line( const std::string &line    );
         void  save_kmer(  const std::string &outfile );

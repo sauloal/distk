@@ -96,6 +96,17 @@ std::ostream& operator<< (std::ostream& out, const std::valarray<ulong>& v) {
   }
   return out;
 }
+std::ostream& operator<< (std::ostream& out, const std::valarray<bool>& v) {
+  if ( v.size() != 0 ) {
+    out << '[';
+    //std::copy (std::begin(v), std::end(v), std::ostream_iterator<bool>(out, ", "));
+    for (auto it=std::begin(v); it!=std::end(v); ++it) {
+        out << (( it == std::begin(v) )? "" : ", ") << *it;
+    }
+    out << "]";
+  }
+  return out;
+}
 template <typename T>
 std::vector<T> reversed(std::vector<T> v) {
     std::vector<T> w(v.begin(), v.end());
@@ -129,6 +140,21 @@ extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), re
         ulong ind = (kmer_size-pos-1);
         pows[pos] = std::pow(4, ind);
     }
+
+    kchaF.resize(kmer_size);
+    kintF.resize(kmer_size);
+}
+
+
+extract_kmers::~extract_kmers(){
+        kchaF.resize(0);
+        kintF.resize(0);
+
+        charF.resize(0);
+        intsF.resize(0);
+        valsF.resize(0);
+
+        q.clear();
 }
 
 ulong extract_kmers::get_total() {
@@ -155,9 +181,9 @@ void extract_kmers::read_file(  const std::string &infile  ) {
 
         std::cout << "TOTAL: " <<  get_total() << std::endl;
     
-//#ifdef _DEBUG_
+#ifdef _DEBUG_
         print_all();
-//#endif
+#endif
 
         infhd.close();
     
@@ -173,25 +199,38 @@ void extract_kmers::parse_line( const std::string &line    ) {
     }
 #endif
 
+    //std::slice sl;
+    //charValArr kchaF(kmer_size);
+    //uIntValArr kintF(kmer_size);
+
     if ( line.length() >= kmer_size ) {
         lineNum          += 1;
         ll                = line.length();
         
 //#ifdef _DEBUG_
-        std::cout << " Line :: Length: " << ll << " Num: " << lineNum << std::endl;
+        std::cout << " Line :: Length: " << ll << " Num: " << lineNum;
 //#endif
 
+#ifdef _DEBUG_
         charF = charValArr(line.c_str(), ll);
         intsF = uIntValArr(              ll);
-        valsF = intValArr(               ll);
+#else
+        charF = charValArr(line.c_str(), ll);
+#endif
+
+        valsF = boolValArr(              ll);
+
+        std::cout << " =" << std::endl;
 
         for ( long i = 0; i < ll; i++ ) {
             c        = charF[i];
             vF       = dictF[c];
-            intsF[i] = vF;
 
 #ifdef _DEBUG_
-            std::cout << "i " << i << " c " << c << " vF " << vF << "(" << vF << ")" << std::endl;
+            intsF[i] = vF;
+            std::cout << "i " << i << " c " << c << " vF " << vF << std::endl;
+#else
+            charF[i] = vF;
 #endif
 
             if ( vF == 127 ) {
@@ -235,15 +274,34 @@ void extract_kmers::parse_line( const std::string &line    ) {
 #endif
 */
 
-            if ( i >= (kmer_size-1) ) {
-                int valF  = valsF[ i  ];
+            if ( i < (kmer_size-1) ) {
+#ifdef _DEBUG_
+                std::cout << " seq too small  : " << i << " <  " << (kmer_size-1) << std::endl;
+#endif
+            } else {
+#ifdef _DEBUG_
+                std::cout << " seq long enough: " << i << " >= " << (kmer_size-1) << std::endl;
+#endif
+                bool valF = valsF[ i  ];
 
-                if ( valF == 0 ) {
-                    std::slice sl    = std::slice(i - kmer_size + 1, kmer_size, 1);
-                    charValArr kchaF = charF[ sl ];
-                    uIntValArr kintF = intsF[ sl ];
+                if ( valF ) {
+#ifdef _DEBUG_
+                    std::cout << "  position not valid" << std::endl;
+#endif
+
+                } else {
+#ifdef _DEBUG_
+                    std::cout << "  position valid" << std::endl;
+#endif
+
+                    //           sl    = std::slice(i - kmer_size + 1, kmer_size, 1);
+                    //charValArr kchaF = charF[ sl ];
+                    std::copy(std::begin(charF) + i - kmer_size + 1, std::begin(charF) + i + kmer_size, std::begin(kchaF));
 
 #ifdef _DEBUG_
+                    //uIntValArr kintF = intsF[ sl ];
+                    std::copy(std::begin(intsF) + i - kmer_size + 1, std::begin(intsF) + i + kmer_size, std::begin(kintF));
+
                     std::cout << " I   : " << i;
                     std::cout << " KMER: " << kchaF;
                     std::cout << " VALS: " << kintF;
@@ -263,7 +321,11 @@ void extract_kmers::parse_line( const std::string &line    ) {
                     cvR  = 0;
 
                     for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
+#ifdef _DEBUG_
                         kcF   = kintF[             pos     ];
+#else
+                        kcF   = kchaF[             pos     ];
+#endif
                         kcR   = 3 - kcF;
                         pvF   = pows[              pos     ];
                         pvR   = pows[  kmer_size - pos - 1 ];
@@ -291,9 +353,9 @@ void extract_kmers::parse_line( const std::string &line    ) {
 
                     q.insert(resM);
 
-//#ifdef _DEBUG_
+#ifdef _DEBUG_
                     std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
-//#endif
+#endif
                 }// if ( valF == 0 ) {
             }//if ( i >= kmer_size ) {
         }//for (ulong i = 0; i < ll; i++) {
@@ -317,6 +379,8 @@ void extract_kmers::save_kmer(  const std::string &outfile ) {
 #ifdef _DEBUG_
         read_kmer(outfile);
 #endif
+    } else {
+        std::cout << "NO KMER TO SAVE" << std::endl;
     }
 }
 
@@ -333,6 +397,7 @@ void extract_kmers::read_kmer(  const std::string &infile  ) {
         fileSize = infhd.tellg();
         regs = fileSize / sizeof(ulong);
         infhd.seekg(0, std::ios::beg);
+
         std::cout << " SIZE: " << fileSize << " REGISTERS " << regs << std::endl;
         std::vector<ulong> newVector(regs);
 
@@ -340,6 +405,7 @@ void extract_kmers::read_kmer(  const std::string &infile  ) {
         infhd.read((char*) &newVector[0], fileSize);
         infhd.close();
         std::cout << " LENGHT: " << newVector.size() << std::endl;
+
 #ifdef _DEBUG_
         std::cout << newVector << std::endl;
 #endif

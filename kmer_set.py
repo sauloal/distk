@@ -157,6 +157,10 @@ version = _kmer_set.version
 def extract_kmers(*args):
   return _kmer_set.extract_kmers(*args)
 extract_kmers = _kmer_set.extract_kmers
+
+def read_kmers(*args):
+  return _kmer_set.read_kmers(*args)
+read_kmers = _kmer_set.read_kmers
 # This file is compatible with both classic and new-style classes.
 
 

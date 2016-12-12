@@ -12,7 +12,7 @@ ifeq ($(DEBUG),)
 CPP_OPTS+=-Ofast
 else
 #debug
-CPP_OPTS+=-O0 -g -DDEBUG
+CPP_OPTS+=-O0 -g -D_DEBUG_
 endif
 
 CPP=g++
@@ -20,7 +20,7 @@ CPP=g++
 all: _$(BASE).so
 
 clean:
-	rm -v $(BASE)_wrap.* $(BASE).o $(BASE).py $(BASE).pyc _$(BASE).so || true
+	rm -v $(BASE)_wrap.* $(BASE).o $(BASE).py $(BASE).pyc _$(BASE).so test/*.kmer || true
 
 .PHONY: test
 test:

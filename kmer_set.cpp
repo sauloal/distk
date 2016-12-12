@@ -1,10 +1,31 @@
 #include "kmer_set.hpp"
 
-#include <iostream>
 
 #ifndef _PRINT_PROGRESS_EVERY_
 #define _PRINT_PROGRESS_EVERY_ 5000000
 #endif
+
+//http://www.linuxquestions.org/questions/programming-9/mmap-tutorial-c-c-511265/
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iterator>
+#include <numeric>
+
+
+//#include <vector>
+//#include <string>
+//#include <functional>
+//#include <math.h>       /* pow */
+
+//http://www.cplusplus.com/reference/valarray/slice/
+//#include <cstddef>      // std::size_t
 
 int fact (int n) {
     if (n < 0){
@@ -28,25 +49,8 @@ void version () {
 }
 
 
-//http://www.linuxquestions.org/questions/programming-9/mmap-tutorial-c-c-511265/
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <iostream>
-#include <string>
 
-#include <valarray>     // std::valarray, std::slice
-
-#include <fstream>
-#include <sstream>
-#include <iterator>
-#include <numeric>
-#include <math.h>       /* pow */
-#include <functional>
-#include <set>
-
+#ifdef _DEBUG_
 //http://stackoverflow.com/questions/10750057/how-to-print-out-the-contents-of-a-vector
 template <typename T>
 std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
@@ -98,49 +102,15 @@ std::vector<T> reversed(std::vector<T> v) {
     std::reverse(w.begin(),w.end());
     return w;
 }
+#endif
 
 
 
 
-typedef std::valarray<char>  charValArr;
-typedef std::valarray<ulong> oIntValArr;
-typedef std::valarray<int>   intValArr;
-//http://en.cppreference.com/w/cpp/numeric/valarray/apply
-//http://en.cppreference.com/w/cpp/algorithm/for_each
-
-struct KmerSum
-{
-    int   len;
-    ulong sum;
-    ulong pos;
-    KmerSum(const int l): len(l), sum(0), pos(0) {}
-    void operator()(const int n) {
-        pos       += 1;
-        //std::cout << "\nPOS: " << pos << " N: " << n << " SUM B: " << sum;
-        ulong pv   = std::pow( 4, (len-pos));
-        ulong val  = pv * n;
-        sum       += val;
-        //std::cout << " PV: " << pv << " VAL: " << val << " SUM A: " << sum << endl;
-    }
-};
 
 
-
-/*
-ulong KmerSummer(oIntValArr &kval) {
-    return 0;
-}
-*/
-
-//http://www.cplusplus.com/reference/valarray/slice/
-#include <cstddef>      // std::size_t
-#include <valarray>     // std::valarray, std::slice
-
-template<class T> using max_set  = std::set<T, std::greater<T> >;
-template<class T> using min_set  = std::set<T, std::less<T> >;
-
-void extract_kmers(const std::string infile, const std::string outfile, const int kmer_size) {
-    int dictF[256];
+extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), resF(0), resR(0), resM(0), kcF(0), pvF(0), cvF(0), kcR(0), pvR(0), cvR(0) {
+    std::cout << " KMER SIZE: " << kmer_size << std::endl;
 
     for ( int i = 0; i < 256; i++ ) {
         dictF[i] = 127;
@@ -155,182 +125,184 @@ void extract_kmers(const std::string infile, const std::string outfile, const in
     dictF['t'] = 3;
     dictF['T'] = 3;
 
-    std::ifstream infhd(infile);
-    std::valarray<char> kmer;
-    min_set<ulong>  q;
-
-    ulong pows[32] = {};
-
     for ( int pos = 0; pos < kmer_size; pos++ ) {
         ulong ind = (kmer_size-pos-1);
         pows[pos] = std::pow(4, ind);
     }
+}
 
+ulong extract_kmers::get_total() {
+    return q.size();
+}
+
+void extract_kmers::print_all() {
+    for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
+        std::cout << ' ' << *it;
+        std::cout << '\n';
+    }
+}
+
+void extract_kmers::read_file(  const std::string &infile  ) {
+    std::ifstream infhd(infile);
 
     if(infhd.is_open()) {
         std::string line;
         //std::valarray<const char *> l;
 
-        char  c;
-        int   vF;
-
-        ulong lineNum = 0;
-
-        ulong resF    = 0;
-        ulong resR    = 0;
-        ulong resM    = 0;
-
-        ulong kcF     = 0;
-        ulong pvF     = 0;
-        ulong cvF     = 0;
-
-        ulong kcR     = 0;
-        ulong pvR     = 0;
-        ulong cvR     = 0;
-
         while (getline(infhd,line)) {
+            parse_line(line);
+        }//while (getline(infhd,line)) {
 
-#ifdef _DEBUG_
-            if ( line.length() <= 100 ) {
-                std::cout << "Line: " << line << endl;
-            }
-#endif
-
-            if ( line.length() >= kmer_size ) {
-                lineNum          += 1;
-                ulong      ll     = line.length();
-
+        std::cout << "TOTAL: " <<  get_total() << std::endl;
+    
 //#ifdef _DEBUG_
-                std::cout << " Length: " << ll << " Num: " << lineNum << endl;
+        print_all();
 //#endif
 
-                charValArr charF  = charValArr(line.c_str(), ll);
-                oIntValArr intsF  = oIntValArr(              ll);
-                intValArr  valsF  = intValArr(               ll);
+        infhd.close();
+    
+    } else {//if(infhd.is_open()) {
+        perror("Error reading file");
+    }
+}
 
-                for ( ulong i = 0; i < ll; i++ ) {
-                    c        = charF[i];
-                    vF       = dictF[c];
-                    intsF[i] = vF;
-
+void extract_kmers::parse_line( const std::string &line    ) {
 #ifdef _DEBUG_
-                    std::cout << "i " << i << " c " << c << " vF " << vF << "(" << vF << ")" << std::endl;
+    if ( line.length() <= 100 ) {
+        std::cout << "Line: " << line << std::endl;
+    }
 #endif
 
-                    long js;
-                    long je;
-                    if ( vF == 127 ) {
-#ifdef _DEBUG_
-                        if ( line.length() <= 100 ) {
-                            std::cout << " BAD"                          << std::endl;
-                            std::cout << "  SEQ   :           " << charF << std::endl;
-                            std::cout << "  INTS  :           " << intsF << std::endl;
-                        }
-#endif
-                        js = i - kmer_size + 1;
-                        je = i + kmer_size;
+    if ( line.length() >= kmer_size ) {
+        lineNum          += 1;
+        ll                = line.length();
+        
+//#ifdef _DEBUG_
+        std::cout << " Line :: Length: " << ll << " Num: " << lineNum << std::endl;
+//#endif
 
-                        if ( js < 0  ) { js =  0; }
-                        if ( je > ll ) { js = ll; }
+        charF = charValArr(line.c_str(), ll);
+        intsF = uIntValArr(              ll);
+        valsF = intValArr(               ll);
+
+        for ( long i = 0; i < ll; i++ ) {
+            c        = charF[i];
+            vF       = dictF[c];
+            intsF[i] = vF;
+
 #ifdef _DEBUG_
-                        std::cout << "   js " << js << " je " << je << std::endl;
+            std::cout << "i " << i << " c " << c << " vF " << vF << "(" << vF << ")" << std::endl;
 #endif
 
-                        for ( ulong j = js; j < je; j++ ) {
-                            valsF[j] = 1;
+            if ( vF == 127 ) {
 #ifdef _DEBUG_
-                            std::cout << "   js " << js << " je " << je << " j " << j;
-                            if ( line.length() <= 100 ) {
-                                std::cout << " " << valsF;
-                            }
-                            std::cout << std::endl;
+                if ( line.length() <= 100 ) {
+                    std::cout << " BAD"                          << std::endl;
+                    std::cout << "  SEQ   :           " << charF << std::endl;
+                    std::cout << "  INTS  :           " << intsF << std::endl;
+                    std::cout << "  VALS  :           " << valsF << std::endl;
+                }
 #endif
-                        }
-                    }//if ( vF == 127 ) {
+                long js = i - kmer_size + 1;
+                long je = i + kmer_size;
+
+                if ( js <  0  ) { js =  0; }
+                if ( js >= ll ) { js =  0; }
+                if ( je >= ll ) { je = ll; }
+#ifdef _DEBUG_
+                std::cout << "   js " << js << " je " << je << std::endl;
+#endif
+
+                for ( ulong j = js; j < je; j++ ) {
+                    valsF[j] = 1;
+#ifdef _DEBUG_
+                    std::cout << "   js " << js << " je " << je << " j " << j;
+                    
+                    if ( line.length() <= 100 ) {
+                        std::cout << " " << valsF;
+                    }
+                    
+                    std::cout << " " << valsF.size() << std::endl;
+#endif
+                }
+            }//if ( vF == 127 ) {
 
 /*
 #ifdef _DEBUG_
-                std::cout << " SEQ   : " << charF << endl;
-                std::cout << " INTS  : " << intsF << endl;
-                std::cout << " VALIDS: " << valsF << endl;
+        std::cout << " SEQ   : " << charF << std::endl;
+        std::cout << " INTS  : " << intsF << std::endl;
+        std::cout << " VALIDS: " << valsF << std::endl;
 #endif
 */
 
-                    if ( i >= (kmer_size-1) ) {
-                        bool       valF  = valsF[ i  ];
+            if ( i >= (kmer_size-1) ) {
+                int valF  = valsF[ i  ];
 
-                        if ( valF == 0 ) {
-                            std::slice sl    = std::slice(i - kmer_size + 1, kmer_size, 1);
-                            charValArr kmerF = charF[ sl ];
-                            oIntValArr kvalF = intsF[ sl ];
-
-#ifdef _DEBUG_
-                            std::cout << " I   : " << i;
-                            std::cout << " KMER: " << kmerF;
-                            std::cout << " VALS: " << kvalF;
-                            std::cout << "\n";
-#endif
-
-                            resF = 0;
-                            resR = 0;
-                            resM = 0;
-
-                            kcF  = 0;
-                            pvF  = 0;
-                            cvF  = 0;
-
-                            kcR  = 0;
-                            pvR  = 0;
-                            cvR  = 0;
-
-                            for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
-                                kcF   = kvalF[             pos     ];
-                                kcR   = 3 - kcF;
-                                pvF   = pows[              pos     ];
-                                pvR   = pows[  kmer_size - pos - 1 ];
+                if ( valF == 0 ) {
+                    std::slice sl    = std::slice(i - kmer_size + 1, kmer_size, 1);
+                    charValArr kchaF = charF[ sl ];
+                    uIntValArr kintF = intsF[ sl ];
 
 #ifdef _DEBUG_
-                                std::cout << "  I: "     << i    << " POS : "   << (pos+1)
-                                          << " VALID: "  << valF
-                                          << " SUM BF: " << resF << " SUM BR: " << resR
-                                          << " KCF: "    << kcF  << " KCR: "    << kcR
-                                          << " PVF: "    << pvF  << " PVR: "    << pvR;
+                    std::cout << " I   : " << i;
+                    std::cout << " KMER: " << kchaF;
+                    std::cout << " VALS: " << kintF;
+                    std::cout << "\n";
 #endif
-                                cvF   = kcF * pvF;
-                                cvR   = kcR * pvR;
 
-                                resF += cvF;
-                                resR += cvR;
+                    resF = 0;
+                    resR = 0;
+                    resM = 0;
+
+                    kcF  = 0;
+                    pvF  = 0;
+                    cvF  = 0;
+
+                    kcR  = 0;
+                    pvR  = 0;
+                    cvR  = 0;
+
+                    for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
+                        kcF   = kintF[             pos     ];
+                        kcR   = 3 - kcF;
+                        pvF   = pows[              pos     ];
+                        pvR   = pows[  kmer_size - pos - 1 ];
 
 #ifdef _DEBUG_
-                                std::cout << " VALF: "   << cvF  << " VALR: "   << cvR
-                                          << " SUM AF: " << resF << " SUM AR: " << resR << endl;
+                        std::cout << "  I: "     << i    << " POS : "   << (pos+1)
+                                  << " VALID: "  << valF
+                                  << " SUM BF: " << resF << " SUM BR: " << resR
+                                  << " KCF: "    << kcF  << " KCR: "    << kcR
+                                  << " PVF: "    << pvF  << " PVR: "    << pvR;
 #endif
-                            } //for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
+                        cvF   = kcF * pvF;
+                        cvR   = kcR * pvR;
 
-                            resM = ( resF <= resR ) ? resF : resR;
-
-                            q.insert(resM);
+                        resF += cvF;
+                        resR += cvR;
 
 #ifdef _DEBUG_
-                            std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << endl;
+                        std::cout << " VALF: "   << cvF  << " VALR: "   << cvR
+                                  << " SUM AF: " << resF << " SUM AR: " << resR << std::endl;
 #endif
-                        }// if ( valF == 0 ) {
-                    }//if ( i >= kmer_size ) {
-                }//for (ulong i = 0; i < ll; i++) {
-            }//if ( line.length() >= kmer_size ) {
-        }//while (getline(infhd,line)) {
+                    } //for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
 
-        std::cout << "TOTAL: " << q.size() << endl;
+                    resM = ( resF <= resR ) ? resF : resR;
 
-#ifdef _DEBUG_
-        for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
-            std::cout << ' ' << *it;
-            std::cout << '\n';
-        }
-#endif
+                    q.insert(resM);
 
-        std::cout << "SAVING TO: " << outfile << " SIZE " << (q.size()*sizeof(ulong)) << endl;
+//#ifdef _DEBUG_
+                    std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
+//#endif
+                }// if ( valF == 0 ) {
+            }//if ( i >= kmer_size ) {
+        }//for (ulong i = 0; i < ll; i++) {
+    }//if ( line.length() >= kmer_size ) {
+}
+
+void extract_kmers::save_kmer(  const std::string &outfile ) {
+    if ( get_total() > 0 ) {
+        std::cout << "SAVING TO: " << outfile << " SIZE " << (get_total()*sizeof(ulong)) << std::endl;
 
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
         std::ofstream outfhd(outfile, std::ios::out | std::ofstream::binary);
@@ -343,28 +315,25 @@ void extract_kmers(const std::string infile, const std::string outfile, const in
         outfhd.close();
 
 #ifdef _DEBUG_
-        read_kmers(outfile);
+        read_kmer(outfile);
 #endif
-    } else {//if(infhd.is_open()) {
-        perror("Error reading file");
     }
 }
 
-
-void read_kmers(const std::string outfile) {
-        std::cout << "READING BACK FROM: " << outfile << endl;
+void extract_kmers::read_kmer(  const std::string &infile  ) {
+        std::cout << "READING BACK FROM: " << infile << std::endl;
 
         //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
         std::streampos fileSize;
         std::streampos regs;
 
-        std::ifstream infhd(outfile, std::ios::in | std::ifstream::binary);
+        std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
         if (!infhd) throw std::runtime_error("error opening file");
         infhd.seekg(0, std::ios::end);
         fileSize = infhd.tellg();
         regs = fileSize / sizeof(ulong);
         infhd.seekg(0, std::ios::beg);
-        std::cout << " SIZE: " << fileSize << " REGISTERS " << regs << endl;
+        std::cout << " SIZE: " << fileSize << " REGISTERS " << regs << std::endl;
         std::vector<ulong> newVector(regs);
 
         //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
@@ -375,3 +344,11 @@ void read_kmers(const std::string outfile) {
         std::cout << newVector << std::endl;
 #endif
 }
+
+
+/*
+http://en.cppreference.com/w/cpp/algorithm/set_symmetric_difference
+http://en.cppreference.com/w/cpp/algorithm/set_difference
+http://en.cppreference.com/w/cpp/algorithm/set_intersection
+http://en.cppreference.com/w/cpp/algorithm/set_union
+*/

@@ -53,6 +53,15 @@ void version () {
 }
 
 
+std::ostream& operator<< (std::ostream& out, const std::vector<std::string>& v) {
+  if ( v.size() != 0 ) {
+    out << '[';
+    std::copy (std::begin(v), std::end(v), std::ostream_iterator<std::string>(out, ", "));
+    out << "\b\b]";
+  }
+  return out;
+}
+
 
 #ifdef _DEBUG_
 #define _PRINT_LINE_LENGTHS_
@@ -166,18 +175,18 @@ extract_kmers::~extract_kmers(){
         q.clear();
 }
 
-ulong extract_kmers::get_total() {
+ulong     extract_kmers::get_total() {
     return q.size();
 }
 
-void extract_kmers::print_all() {
+void      extract_kmers::print_all() {
     for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
         std::cout << ' ' << *it;
         std::cout << '\n';
     }
 }
 
-void extract_kmers::read_file(  const std::string &infile  ) {
+void      extract_kmers::read_file(    const std::string &infile  ) {
     std::ifstream infhd(infile);
 
     if(infhd.is_open()) {
@@ -201,7 +210,7 @@ void extract_kmers::read_file(  const std::string &infile  ) {
     }
 }
 
-void extract_kmers::parse_line( const std::string &line    ) {
+void      extract_kmers::parse_line(   const std::string &line    ) {
 #ifdef _DEBUG_
     if ( line.length() <= 100 ) {
         std::cout << "Line: " << line << std::endl;
@@ -231,7 +240,9 @@ void extract_kmers::parse_line( const std::string &line    ) {
 
         valsF = boolValArr(              ll);
 
+#ifdef _PRINT_LINE_LENGTHS_
         std::cout << " Line Loaded" << std::endl;
+#endif
 
         for ( long i = 0; i < ll; i++ ) {
             c        = charF[i];
@@ -382,7 +393,7 @@ void extract_kmers::parse_line( const std::string &line    ) {
     }//if ( line.length() >= kmer_size ) {
 }
 
-void extract_kmers::save_kmer(  const std::string &outfile ) {
+void      extract_kmers::save_kmer(    const std::string &outfile ) {
     if ( get_total() > 0 ) {
         std::cout << "SAVING TO: " << outfile << " SIZE " << (get_total()*sizeof(ulong)) << std::endl;
 
@@ -404,33 +415,109 @@ void extract_kmers::save_kmer(  const std::string &outfile ) {
     }
 }
 
-void extract_kmers::read_kmer(  const std::string &infile  ) {
-        std::cout << "READING BACK FROM: " << infile << std::endl;
+ulong     extract_kmers::get_db_size(  const std::string &infile  ) {
+    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
+    
+    if (!infhd) throw std::runtime_error("error opening file");
+    
+    infhd.seekg(0, std::ios::end);
+    
+    ulong fileSize = infhd.tellg();
+    
+    return fileSize;
+}
 
-        //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
-        std::streampos fileSize;
-        std::streampos regs;
+void      extract_kmers::get_kmer(     const std::string &infile , ulongVec &newVector ) {
+    std::cout << "  READING BACK FROM: " << infile << std::endl;
 
-        std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
-        if (!infhd) throw std::runtime_error("error opening file");
-        infhd.seekg(0, std::ios::end);
-        fileSize = infhd.tellg();
-        regs = fileSize / sizeof(ulong);
-        infhd.seekg(0, std::ios::beg);
+    //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
+    ulong fileSize = get_db_size(infile);
+    ulong regs     = fileSize / sizeof(ulong);
+    
+    newVector.resize(regs);
 
-        std::cout << " SIZE: " << fileSize << " REGISTERS " << regs << std::endl;
-        std::vector<ulong> newVector(regs);
+    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
 
-        //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
-        infhd.read((char*) &newVector[0], fileSize);
-        infhd.close();
-        std::cout << " LENGHT: " << newVector.size() << std::endl;
+    std::cout << "    SIZE: " << fileSize << " REGISTERS " << regs << std::endl;
+
+    //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
+    infhd.read((char*) &newVector[0], fileSize);
+    infhd.close();
+    
+    std::cout << "    LENGHT: " << newVector.size() << std::endl;
 
 #ifdef _DEBUG_
-        std::cout << newVector << std::endl;
+    std::cout << newVector << std::endl;
 #endif
 }
 
+ulongVec  extract_kmers::get_kmer(     const std::string &infile  ) {
+    ulongVec newVector;
+    get_kmer(infile, newVector);
+    return newVector;
+}
+
+void      extract_kmers::merge_kmers(  const std::string &outfile, const strVec &infiles, ulongVec &mat ) {
+    ulongVec v1;
+    ulongVec v2;
+    
+    auto size = infiles.size();
+
+    std::cout << "# files " << size << " " << infiles << std::endl;
+
+    mat.resize(size * size);
+    
+    for( strVec::size_type i = 0; i < (size-1); i++ ) {
+        auto file1  = infiles[i];
+        
+        v1.clear();
+        
+        get_kmer(file1, v1);
+        
+        std::cout << "I " << i << " (" << file1 << ") [" << v1.size() << "]" << std::endl;
+        
+        for( strVec::size_type j = i+1; j < size; j++ ) {
+            auto pos1 = ( i * size ) + j;
+            auto pos2 = ( j * size ) + i;
+
+            /*
+             *00 01 02 03
+             *04 05 06 07
+             *08 09 10 11
+             *12 13 14 15
+             *
+             *   01 02 03
+             *      06 07
+             *         11
+             *
+             *
+             *04
+             *08 09
+             *12 13 14
+             *
+             *00
+             *   05
+             *      10
+             *         15
+             */
+
+            auto file2 = infiles[j];
+            v2.clear();
+            get_kmer(file2, v2);
+            
+            std::cout << "  J " << j << " (" << file2 << ") [" << v2.size() << "] - " << pos1 << ":" << pos2 << std::endl;
+            
+            mat[pos1] = pos1;
+            mat[pos2] = pos2;
+        }
+    }
+}
+
+ulongVec extract_kmers::merge_kmers(  const std::string &outfile, const strVec &infiles   ) {
+    ulongVec mat;
+    merge_kmers( outfile, infiles, mat );
+    return mat;
+}
 
 /*
 http://en.cppreference.com/w/cpp/algorithm/set_symmetric_difference

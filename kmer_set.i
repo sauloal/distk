@@ -1,13 +1,17 @@
 %module kmer_set
-//%include "std_vector.i"
+
+%include typemaps.i
+%include <std_vector.i>
 %include <std_string.i>
-namespace std {
-   //%template(vectors) vector<string>;
-   //%template(vectord) vector<double>;
-   //%template(vectori) vector<long unsigned int>;
-};
+%include <stl.i>
+#include <sys/types.h>
+
+%template(StringVector) std::vector< std::string >;
+%template(vectori)      std::vector< unsigned long >;
+%template(vectord)      std::vector< double >;
+
 %{
 #include "kmer_set.hpp"
 %}
+
 %include "kmer_set.hpp"
-//int fact(int n);

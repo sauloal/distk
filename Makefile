@@ -21,7 +21,7 @@ CPP=g++
 all: _$(BASE).so
 
 clean:
-	rm -v $(BASE)_wrap.* $(BASE).o $(BASE).py $(BASE).pyc _$(BASE).so test/*.kmer test/*.log core || true
+	rm -v $(BASE)_wrap.* $(BASE).o $(BASE).py $(BASE).pyc _$(BASE).so test/*.kmer test/*.log test/*.matrix core || true
 
 .PHONY: test
 test:

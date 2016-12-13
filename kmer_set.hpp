@@ -3,9 +3,12 @@
 
 #include <set>
 #include <valarray>     // std::valarray, std::slice
+#include <vector>
 #include <string>
+#include <sys/types.h>
 
 typedef unsigned long ulong;
+//typedef unsigned double    udouble;
 
 typedef std::set<ulong, std::less<ulong> > setLongLess;
 //http://en.cppreference.com/w/cpp/numeric/valarray/apply
@@ -18,13 +21,17 @@ template<class T> using min_set  = std::set<T, std::less<T> >;
 
 //using namespace std;
 
-int fact (int n);
+int  fact (int n);
 void version ();
 
 typedef std::valarray<char>                charValArr;
 typedef std::valarray<ulong>               uIntValArr;
 typedef std::valarray<int>                 intValArr;
 typedef std::valarray<int>                 boolValArr;
+
+typedef std::vector<std::string>           strVec;
+typedef std::vector<ulong>                 ulongVec;
+typedef std::vector<double>                doubleVec;
 
 class extract_kmers {
     private:
@@ -63,12 +70,16 @@ class extract_kmers {
     public:
         extract_kmers(    const int ks);
         ~extract_kmers();
-        void  read_file(  const std::string &infile  );
-        void  parse_line( const std::string &line    );
-        void  save_kmer(  const std::string &outfile );
-        void  read_kmer(  const std::string &infile  );
-        ulong get_total();
-        void  print_all();
+        void      read_file(    const std::string &infile  );
+        void      parse_line(   const std::string &line    );
+        void      save_kmer(    const std::string &outfile );
+        void      get_kmer(     const std::string &infile , ulongVec &newVector );
+        ulongVec  get_kmer(     const std::string &infile  );
+        void      merge_kmers(  const std::string &outfile, const strVec &infiles, ulongVec &mat );
+        ulongVec  merge_kmers(  const std::string &outfile, const strVec &infiles   );
+        ulong     get_db_size(  const std::string &infile  );
+        ulong     get_total();
+        void      print_all();
 };
 
 #endif //__H_KMET_SET__

@@ -1,12 +1,12 @@
 BASE=kmer_set
 
-KMER_SET_VERSION=$(shell git rev-parse HEAD)
-COMP_DATE=$(shell date)
+__PROG_VERSION__=$(shell git rev-parse HEAD)
+__COMPILE_DATE__=$(shell date)
 
 CPP_INCL=-I/usr/include/python2.7 -Itree-3.1/src/
 CPP_OPTS=-fPIC -std=c++11
 CPP_VARS_F=$(CPP_VARS)
-CPP_VARS_F+=-D__KMER_SET_VERSION__="$(KMER_SET_VERSION)" -D__DATE__="$(COMP_DATE)"
+CPP_VARS_F+=-D__PROG_VERSION__="$(__PROG_VERSION__)" -D__COMPILE_DATE__="$(__COMPILE_DATE__)"
 
 ifeq ($(DEBUG),)
 #no debug

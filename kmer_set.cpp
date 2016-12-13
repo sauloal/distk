@@ -1,30 +1,21 @@
 #include "kmer_set.hpp"
 
-
-#ifndef _PRINT_PROGRESS_EVERY_
-#define _PRINT_PROGRESS_EVERY_ 5000000
-#endif
-
 //http://www.linuxquestions.org/questions/programming-9/mmap-tutorial-c-c-511265/
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <string>
 #include <fstream>
-#include <sstream>
 #include <iterator>
-#include <numeric>
 
 
+//#include <numeric>
+//#include <sstream>
+//#include <unistd.h>
+//#include <sys/stat.h>
+//#include <sys/types.h>
+//#include <stdlib.h>
+//#include <stdio.h>
 //#include <vector>
-//#include <string>
 //#include <functional>
 //#include <math.h>       /* pow */
-
-//http://www.cplusplus.com/reference/valarray/slice/
 //#include <cstddef>      // std::size_t
 
 int fact (int n) {
@@ -44,13 +35,28 @@ int fact (int n) {
 #define STRING2(x) #x
 #define STRING(x) STRING2(x)
 void version () {
-   std::cout   << "kmer_set version: " << STRING(__KMER_SET_VERSION__) << "\n"
-               << "build date      : " << STRING(__DATE__            ) << std::endl;
+   std::cout   << "version      : " << STRING(__PROG_VERSION__) << "\n"
+               << "build date   : " << STRING(__COMPILE_DATE__) << std::endl;
+#ifdef _DEBUG_
+    std::cout   << "COMPILE FLAG: _DEBUG_" << std::endl;
+#endif
+#ifdef _PRINT_LINE_LENGTHS_
+    std::cout   << "COMPILE FLAG: _PRINT_LINE_LENGTHS_" << std::endl;
+#endif
+#ifdef _USE_SLICE_
+    std::cout   << "COMPILE FLAG: _USE_SLICE_" << std::endl;
+/*
+ *7 7           2m52.768s
+ *7 7 use slice 4m32.193s
+*/
+#endif
 }
 
 
 
 #ifdef _DEBUG_
+#define _PRINT_LINE_LENGTHS_
+
 //http://stackoverflow.com/questions/10750057/how-to-print-out-the-contents-of-a-vector
 template <typename T>
 std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
@@ -212,9 +218,9 @@ void extract_kmers::parse_line( const std::string &line    ) {
         lineNum          += 1;
         ll                = line.length();
         
-//#ifdef _DEBUG_
+#ifdef _PRINT_LINE_LENGTHS_
         std::cout << " Line :: Length: " << ll << " Num: " << lineNum;
-//#endif
+#endif
 
 #ifdef _DEBUG_
         charF = charValArr(line.c_str(), ll);
@@ -225,7 +231,7 @@ void extract_kmers::parse_line( const std::string &line    ) {
 
         valsF = boolValArr(              ll);
 
-        std::cout << " =" << std::endl;
+        std::cout << " Line Loaded" << std::endl;
 
         for ( long i = 0; i < ll; i++ ) {
             c        = charF[i];

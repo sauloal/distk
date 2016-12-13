@@ -9,7 +9,7 @@ rm core || true
 ./kmer.py
 
 for ti in 7; do
-for kl in 3; do
+for kl in 7; do
 
 #for ti in 7; do
 #for kl in 3; do

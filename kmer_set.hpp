@@ -1,9 +1,9 @@
-#ifndef __KMET_SET__
-#define __KMET_SET__
+#ifndef __H_KMET_SET__
+#define __H_KMET_SET__
 
-#include <string>
 #include <set>
 #include <valarray>     // std::valarray, std::slice
+#include <string>
 
 typedef unsigned long ulong;
 
@@ -71,4 +71,4 @@ class extract_kmers {
         void  print_all();
 };
 
-#endif //__KMET_SET__
+#endif //__H_KMET_SET__

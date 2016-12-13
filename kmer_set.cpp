@@ -44,7 +44,7 @@ int fact (int n) {
 #define STRING2(x) #x
 #define STRING(x) STRING2(x)
 void version () {
-   std::cout   << "kmer_gen version: " << STRING(__KMER_GEN_VERSION__) << "\n"
+   std::cout   << "kmer_set version: " << STRING(__KMER_SET_VERSION__) << "\n"
                << "build date      : " << STRING(__DATE__            ) << std::endl;
 }
 
@@ -141,15 +141,18 @@ extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), re
         pows[pos] = std::pow(4, ind);
     }
 
+#ifndef _USE_SLICE_
     kchaF.resize(kmer_size);
     kintF.resize(kmer_size);
+#endif
 }
 
 
 extract_kmers::~extract_kmers(){
+#ifndef _USE_SLICE_
         kchaF.resize(0);
         kintF.resize(0);
-
+#endif
         charF.resize(0);
         intsF.resize(0);
         valsF.resize(0);
@@ -199,7 +202,9 @@ void extract_kmers::parse_line( const std::string &line    ) {
     }
 #endif
 
-    //std::slice sl;
+#ifdef _USE_SLICE_
+    std::slice sl;
+#endif
     //charValArr kchaF(kmer_size);
     //uIntValArr kintF(kmer_size);
 
@@ -294,13 +299,22 @@ void extract_kmers::parse_line( const std::string &line    ) {
                     std::cout << "  position valid" << std::endl;
 #endif
 
-                    //           sl    = std::slice(i - kmer_size + 1, kmer_size, 1);
-                    //charValArr kchaF = charF[ sl ];
+
+#ifdef _USE_SLICE_
+                    sl               = std::slice(i - kmer_size + 1, kmer_size, 1);
+                    charValArr kchaF = charF[ sl ];
+#else
                     std::copy(std::begin(charF) + i - kmer_size + 1, std::begin(charF) + i + kmer_size, std::begin(kchaF));
+#endif
+
+
 
 #ifdef _DEBUG_
-                    //uIntValArr kintF = intsF[ sl ];
+#ifdef _USE_SLICE_
+                    uIntValArr kintF = intsF[ sl ];
+#else
                     std::copy(std::begin(intsF) + i - kmer_size + 1, std::begin(intsF) + i + kmer_size, std::begin(kintF));
+#endif
 
                     std::cout << " I   : " << i;
                     std::cout << " KMER: " << kchaF;

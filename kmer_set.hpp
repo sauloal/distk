@@ -67,6 +67,7 @@ class extract_kmers {
         boolValArr  valsF;
 
         setuLongLess q;
+        
     public:
         extract_kmers(    const int ks);
         ~extract_kmers();

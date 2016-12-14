@@ -186,7 +186,7 @@ void      extract_kmers::print_all() {
     }
 }
 
-void      extract_kmers::read_file_one_liner(    const std::string &infile  ) {
+void      extract_kmers::read_file_one_liner( const std::string &infile  ) {
     std::ifstream infhd(infile);
 
     if(infhd.is_open()) {
@@ -210,7 +210,7 @@ void      extract_kmers::read_file_one_liner(    const std::string &infile  ) {
     }
 }
 
-void      extract_kmers::parse_line(   const std::string &line    ) {
+void      extract_kmers::parse_line(          const std::string &line    ) {
 #ifdef _DEBUG_
     if ( line.length() <= 100 ) {
         std::cout << "Line: " << line << std::endl;
@@ -396,7 +396,7 @@ void      extract_kmers::parse_line(   const std::string &line    ) {
     }//if ( line.length() >= kmer_size ) {
 }
 
-void      extract_kmers::save_kmer_db(    const std::string &outfile ) {
+void      extract_kmers::save_kmer_db(        const std::string &outfile ) {
     if ( get_total() > 0 ) {
         std::cout << "SAVING TO: " << outfile << " SIZE " << (get_total()*sizeof(ulong)) << std::endl;
 
@@ -418,7 +418,7 @@ void      extract_kmers::save_kmer_db(    const std::string &outfile ) {
     }
 }
 
-ulong     extract_kmers::get_db_size(  const std::string &infile  ) {
+ulong     extract_kmers::get_db_size(         const std::string &infile  ) {
     /*
      * TODO: read delta format
      */
@@ -433,7 +433,7 @@ ulong     extract_kmers::get_db_size(  const std::string &infile  ) {
     return fileSize;
 }
 
-void      extract_kmers::read_kmer_db(     const std::string &infile , ulongVec &newVector ) {
+void      extract_kmers::read_kmer_db(        const std::string &infile , ulongVec &newVector ) {
     /*
      * TODO: load into q
      *       read delta format
@@ -461,7 +461,7 @@ void      extract_kmers::read_kmer_db(     const std::string &infile , ulongVec 
 #endif
 }
 
-ulongVec extract_kmers::read_kmer_db(     const std::string &infile  ) {
+ulongVec  extract_kmers::read_kmer_db(        const std::string &infile  ) {
     /*
      * TODO: return q
      */
@@ -470,7 +470,7 @@ ulongVec extract_kmers::read_kmer_db(     const std::string &infile  ) {
     return newVector;
 }
 
-void      extract_kmers::merge_kmers(  const std::string &outfile, const strVec &infiles, ulongVec &mat ) {
+void      extract_kmers::merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat ) {
     /*
      * TODO: read q
      */
@@ -531,7 +531,7 @@ void      extract_kmers::merge_kmers(  const std::string &outfile, const strVec 
     }
 }
 
-ulongVec extract_kmers::merge_kmers(  const std::string &outfile, const strVec &infiles   ) {
+ulongVec extract_kmers::merge_kmers(          const std::string &outfile, const strVec &infiles   ) {
     /*
      * TODO: return q
      */

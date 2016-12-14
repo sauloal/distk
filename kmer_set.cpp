@@ -186,7 +186,7 @@ void      extract_kmers::print_all() {
     }
 }
 
-void      extract_kmers::read_file(    const std::string &infile  ) {
+void      extract_kmers::read_file_one_liner(    const std::string &infile  ) {
     std::ifstream infhd(infile);
 
     if(infhd.is_open()) {
@@ -198,13 +198,13 @@ void      extract_kmers::read_file(    const std::string &infile  ) {
         }//while (getline(infhd,line)) {
 
         std::cout << "TOTAL: " <<  get_total() << std::endl;
-    
+
 #ifdef _DEBUG_
         print_all();
 #endif
 
         infhd.close();
-    
+
     } else {//if(infhd.is_open()) {
         perror("Error reading file");
     }
@@ -226,7 +226,7 @@ void      extract_kmers::parse_line(   const std::string &line    ) {
     if ( line.length() >= kmer_size ) {
         lineNum          += 1;
         ll                = line.length();
-        
+
 #ifdef _PRINT_LINE_LENGTHS_
         std::cout << " Line :: Length: " << ll << " Num: " << lineNum;
 #endif
@@ -278,11 +278,11 @@ void      extract_kmers::parse_line(   const std::string &line    ) {
                     valsF[j] = 1;
 #ifdef _DEBUG_
                     std::cout << "   js " << js << " je " << je << " j " << j;
-                    
+
                     if ( line.length() <= 100 ) {
                         std::cout << " " << valsF;
                     }
-                    
+
                     std::cout << " " << valsF.size() << std::endl;
 #endif
                 }
@@ -352,6 +352,9 @@ void      extract_kmers::parse_line(   const std::string &line    ) {
                     cvR  = 0;
 
                     for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
+			/*
+			 * TODO: rolling kmer
+			*/
 #ifdef _DEBUG_
                         kcF   = kintF[             pos     ];
 #else
@@ -393,7 +396,7 @@ void      extract_kmers::parse_line(   const std::string &line    ) {
     }//if ( line.length() >= kmer_size ) {
 }
 
-void      extract_kmers::save_kmer(    const std::string &outfile ) {
+void      extract_kmers::save_kmer_db(    const std::string &outfile ) {
     if ( get_total() > 0 ) {
         std::cout << "SAVING TO: " << outfile << " SIZE " << (get_total()*sizeof(ulong)) << std::endl;
 
@@ -416,24 +419,31 @@ void      extract_kmers::save_kmer(    const std::string &outfile ) {
 }
 
 ulong     extract_kmers::get_db_size(  const std::string &infile  ) {
+    /*
+     * TODO: read delta format
+     */
     std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
-    
+
     if (!infhd) throw std::runtime_error("error opening file");
-    
+
     infhd.seekg(0, std::ios::end);
-    
+
     ulong fileSize = infhd.tellg();
-    
+
     return fileSize;
 }
 
-void      extract_kmers::get_kmer(     const std::string &infile , ulongVec &newVector ) {
+void      extract_kmers::read_kmer_db(     const std::string &infile , ulongVec &newVector ) {
+    /*
+     * TODO: load into q
+     *       read delta format
+     */
     std::cout << "  READING BACK FROM: " << infile << std::endl;
 
     //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
     ulong fileSize = get_db_size(infile);
     ulong regs     = fileSize / sizeof(ulong);
-    
+
     newVector.resize(regs);
 
     std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
@@ -443,7 +453,7 @@ void      extract_kmers::get_kmer(     const std::string &infile , ulongVec &new
     //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
     infhd.read((char*) &newVector[0], fileSize);
     infhd.close();
-    
+
     std::cout << "    LENGHT: " << newVector.size() << std::endl;
 
 #ifdef _DEBUG_
@@ -451,31 +461,39 @@ void      extract_kmers::get_kmer(     const std::string &infile , ulongVec &new
 #endif
 }
 
-ulongVec  extract_kmers::get_kmer(     const std::string &infile  ) {
+ulongVec extract_kmers::read_kmer_db(     const std::string &infile  ) {
+    /*
+     * TODO: return q
+     */
     ulongVec newVector;
-    get_kmer(infile, newVector);
+    read_kmer_db(infile, newVector);
     return newVector;
 }
 
 void      extract_kmers::merge_kmers(  const std::string &outfile, const strVec &infiles, ulongVec &mat ) {
+    /*
+     * TODO: read q
+     */
     ulongVec v1;
     ulongVec v2;
-    
+
     auto size = infiles.size();
 
     std::cout << "# files " << size << " " << infiles << std::endl;
 
     mat.resize(size * size);
-    
+
     for( strVec::size_type i = 0; i < (size-1); i++ ) {
         auto file1  = infiles[i];
-        
-        v1.clear();
-        
-        get_kmer(file1, v1);
-        
+
+        v1.resize(0);
+
+        read_kmer_db(file1, v1);
+
         std::cout << "I " << i << " (" << file1 << ") [" << v1.size() << "]" << std::endl;
-        
+
+        mat[((i * size) + i)] = v1.size();
+
         for( strVec::size_type j = i+1; j < size; j++ ) {
             auto pos1 = ( i * size ) + j;
             auto pos2 = ( j * size ) + i;
@@ -502,11 +520,11 @@ void      extract_kmers::merge_kmers(  const std::string &outfile, const strVec 
              */
 
             auto file2 = infiles[j];
-            v2.clear();
-            get_kmer(file2, v2);
-            
+            v2.resize(0);
+            read_kmer_db(file2, v2);
+
             std::cout << "  J " << j << " (" << file2 << ") [" << v2.size() << "] - " << pos1 << ":" << pos2 << std::endl;
-            
+
             mat[pos1] = pos1;
             mat[pos2] = pos2;
         }
@@ -514,6 +532,9 @@ void      extract_kmers::merge_kmers(  const std::string &outfile, const strVec 
 }
 
 ulongVec extract_kmers::merge_kmers(  const std::string &outfile, const strVec &infiles   ) {
+    /*
+     * TODO: return q
+     */
     ulongVec mat;
     merge_kmers( outfile, infiles, mat );
     return mat;

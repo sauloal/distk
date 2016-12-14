@@ -39,8 +39,8 @@ fls="${fls}${km}"
 
 rm -v ${lo} ${km} || true
 
-( time python -c "import kmer_set; print dir(kmer_set); kmer_set.version(); ek = kmer_set.extract_kmers("$kmer_len"); ek.read_file('"$fa"');      ek.save_kmer('"$km"');" 2>&1 ) 2>&1 | tee -a ${lo}
-( time python -c "import kmer_set;                                          ek = kmer_set.extract_kmers("$kmer_len");                        re = ek.get_kmer( '"$km"'); print re if ("$kmer_len" <= 5) else ''" 2>&1 ) 2>&1 | tee -a ${lo}
+( time python -c "import kmer_set; print dir(kmer_set); kmer_set.version(); ek = kmer_set.extract_kmers("$kmer_len"); ek.read_file_one_liner('"$fa"');      ek.save_kmer_db('"$km"');" 2>&1 ) 2>&1 | tee -a ${lo}
+( time python -c "import kmer_set;                                          ek = kmer_set.extract_kmers("$kmer_len");                                  re = ek.read_kmer_db( '"$km"'); print re if ("$kmer_len" <= 5) else ''" 2>&1 ) 2>&1 | tee -a ${lo}
 
 done
 

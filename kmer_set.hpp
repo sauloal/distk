@@ -71,16 +71,16 @@ class extract_kmers {
     public:
         extract_kmers(    const int ks);
         ~extract_kmers();
-        void         read_file_one_liner( const std::string &infile  );
-        void         parse_line(          const std::string &line    );
-        void         save_kmer_db(        const std::string &outfile );
-        void         read_kmer_db(        const std::string &infile , ulongVec &newVector );
-        ulongVec     read_kmer_db(        const std::string &infile  );
-        void         merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat );
-        ulongVec     merge_kmers(         const std::string &outfile, const strVec &infiles   );
-        ulong        get_db_size(         const std::string &infile  );
-        ulong        get_total();
-        void         print_all();
+        void          read_file_one_liner( const std::string &infile  );
+        void          parse_line(          const std::string &line    );
+        void          save_kmer_db(        const std::string &outfile );
+        void          read_kmer_db(        const std::string &infile  );
+        setuLongLess &get_kmer_db();
+        void          merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat );
+        ulongVec      merge_kmers(         const std::string &outfile, const strVec &infiles   );
+        ulong         get_db_size(         const std::string &infile  );
+        ulong         size();
+        void          print_all();
 };
 
 #endif //__H_KMET_SET__

@@ -11059,56 +11059,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
-  ulongVec *arg3 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:extract_kmers_read_kmer_db",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_read_kmer_db" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t,  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "extract_kmers_read_kmer_db" "', argument " "3"" of type '" "ulongVec &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_kmer_db" "', argument " "3"" of type '" "ulongVec &""'"); 
-  }
-  arg3 = reinterpret_cast< ulongVec * >(argp3);
-  (arg1)->read_kmer_db((std::string const &)*arg2,*arg3);
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
   std::string *arg2 = 0 ;
@@ -11117,7 +11068,6 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db__SWIG_1(PyObject *SWIGUNUS
   int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  ulongVec result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:extract_kmers_read_kmer_db",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
@@ -11136,8 +11086,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db__SWIG_1(PyObject *SWIGUNUS
     }
     arg2 = ptr;
   }
-  result = (arg1)->read_kmer_db((std::string const &)*arg2);
-  resultobj = swig::from(static_cast< std::vector< unsigned long,std::allocator< unsigned long > > >(result));
+  (arg1)->read_kmer_db((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -11146,56 +11096,25 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[4] = {
-    0
-  };
-  Py_ssize_t ii;
+SWIGINTERN PyObject *_wrap_extract_kmers_get_kmer_db(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  setuLongLess *result = 0 ;
   
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_kmer_db",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_kmer_db" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_extract_kmers, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_extract_kmers_read_kmer_db__SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_extract_kmers, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        void *vptr = 0;
-        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          return _wrap_extract_kmers_read_kmer_db__SWIG_0(self, args);
-        }
-      }
-    }
-  }
-  
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  result = (setuLongLess *) &(arg1)->get_kmer_db();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
+  return resultobj;
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'extract_kmers_read_kmer_db'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    extract_kmers::read_kmer_db(std::string const &,ulongVec &)\n"
-    "    extract_kmers::read_kmer_db(std::string const &)\n");
-  return 0;
+  return NULL;
 }
 
 
@@ -11417,7 +11336,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_extract_kmers_get_total(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_extract_kmers_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
   void *argp1 = 0 ;
@@ -11425,13 +11344,13 @@ SWIGINTERN PyObject *_wrap_extract_kmers_get_total(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj0 = 0 ;
   ulong result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_total",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_size",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_total" "', argument " "1"" of type '" "extract_kmers *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_size" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  result = (ulong)(arg1)->get_total();
+  result = (ulong)(arg1)->size();
   resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
   return resultobj;
 fail:
@@ -11590,9 +11509,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"extract_kmers_parse_line", _wrap_extract_kmers_parse_line, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_save_kmer_db", _wrap_extract_kmers_save_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_kmer_db", _wrap_extract_kmers_read_kmer_db, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_get_kmer_db", _wrap_extract_kmers_get_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_merge_kmers", _wrap_extract_kmers_merge_kmers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_get_db_size", _wrap_extract_kmers_get_db_size, METH_VARARGS, NULL},
-	 { (char *)"extract_kmers_get_total", _wrap_extract_kmers_get_total, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_size", _wrap_extract_kmers_size, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_print_all", _wrap_extract_kmers_print_all, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_swigregister", extract_kmers_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

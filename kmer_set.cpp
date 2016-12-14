@@ -134,6 +134,24 @@ std::vector<T> reversed(std::vector<T> v) {
 
 
 
+//https://stackoverflow.com/questions/32640327/how-to-compute-the-size-of-an-intersection-of-two-stl-sets-in-c
+struct Counter
+{
+    struct value_type { template<typename T> value_type(const T&) { } };
+    void   push_back(const value_type&) { ++count; }
+    size_t count = 0;
+};
+
+template<typename T1, typename T2>
+size_t intersection_size(const T1& s1, const T2& s2)
+{
+    Counter c;
+    set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(), std::back_inserter(c));
+    return c.count;
+}
+
+
+
 
 extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), resF(0), resR(0), resM(0), kcF(0), pvF(0), cvF(0), kcR(0), pvR(0), cvR(0) {
     std::cout << " KMER SIZE: " << kmer_size << std::endl;
@@ -162,7 +180,6 @@ extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), re
 #endif
 }
 
-
 extract_kmers::~extract_kmers(){
 #ifndef _USE_SLICE_
         kchaF.resize(0);
@@ -175,18 +192,18 @@ extract_kmers::~extract_kmers(){
         q.clear();
 }
 
-ulong     extract_kmers::get_total() {
+ulong         extract_kmers::size() {
     return q.size();
 }
 
-void      extract_kmers::print_all() {
+void          extract_kmers::print_all() {
     for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
         std::cout << ' ' << *it;
         std::cout << '\n';
     }
 }
 
-void      extract_kmers::read_file_one_liner( const std::string &infile  ) {
+void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
     std::ifstream infhd(infile);
 
     if(infhd.is_open()) {
@@ -197,7 +214,7 @@ void      extract_kmers::read_file_one_liner( const std::string &infile  ) {
             parse_line(line);
         }//while (getline(infhd,line)) {
 
-        std::cout << "TOTAL: " <<  get_total() << std::endl;
+        std::cout << "TOTAL: " <<  size() << std::endl;
 
 #ifdef _DEBUG_
         print_all();
@@ -210,7 +227,7 @@ void      extract_kmers::read_file_one_liner( const std::string &infile  ) {
     }
 }
 
-void      extract_kmers::parse_line(          const std::string &line    ) {
+void          extract_kmers::parse_line(          const std::string &line    ) {
 #ifdef _DEBUG_
     if ( line.length() <= 100 ) {
         std::cout << "Line: " << line << std::endl;
@@ -396,9 +413,9 @@ void      extract_kmers::parse_line(          const std::string &line    ) {
     }//if ( line.length() >= kmer_size ) {
 }
 
-void      extract_kmers::save_kmer_db(        const std::string &outfile ) {
-    if ( get_total() > 0 ) {
-        std::cout << "SAVING TO: " << outfile << " SIZE " << (get_total()*sizeof(ulong)) << std::endl;
+void          extract_kmers::save_kmer_db(        const std::string &outfile ) {
+    if ( size() > 0 ) {
+        std::cout << "SAVING TO: " << outfile << " SIZE " << (size()*sizeof(ulong)) << std::endl;
 
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
         std::ofstream outfhd(outfile, std::ios::out | std::ofstream::binary);
@@ -418,7 +435,7 @@ void      extract_kmers::save_kmer_db(        const std::string &outfile ) {
     }
 }
 
-ulong     extract_kmers::get_db_size(         const std::string &infile  ) {
+ulong         extract_kmers::get_db_size(         const std::string &infile  ) {
     /*
      * TODO: read delta format
      */
@@ -433,7 +450,7 @@ ulong     extract_kmers::get_db_size(         const std::string &infile  ) {
     return fileSize;
 }
 
-void      extract_kmers::read_kmer_db(        const std::string &infile , ulongVec &newVector ) {
+void          extract_kmers::read_kmer_db(        const std::string &infile  ) {
     /*
      * TODO: load into q
      *       read delta format
@@ -444,38 +461,53 @@ void      extract_kmers::read_kmer_db(        const std::string &infile , ulongV
     ulong fileSize = get_db_size(infile);
     ulong regs     = fileSize / sizeof(ulong);
 
-    newVector.resize(regs);
-
-    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
-
     std::cout << "    SIZE: " << fileSize << " REGISTERS " << regs << std::endl;
 
+    std::cout << "   CLEARING" << std::endl;
+
+    q.clear();
+    
+    std::cout << "   ALLOCATING " << regs << " REGS" << std::endl;
+
+    q.get_allocator().allocate(regs);
+
+    std::cout << "   READING" << std::endl;
+    
+    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
+
+    std::cout << "    OPEN" << std::endl;
+
     //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
-    infhd.read((char*) &newVector[0], fileSize);
+    //infhd.read((char*)&(*q.cbegin()), fileSize);
+
+    ulong buffer;
+    while(infhd.read((char *)&buffer,sizeof(buffer)))
+    {
+        q.insert(buffer);
+    }
+    
+    
+    std::cout << "    CLOSE" << std::endl;
     infhd.close();
 
-    std::cout << "    LENGHT: " << newVector.size() << std::endl;
+    std::cout << "   READ" << std::endl;
 
-#ifdef _DEBUG_
-    std::cout << newVector << std::endl;
-#endif
+    std::cout << "    LENGHT: " << q.size() << std::endl;
 }
 
-ulongVec  extract_kmers::read_kmer_db(        const std::string &infile  ) {
+setuLongLess &extract_kmers::get_kmer_db() {
     /*
      * TODO: return q
      */
-    ulongVec newVector;
-    read_kmer_db(infile, newVector);
-    return newVector;
+    return q;
 }
 
-void      extract_kmers::merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat ) {
+void          extract_kmers::merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat ) {
     /*
      * TODO: read q
      */
-    ulongVec v1;
-    ulongVec v2;
+    extract_kmers v1(kmer_size);
+    extract_kmers v2(kmer_size);
 
     auto size = infiles.size();
 
@@ -486,9 +518,7 @@ void      extract_kmers::merge_kmers(         const std::string &outfile, const 
     for( strVec::size_type i = 0; i < (size-1); i++ ) {
         auto file1  = infiles[i];
 
-        v1.resize(0);
-
-        read_kmer_db(file1, v1);
+        v1.read_kmer_db( file1 );
 
         std::cout << "I " << i << " (" << file1 << ") [" << v1.size() << "]" << std::endl;
 
@@ -520,18 +550,22 @@ void      extract_kmers::merge_kmers(         const std::string &outfile, const 
              */
 
             auto file2 = infiles[j];
-            v2.resize(0);
-            read_kmer_db(file2, v2);
 
-            std::cout << "  J " << j << " (" << file2 << ") [" << v2.size() << "] - " << pos1 << ":" << pos2 << std::endl;
+            v2.read_kmer_db( file2 );
 
-            mat[pos1] = pos1;
-            mat[pos2] = pos2;
+            std::cout << "  J " << j << " (" << file2 << ") [" << v2.size() << "] - " << pos1 << ":" << pos2 << " CALCULATING" << std::endl;
+
+            size_t count = intersection_size( v1.get_kmer_db(), v2.get_kmer_db() );
+            
+            std::cout << "   COUNT " << count << std::endl;
+            
+            mat[pos1] = count;
+            mat[pos2] = count;
         }
     }
 }
 
-ulongVec extract_kmers::merge_kmers(          const std::string &outfile, const strVec &infiles   ) {
+ulongVec      extract_kmers::merge_kmers(         const std::string &outfile, const strVec &infiles   ) {
     /*
      * TODO: return q
      */

@@ -505,8 +505,11 @@ class extract_kmers(_object):
     def save_kmer_db(self, outfile):
         return _kmer_set.extract_kmers_save_kmer_db(self, outfile)
 
-    def read_kmer_db(self, *args):
-        return _kmer_set.extract_kmers_read_kmer_db(self, *args)
+    def read_kmer_db(self, infile):
+        return _kmer_set.extract_kmers_read_kmer_db(self, infile)
+
+    def get_kmer_db(self):
+        return _kmer_set.extract_kmers_get_kmer_db(self)
 
     def merge_kmers(self, *args):
         return _kmer_set.extract_kmers_merge_kmers(self, *args)
@@ -514,8 +517,8 @@ class extract_kmers(_object):
     def get_db_size(self, infile):
         return _kmer_set.extract_kmers_get_db_size(self, infile)
 
-    def get_total(self):
-        return _kmer_set.extract_kmers_get_total(self)
+    def size(self):
+        return _kmer_set.extract_kmers_size(self)
 
     def print_all(self):
         return _kmer_set.extract_kmers_print_all(self)

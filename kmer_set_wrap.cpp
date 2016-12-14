@@ -3013,24 +3013,22 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_char swig_types[1]
 #define SWIGTYPE_p_difference_type swig_types[2]
 #define SWIGTYPE_p_extract_kmers swig_types[3]
-#define SWIGTYPE_p_key_type swig_types[4]
-#define SWIGTYPE_p_p_PyObject swig_types[5]
-#define SWIGTYPE_p_size_type swig_types[6]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[7]
-#define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[8]
-#define SWIGTYPE_p_std__invalid_argument swig_types[9]
-#define SWIGTYPE_p_std__lessT_unsigned_long_t swig_types[10]
-#define SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t swig_types[11]
-#define SWIGTYPE_p_std__valarrayT_char_t swig_types[12]
-#define SWIGTYPE_p_std__valarrayT_int_t swig_types[13]
-#define SWIGTYPE_p_std__valarrayT_unsigned_long_t swig_types[14]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[15]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[16]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[17]
-#define SWIGTYPE_p_unsigned_long swig_types[18]
-#define SWIGTYPE_p_value_type swig_types[19]
-static swig_type_info *swig_types[21];
-static swig_module_info swig_module = {swig_types, 20, 0, 0, 0, 0};
+#define SWIGTYPE_p_p_PyObject swig_types[4]
+#define SWIGTYPE_p_size_type swig_types[5]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[6]
+#define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[7]
+#define SWIGTYPE_p_std__invalid_argument swig_types[8]
+#define SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t swig_types[9]
+#define SWIGTYPE_p_std__valarrayT_char_t swig_types[10]
+#define SWIGTYPE_p_std__valarrayT_int_t swig_types[11]
+#define SWIGTYPE_p_std__valarrayT_unsigned_long_t swig_types[12]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[13]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[14]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[15]
+#define SWIGTYPE_p_unsigned_long swig_types[16]
+#define SWIGTYPE_p_value_type swig_types[17]
+static swig_type_info *swig_types[19];
+static swig_module_info swig_module = {swig_types, 18, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4975,74 +4973,6 @@ namespace swig {
     }
   };
 }
-
-
-  namespace swig {
-    template <class SwigPySeq, class T> 
-    inline void 
-    assign(const SwigPySeq& swigpyseq, std::set<T>* seq) {
-      // seq->insert(swigpyseq.begin(), swigpyseq.end()); // not used as not always implemented
-      typedef typename SwigPySeq::value_type value_type;
-      typename SwigPySeq::const_iterator it = swigpyseq.begin();
-      for (;it != swigpyseq.end(); ++it) {
-	seq->insert(seq->end(),(value_type)(*it));
-      }
-    }
-
-    template <class T>
-    struct traits_asptr<std::set<T> >  {
-      static int asptr(PyObject *obj, std::set<T> **s) {
-	return traits_asptr_stdseq<std::set<T> >::asptr(obj, s);
-      }
-    };
-
-    template <class T>
-    struct traits_from<std::set<T> > {
-      static PyObject *from(const std::set<T>& vec) {
-	return traits_from_stdseq<std::set<T> >::from(vec);
-      }
-    };
-  }
-
-
-      namespace swig {
-	template <>  struct traits<std::set< unsigned long, std::less< unsigned long >, std::allocator< unsigned long > > > {
-	  typedef pointer_category category;
-	  static const char* type_name() {
-	    return "std::set<" "unsigned long" "," "std::less< unsigned long >" "," "std::allocator< unsigned long >" " >";
-	  }
-	};
-      }
-    
-SWIGINTERN swig::SwigPyIterator *std_set_Sl_unsigned_SS_long_Sg__iterator(std::set< unsigned long > *self,PyObject **PYTHON_SELF){
-      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
-    }
-SWIGINTERN bool std_set_Sl_unsigned_SS_long_Sg____nonzero__(std::set< unsigned long > const *self){
-      return !(self->empty());
-    }
-SWIGINTERN bool std_set_Sl_unsigned_SS_long_Sg____bool__(std::set< unsigned long > const *self){
-      return !(self->empty());
-    }
-SWIGINTERN std::set< unsigned long >::size_type std_set_Sl_unsigned_SS_long_Sg____len__(std::set< unsigned long > const *self){
-      return self->size();
-    }
-SWIGINTERN void std_set_Sl_unsigned_SS_long_Sg__append(std::set< unsigned long > *self,std::set< unsigned long >::value_type x){
-       self->insert(x);
-     }
-SWIGINTERN bool std_set_Sl_unsigned_SS_long_Sg____contains__(std::set< unsigned long > *self,std::set< unsigned long >::value_type x){
-       return self->find(x) != self->end();
-     }
-SWIGINTERN std::set< unsigned long >::value_type std_set_Sl_unsigned_SS_long_Sg____getitem__(std::set< unsigned long > const *self,std::set< unsigned long >::difference_type i){
-       return *(swig::cgetpos(self, i));
-     }
-SWIGINTERN void std_set_Sl_unsigned_SS_long_Sg__add(std::set< unsigned long > *self,std::set< unsigned long >::value_type x){
-       self->insert(x);
-     }
-SWIGINTERN void std_set_Sl_unsigned_SS_long_Sg__discard(std::set< unsigned long > *self,std::set< unsigned long >::value_type x){
-       self->erase(x);
-     }
-SWIGINTERN void std_set_Sl_unsigned_SS_long_Sg__erase__SWIG_1(std::set< unsigned long > *self,std::set< unsigned long >::iterator pos){ self->erase(pos); }
-SWIGINTERN void std_set_Sl_unsigned_SS_long_Sg__erase__SWIG_2(std::set< unsigned long > *self,std::set< unsigned long >::iterator first,std::set< unsigned long >::iterator last){ self->erase(first, last); }
 
 
       namespace swig {
@@ -7982,977 +7912,6 @@ SWIGINTERN PyObject *StringVector_swigregister(PyObject *SWIGUNUSEDPARM(self), P
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_new_ULongSet__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::less< unsigned long > *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::set< unsigned long > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_ULongSet",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__lessT_unsigned_long_t,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ULongSet" "', argument " "1"" of type '" "std::less< unsigned long > const &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ULongSet" "', argument " "1"" of type '" "std::less< unsigned long > const &""'"); 
-  }
-  arg1 = reinterpret_cast< std::less< unsigned long > * >(argp1);
-  result = (std::set< unsigned long > *)new std::set< unsigned long >((std::less< unsigned long > const &)*arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  PyObject **arg2 = (PyObject **) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  swig::SwigPyIterator *result = 0 ;
-  
-  arg2 = &obj0;
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet_iterator",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_iterator" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = (swig::SwigPyIterator *)std_set_Sl_unsigned_SS_long_Sg__iterator(arg1,arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet___nonzero__",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet___nonzero__" "', argument " "1"" of type '" "std::set< unsigned long > const *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = (bool)std_set_Sl_unsigned_SS_long_Sg____nonzero__((std::set< unsigned long > const *)arg1);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet___bool__",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet___bool__" "', argument " "1"" of type '" "std::set< unsigned long > const *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = (bool)std_set_Sl_unsigned_SS_long_Sg____bool__((std::set< unsigned long > const *)arg1);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::set< unsigned long >::size_type result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet___len__",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet___len__" "', argument " "1"" of type '" "std::set< unsigned long > const *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = std_set_Sl_unsigned_SS_long_Sg____len__((std::set< unsigned long > const *)arg1);
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::value_type arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_append",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_append" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_append" "', argument " "2"" of type '" "std::set< unsigned long >::value_type""'");
-  } 
-  arg2 = static_cast< std::set< unsigned long >::value_type >(val2);
-  std_set_Sl_unsigned_SS_long_Sg__append(arg1,arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet___contains__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::value_type arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet___contains__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet___contains__" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet___contains__" "', argument " "2"" of type '" "std::set< unsigned long >::value_type""'");
-  } 
-  arg2 = static_cast< std::set< unsigned long >::value_type >(val2);
-  result = (bool)std_set_Sl_unsigned_SS_long_Sg____contains__(arg1,arg2);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::difference_type arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  ptrdiff_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  std::set< unsigned long >::value_type result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet___getitem__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet___getitem__" "', argument " "1"" of type '" "std::set< unsigned long > const *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet___getitem__" "', argument " "2"" of type '" "std::set< unsigned long >::difference_type""'");
-  } 
-  arg2 = static_cast< std::set< unsigned long >::difference_type >(val2);
-  try {
-    result = (std::set< unsigned long >::value_type)std_set_Sl_unsigned_SS_long_Sg____getitem__((std::set< unsigned long > const *)arg1,arg2);
-  }
-  catch(std::out_of_range &_e) {
-    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
-  }
-  
-  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_add(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::value_type arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_add",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_add" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_add" "', argument " "2"" of type '" "std::set< unsigned long >::value_type""'");
-  } 
-  arg2 = static_cast< std::set< unsigned long >::value_type >(val2);
-  std_set_Sl_unsigned_SS_long_Sg__add(arg1,arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_discard(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::value_type arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_discard",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_discard" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_discard" "', argument " "2"" of type '" "std::set< unsigned long >::value_type""'");
-  } 
-  arg2 = static_cast< std::set< unsigned long >::value_type >(val2);
-  std_set_Sl_unsigned_SS_long_Sg__discard(arg1,arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_ULongSet__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_ULongSet")) SWIG_fail;
-  result = (std::set< unsigned long > *)new std::set< unsigned long >();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_ULongSet__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  std::set< unsigned long > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_ULongSet",&obj0)) SWIG_fail;
-  {
-    std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > > *ptr = (std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > > *)0;
-    res1 = swig::asptr(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ULongSet" "', argument " "1"" of type '" "std::set< unsigned long > const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ULongSet" "', argument " "1"" of type '" "std::set< unsigned long > const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  result = (std::set< unsigned long > *)new std::set< unsigned long >((std::set< unsigned long > const &)*arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_ULongSet(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[2] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 0) {
-    return _wrap_new_ULongSet__SWIG_1(self, args);
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__lessT_unsigned_long_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_ULongSet__SWIG_0(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = swig::asptr(argv[0], (std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > >**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_ULongSet__SWIG_2(self, args);
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ULongSet'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    std::set< unsigned long >::set(std::less< unsigned long > const &)\n"
-    "    std::set< unsigned long >::set()\n"
-    "    std::set< unsigned long >::set(std::set< unsigned long > const &)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet_empty",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_empty" "', argument " "1"" of type '" "std::set< unsigned long > const *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = (bool)((std::set< unsigned long > const *)arg1)->empty();
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::set< unsigned long >::size_type result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet_size",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_size" "', argument " "1"" of type '" "std::set< unsigned long > const *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = ((std::set< unsigned long > const *)arg1)->size();
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet_clear",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_clear" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  (arg1)->clear();
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_swap",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_swap" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ULongSet_swap" "', argument " "2"" of type '" "std::set< unsigned long > &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ULongSet_swap" "', argument " "2"" of type '" "std::set< unsigned long > &""'"); 
-  }
-  arg2 = reinterpret_cast< std::set< unsigned long > * >(argp2);
-  (arg1)->swap(*arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::key_type *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::set< unsigned long >::key_type temp2 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  std::set< unsigned long >::size_type result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_erase",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_erase" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_erase" "', argument " "2"" of type '" "std::set< unsigned long >::key_type""'");
-  } 
-  temp2 = static_cast< std::set< unsigned long >::key_type >(val2);
-  arg2 = &temp2;
-  result = (arg1)->erase((std::set< unsigned long >::key_type const &)*arg2);
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_count(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::key_type *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::set< unsigned long >::key_type temp2 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  std::set< unsigned long >::size_type result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_count",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_count" "', argument " "1"" of type '" "std::set< unsigned long > const *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_count" "', argument " "2"" of type '" "std::set< unsigned long >::key_type""'");
-  } 
-  temp2 = static_cast< std::set< unsigned long >::key_type >(val2);
-  arg2 = &temp2;
-  result = ((std::set< unsigned long > const *)arg1)->count((std::set< unsigned long >::key_type const &)*arg2);
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::set< unsigned long >::iterator result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet_begin",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_begin" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = (arg1)->begin();
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::set< unsigned long >::iterator & >(result)),
-    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::set< unsigned long >::iterator result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet_end",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_end" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = (arg1)->end();
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::set< unsigned long >::iterator & >(result)),
-    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::set< unsigned long >::reverse_iterator result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet_rbegin",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_rbegin" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = (arg1)->rbegin();
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::set< unsigned long >::reverse_iterator & >(result)),
-    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::set< unsigned long >::reverse_iterator result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ULongSet_rend",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_rend" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  result = (arg1)->rend();
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::set< unsigned long >::reverse_iterator & >(result)),
-    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::iterator arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  swig::SwigPyIterator *iter2 = 0 ;
-  int res2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_erase",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_erase" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
-  if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ULongSet_erase" "', argument " "2"" of type '" "std::set< unsigned long >::iterator""'");
-  } else {
-    swig::SwigPyIterator_T<std::set< unsigned long >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::set< unsigned long >::iterator > *>(iter2);
-    if (iter_t) {
-      arg2 = iter_t->get_current();
-    } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ULongSet_erase" "', argument " "2"" of type '" "std::set< unsigned long >::iterator""'");
-    }
-  }
-  std_set_Sl_unsigned_SS_long_Sg__erase__SWIG_1(arg1,arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_erase__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::iterator arg2 ;
-  std::set< unsigned long >::iterator arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  swig::SwigPyIterator *iter2 = 0 ;
-  int res2 ;
-  swig::SwigPyIterator *iter3 = 0 ;
-  int res3 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:ULongSet_erase",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_erase" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
-  if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ULongSet_erase" "', argument " "2"" of type '" "std::set< unsigned long >::iterator""'");
-  } else {
-    swig::SwigPyIterator_T<std::set< unsigned long >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::set< unsigned long >::iterator > *>(iter2);
-    if (iter_t) {
-      arg2 = iter_t->get_current();
-    } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ULongSet_erase" "', argument " "2"" of type '" "std::set< unsigned long >::iterator""'");
-    }
-  }
-  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
-  if (!SWIG_IsOK(res3) || !iter3) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ULongSet_erase" "', argument " "3"" of type '" "std::set< unsigned long >::iterator""'");
-  } else {
-    swig::SwigPyIterator_T<std::set< unsigned long >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::set< unsigned long >::iterator > *>(iter3);
-    if (iter_t) {
-      arg3 = iter_t->get_current();
-    } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ULongSet_erase" "', argument " "3"" of type '" "std::set< unsigned long >::iterator""'");
-    }
-  }
-  std_set_Sl_unsigned_SS_long_Sg__erase__SWIG_2(arg1,arg2,arg3);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_erase(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[4] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    int res = swig::asptr(argv[0], (std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > >**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      swig::SwigPyIterator *iter = 0;
-      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::set< unsigned long >::iterator > *>(iter) != 0));
-      if (_v) {
-        return _wrap_ULongSet_erase__SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    int res = swig::asptr(argv[0], (std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > >**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_ULongSet_erase__SWIG_0(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    int res = swig::asptr(argv[0], (std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > >**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      swig::SwigPyIterator *iter = 0;
-      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::set< unsigned long >::iterator > *>(iter) != 0));
-      if (_v) {
-        swig::SwigPyIterator *iter = 0;
-        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::set< unsigned long >::iterator > *>(iter) != 0));
-        if (_v) {
-          return _wrap_ULongSet_erase__SWIG_2(self, args);
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ULongSet_erase'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    std::set< unsigned long >::erase(std::set< unsigned long >::key_type const &)\n"
-    "    std::set< unsigned long >::erase(std::set< unsigned long >::iterator)\n"
-    "    std::set< unsigned long >::erase(std::set< unsigned long >::iterator,std::set< unsigned long >::iterator)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_find(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::key_type *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::set< unsigned long >::key_type temp2 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  std::set< unsigned long >::iterator result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_find",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_find" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_find" "', argument " "2"" of type '" "std::set< unsigned long >::key_type""'");
-  } 
-  temp2 = static_cast< std::set< unsigned long >::key_type >(val2);
-  arg2 = &temp2;
-  result = (arg1)->find((std::set< unsigned long >::key_type const &)*arg2);
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::set< unsigned long >::iterator & >(result)),
-    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_lower_bound(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::key_type *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::set< unsigned long >::key_type temp2 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  std::set< unsigned long >::iterator result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_lower_bound",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_lower_bound" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_lower_bound" "', argument " "2"" of type '" "std::set< unsigned long >::key_type""'");
-  } 
-  temp2 = static_cast< std::set< unsigned long >::key_type >(val2);
-  arg2 = &temp2;
-  result = (arg1)->lower_bound((std::set< unsigned long >::key_type const &)*arg2);
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::set< unsigned long >::iterator & >(result)),
-    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_upper_bound(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::key_type *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::set< unsigned long >::key_type temp2 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  std::set< unsigned long >::iterator result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_upper_bound",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_upper_bound" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_upper_bound" "', argument " "2"" of type '" "std::set< unsigned long >::key_type""'");
-  } 
-  temp2 = static_cast< std::set< unsigned long >::key_type >(val2);
-  arg2 = &temp2;
-  result = (arg1)->upper_bound((std::set< unsigned long >::key_type const &)*arg2);
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::set< unsigned long >::iterator & >(result)),
-    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_equal_range(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::key_type *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::set< unsigned long >::key_type temp2 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  SwigValueWrapper< std::pair< std::set< unsigned long >::iterator,std::set< unsigned long >::iterator > > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_equal_range",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_equal_range" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_equal_range" "', argument " "2"" of type '" "std::set< unsigned long >::key_type""'");
-  } 
-  temp2 = static_cast< std::set< unsigned long >::key_type >(val2);
-  arg2 = &temp2;
-  result = (arg1)->equal_range((std::set< unsigned long >::key_type const &)*arg2);
-  resultobj = PyTuple_New(2);
-  PyTuple_SetItem(resultobj,0,SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::pair< std::set< unsigned long >::iterator,std::set< unsigned long >::iterator > & >(result).first),
-      swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN));
-  PyTuple_SetItem(resultobj,1,SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::pair< std::set< unsigned long >::iterator,std::set< unsigned long >::iterator > & >(result).second),
-      swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ULongSet_insert(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  std::set< unsigned long >::value_type *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::set< unsigned long >::value_type temp2 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  SwigValueWrapper< std::pair< std::set< unsigned long >::iterator,bool > > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ULongSet_insert",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ULongSet_insert" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ULongSet_insert" "', argument " "2"" of type '" "std::set< unsigned long >::value_type""'");
-  } 
-  temp2 = static_cast< std::set< unsigned long >::value_type >(val2);
-  arg2 = &temp2;
-  result = (arg1)->insert((std::set< unsigned long >::value_type const &)*arg2);
-  resultobj = PyTuple_New(2);
-  PyTuple_SetItem(resultobj,0,SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::pair< std::set< unsigned long >::iterator,bool > & >(result).first),
-      swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN));    
-  PyTuple_SetItem(resultobj,1,SWIG_From_bool  (static_cast< const std::pair< std::set< unsigned long >::iterator,bool > & >(result).second));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_ULongSet(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::set< unsigned long > *arg1 = (std::set< unsigned long > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_ULongSet",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ULongSet" "', argument " "1"" of type '" "std::set< unsigned long > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::set< unsigned long > * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *ULongSet_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
 SWIGINTERN PyObject *_wrap_ULongVector_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::vector< unsigned long > *arg1 = (std::vector< unsigned long > *) 0 ;
@@ -11096,28 +10055,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_extract_kmers_get_kmer_db(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  setuLongLess *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_kmer_db",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_kmer_db" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  result = (setuLongLess *) &(arg1)->get_kmer_db();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
@@ -11298,6 +10235,97 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_extract_kmers_save_matrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  std::string *arg2 = 0 ;
+  strVec *arg3 = 0 ;
+  ulongVec *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:extract_kmers_save_matrix",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_save_matrix" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_save_matrix" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_matrix" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "extract_kmers_save_matrix" "', argument " "3"" of type '" "strVec const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_matrix" "', argument " "3"" of type '" "strVec const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    std::vector< unsigned long,std::allocator< unsigned long > > *ptr = (std::vector< unsigned long,std::allocator< unsigned long > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "extract_kmers_save_matrix" "', argument " "4"" of type '" "ulongVec const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_matrix" "', argument " "4"" of type '" "ulongVec const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  (arg1)->save_matrix((std::string const &)*arg2,(strVec const &)*arg3,(ulongVec const &)*arg4);
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_get_kmer_db(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  ulongVec result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_kmer_db",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_kmer_db" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  result = (arg1)->get_kmer_db();
+  resultobj = swig::from(static_cast< std::vector< unsigned long,std::allocator< unsigned long > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_extract_kmers_get_db_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
@@ -11440,33 +10468,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StringVector_capacity", _wrap_StringVector_capacity, METH_VARARGS, NULL},
 	 { (char *)"delete_StringVector", _wrap_delete_StringVector, METH_VARARGS, NULL},
 	 { (char *)"StringVector_swigregister", StringVector_swigregister, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_iterator", _wrap_ULongSet_iterator, METH_VARARGS, NULL},
-	 { (char *)"ULongSet___nonzero__", _wrap_ULongSet___nonzero__, METH_VARARGS, NULL},
-	 { (char *)"ULongSet___bool__", _wrap_ULongSet___bool__, METH_VARARGS, NULL},
-	 { (char *)"ULongSet___len__", _wrap_ULongSet___len__, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_append", _wrap_ULongSet_append, METH_VARARGS, NULL},
-	 { (char *)"ULongSet___contains__", _wrap_ULongSet___contains__, METH_VARARGS, NULL},
-	 { (char *)"ULongSet___getitem__", _wrap_ULongSet___getitem__, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_add", _wrap_ULongSet_add, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_discard", _wrap_ULongSet_discard, METH_VARARGS, NULL},
-	 { (char *)"new_ULongSet", _wrap_new_ULongSet, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_empty", _wrap_ULongSet_empty, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_size", _wrap_ULongSet_size, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_clear", _wrap_ULongSet_clear, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_swap", _wrap_ULongSet_swap, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_count", _wrap_ULongSet_count, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_begin", _wrap_ULongSet_begin, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_end", _wrap_ULongSet_end, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_rbegin", _wrap_ULongSet_rbegin, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_rend", _wrap_ULongSet_rend, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_erase", _wrap_ULongSet_erase, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_find", _wrap_ULongSet_find, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_lower_bound", _wrap_ULongSet_lower_bound, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_upper_bound", _wrap_ULongSet_upper_bound, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_equal_range", _wrap_ULongSet_equal_range, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_insert", _wrap_ULongSet_insert, METH_VARARGS, NULL},
-	 { (char *)"delete_ULongSet", _wrap_delete_ULongSet, METH_VARARGS, NULL},
-	 { (char *)"ULongSet_swigregister", ULongSet_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ULongVector_iterator", _wrap_ULongVector_iterator, METH_VARARGS, NULL},
 	 { (char *)"ULongVector___nonzero__", _wrap_ULongVector___nonzero__, METH_VARARGS, NULL},
 	 { (char *)"ULongVector___bool__", _wrap_ULongVector___bool__, METH_VARARGS, NULL},
@@ -11509,8 +10510,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"extract_kmers_parse_line", _wrap_extract_kmers_parse_line, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_save_kmer_db", _wrap_extract_kmers_save_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_kmer_db", _wrap_extract_kmers_read_kmer_db, METH_VARARGS, NULL},
-	 { (char *)"extract_kmers_get_kmer_db", _wrap_extract_kmers_get_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_merge_kmers", _wrap_extract_kmers_merge_kmers, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_save_matrix", _wrap_extract_kmers_save_matrix, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_get_kmer_db", _wrap_extract_kmers_get_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_get_db_size", _wrap_extract_kmers_get_db_size, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_size", _wrap_extract_kmers_size, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_print_all", _wrap_extract_kmers_print_all, METH_VARARGS, NULL},
@@ -11525,14 +10527,12 @@ static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocato
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_extract_kmers = {"_p_extract_kmers", "extract_kmers *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_key_type = {"_p_key_type", "key_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_unsigned_long_t = {"_p_std__allocatorT_unsigned_long_t", "std::vector< unsigned long >::allocator_type *|std::allocator< unsigned long > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__lessT_unsigned_long_t = {"_p_std__lessT_unsigned_long_t", "std::less< unsigned long > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t = {"_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t", "std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > > *|std::set< unsigned long > *|setuLongLess *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t = {"_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t", "std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > > *|setuLongLess *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_char_t = {"_p_std__valarrayT_char_t", "std::valarray< char > *|charValArr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_int_t = {"_p_std__valarrayT_int_t", "intValArr *|boolValArr *|std::valarray< int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_unsigned_long_t = {"_p_std__valarrayT_unsigned_long_t", "std::valarray< unsigned long > *|uLongValArr *", 0, 0, (void*)0, 0};
@@ -11547,13 +10547,11 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_char,
   &_swigt__p_difference_type,
   &_swigt__p_extract_kmers,
-  &_swigt__p_key_type,
   &_swigt__p_p_PyObject,
   &_swigt__p_size_type,
   &_swigt__p_std__allocatorT_std__string_t,
   &_swigt__p_std__allocatorT_unsigned_long_t,
   &_swigt__p_std__invalid_argument,
-  &_swigt__p_std__lessT_unsigned_long_t,
   &_swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t,
   &_swigt__p_std__valarrayT_char_t,
   &_swigt__p_std__valarrayT_int_t,
@@ -11569,13 +10567,11 @@ static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_extract_kmers[] = {  {&_swigt__p_extract_kmers, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_key_type[] = {  {&_swigt__p_key_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_unsigned_long_t[] = {  {&_swigt__p_std__allocatorT_unsigned_long_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__lessT_unsigned_long_t[] = {  {&_swigt__p_std__lessT_unsigned_long_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t[] = {  {&_swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__valarrayT_char_t[] = {  {&_swigt__p_std__valarrayT_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__valarrayT_int_t[] = {  {&_swigt__p_std__valarrayT_int_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -11591,13 +10587,11 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_char,
   _swigc__p_difference_type,
   _swigc__p_extract_kmers,
-  _swigc__p_key_type,
   _swigc__p_p_PyObject,
   _swigc__p_size_type,
   _swigc__p_std__allocatorT_std__string_t,
   _swigc__p_std__allocatorT_unsigned_long_t,
   _swigc__p_std__invalid_argument,
-  _swigc__p_std__lessT_unsigned_long_t,
   _swigc__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t,
   _swigc__p_std__valarrayT_char_t,
   _swigc__p_std__valarrayT_int_t,

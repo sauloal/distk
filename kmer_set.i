@@ -7,11 +7,14 @@
 %include <stl.i>
 #include <sys/types.h>
 
+//%{
+//#   define SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS 
+//%}
 
-%template(StringVector) std::vector< std::string >;
-%template(ULongSet   )  std::set< unsigned long >;
-%template(ULongVector)  std::vector< unsigned long >;
 //%template(vectord)      std::vector< double >;
+%template(StringVector) std::vector< std::string  >;
+%template(ULongVector)  std::vector< unsigned long >;
+//%template(ULongSet   )  std::set< unsigned long >;
 
 %{
 #include "kmer_set.hpp"

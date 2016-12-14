@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iterator>
 
+#include <stdio.h>
+#include <string.h>
 
 //#include <numeric>
 //#include <sstream>
@@ -495,11 +497,11 @@ void          extract_kmers::read_kmer_db(        const std::string &infile  ) {
     std::cout << "    LENGHT: " << q.size() << std::endl;
 }
 
-setuLongLess &extract_kmers::get_kmer_db() {
+ulongVec      extract_kmers::get_kmer_db() {
     /*
      * TODO: return q
      */
-    return q;
+    return ulongVec(q.begin(), q.end());
 }
 
 void          extract_kmers::merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat ) {
@@ -515,7 +517,7 @@ void          extract_kmers::merge_kmers(         const std::string &outfile, co
 
     mat.resize(size * size);
 
-    for( strVec::size_type i = 0; i < (size-1); i++ ) {
+    for( strVec::size_type i = 0; i < size; i++ ) {
         auto file1  = infiles[i];
 
         v1.read_kmer_db( file1 );
@@ -563,6 +565,8 @@ void          extract_kmers::merge_kmers(         const std::string &outfile, co
             mat[pos2] = count;
         }
     }
+    
+    save_matrix(outfile, infiles, mat);
 }
 
 ulongVec      extract_kmers::merge_kmers(         const std::string &outfile, const strVec &infiles   ) {
@@ -572,6 +576,47 @@ ulongVec      extract_kmers::merge_kmers(         const std::string &outfile, co
     ulongVec mat;
     merge_kmers( outfile, infiles, mat );
     return mat;
+}
+
+void          extract_kmers::save_matrix(         const std::string &outfile, const strVec &infiles, const ulongVec &mat ) {
+    if ( mat.size() > 0 ) {
+        std::cout << "SAVING TO: " << outfile << ".matrix SIZE " << (mat.size()*sizeof(ulong)) << std::endl;
+
+        std::string matrix = outfile.c_str() + std::string(".matrix");
+        std::string index  = outfile.c_str() + std::string(".index" );
+        
+        //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
+        std::ofstream outfhd(matrix, std::ios::out | std::ofstream::binary);
+        if (!outfhd) throw std::runtime_error("error opening file");
+        //std::copy(q.begin(), q.end(), std::ostreambuf_iterator<ulong>(outfhd));
+        //outfhd.write(reinterpret_cast<const char*>(&q.begin()), q.size()*sizeof(ulong));
+        for (auto it=mat.begin(); it!=mat.end(); ++it) {
+            outfhd.write(reinterpret_cast<const char*>(&(*it)), sizeof(ulong));
+        }
+        outfhd.close();
+
+        
+        
+        std::ofstream outind(index, std::ios::out | std::ofstream::binary);
+        if (!outind) throw std::runtime_error("error opening file");
+
+        ulong c = 0;
+        char* nl = new char[1];
+        nl[0] = '\n';
+        for (auto it=infiles.begin(); it!=infiles.end(); ++it) {
+            auto n = (*it).c_str();
+            std::cout << n << " " << strlen(n) << std::endl;
+            if ( c > 0 ) {
+                outind.write(nl, 1);                
+            }
+            outind.write(reinterpret_cast<const char*>(n), strlen(n));
+            c++;
+        }
+
+        outind.close();
+    } else {
+        std::cout << "NO MATRIX TO SAVE" << std::endl;
+    }
 }
 
 /*

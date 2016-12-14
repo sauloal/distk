@@ -3,3 +3,4 @@ test7.fasta
 *.kmer
 *.log
 *.matrix
+*.index

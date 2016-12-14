@@ -7,16 +7,16 @@
 #include <string>
 #include <sys/types.h>
 
-typedef unsigned long ulong;
-//typedef unsigned double    udouble;
-
-typedef std::set<ulong, std::less<ulong> > setuLongLess;
 //http://en.cppreference.com/w/cpp/numeric/valarray/apply
 //http://en.cppreference.com/w/cpp/algorithm/for_each
+
+typedef unsigned long ulong;
+typedef std::set< unsigned long > setuLongLess;
 
 /*
 template<class T> using max_set  = std::set<T, std::greater<T> >;
 template<class T> using min_set  = std::set<T, std::less<T> >;
+typedef std::set<ulong, std::less<ulong> > setuLongLess;
 */
 
 //using namespace std;
@@ -75,9 +75,10 @@ class extract_kmers {
         void          parse_line(          const std::string &line    );
         void          save_kmer_db(        const std::string &outfile );
         void          read_kmer_db(        const std::string &infile  );
-        setuLongLess &get_kmer_db();
         void          merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat );
         ulongVec      merge_kmers(         const std::string &outfile, const strVec &infiles   );
+        void          save_matrix(         const std::string &outfile, const strVec &infiles, const ulongVec &mat );
+        ulongVec      get_kmer_db();
         ulong         get_db_size(         const std::string &infile  );
         ulong         size();
         void          print_all();

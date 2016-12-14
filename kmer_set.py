@@ -267,98 +267,6 @@ class StringVector(_object):
 StringVector_swigregister = _kmer_set.StringVector_swigregister
 StringVector_swigregister(StringVector)
 
-class ULongSet(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ULongSet, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ULongSet, name)
-    __repr__ = _swig_repr
-
-    def iterator(self):
-        return _kmer_set.ULongSet_iterator(self)
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self):
-        return _kmer_set.ULongSet___nonzero__(self)
-
-    def __bool__(self):
-        return _kmer_set.ULongSet___bool__(self)
-
-    def __len__(self):
-        return _kmer_set.ULongSet___len__(self)
-
-    def append(self, x):
-        return _kmer_set.ULongSet_append(self, x)
-
-    def __contains__(self, x):
-        return _kmer_set.ULongSet___contains__(self, x)
-
-    def __getitem__(self, i):
-        return _kmer_set.ULongSet___getitem__(self, i)
-
-    def add(self, x):
-        return _kmer_set.ULongSet_add(self, x)
-
-    def discard(self, x):
-        return _kmer_set.ULongSet_discard(self, x)
-
-    def __init__(self, *args):
-        this = _kmer_set.new_ULongSet(*args)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def empty(self):
-        return _kmer_set.ULongSet_empty(self)
-
-    def size(self):
-        return _kmer_set.ULongSet_size(self)
-
-    def clear(self):
-        return _kmer_set.ULongSet_clear(self)
-
-    def swap(self, v):
-        return _kmer_set.ULongSet_swap(self, v)
-
-    def count(self, x):
-        return _kmer_set.ULongSet_count(self, x)
-
-    def begin(self):
-        return _kmer_set.ULongSet_begin(self)
-
-    def end(self):
-        return _kmer_set.ULongSet_end(self)
-
-    def rbegin(self):
-        return _kmer_set.ULongSet_rbegin(self)
-
-    def rend(self):
-        return _kmer_set.ULongSet_rend(self)
-
-    def erase(self, *args):
-        return _kmer_set.ULongSet_erase(self, *args)
-
-    def find(self, x):
-        return _kmer_set.ULongSet_find(self, x)
-
-    def lower_bound(self, x):
-        return _kmer_set.ULongSet_lower_bound(self, x)
-
-    def upper_bound(self, x):
-        return _kmer_set.ULongSet_upper_bound(self, x)
-
-    def equal_range(self, x):
-        return _kmer_set.ULongSet_equal_range(self, x)
-
-    def insert(self, __x):
-        return _kmer_set.ULongSet_insert(self, __x)
-    __swig_destroy__ = _kmer_set.delete_ULongSet
-    __del__ = lambda self: None
-ULongSet_swigregister = _kmer_set.ULongSet_swigregister
-ULongSet_swigregister(ULongSet)
-
 class ULongVector(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, ULongVector, name, value)
@@ -508,11 +416,14 @@ class extract_kmers(_object):
     def read_kmer_db(self, infile):
         return _kmer_set.extract_kmers_read_kmer_db(self, infile)
 
-    def get_kmer_db(self):
-        return _kmer_set.extract_kmers_get_kmer_db(self)
-
     def merge_kmers(self, *args):
         return _kmer_set.extract_kmers_merge_kmers(self, *args)
+
+    def save_matrix(self, outfile, infiles, mat):
+        return _kmer_set.extract_kmers_save_matrix(self, outfile, infiles, mat)
+
+    def get_kmer_db(self):
+        return _kmer_set.extract_kmers_get_kmer_db(self)
 
     def get_db_size(self, infile):
         return _kmer_set.extract_kmers_get_db_size(self, infile)

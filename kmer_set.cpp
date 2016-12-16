@@ -39,19 +39,19 @@ int fact (int n) {
 void version () {
    std::cout   << "version      : " << STRING(__PROG_VERSION__) << "\n"
                << "build date   : " << STRING(__COMPILE_DATE__) << std::endl;
+
 #ifdef _DEBUG_
     std::cout   << "COMPILE FLAG: _DEBUG_" << std::endl;
 #endif
+
 #ifdef _PRINT_LINE_LENGTHS_
     std::cout   << "COMPILE FLAG: _PRINT_LINE_LENGTHS_" << std::endl;
 #endif
-#ifdef _USE_SLICE_
-    std::cout   << "COMPILE FLAG: _USE_SLICE_" << std::endl;
+
 /*
  *7 7           2m52.768s
  *7 7 use slice 4m32.193s
 */
-#endif
 }
 
 
@@ -175,23 +175,17 @@ extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), re
         ulong ind = (kmer_size-pos-1);
         pows[pos] = std::pow(4, ind);
     }
-
-#ifndef _USE_SLICE_
-    kchaF.resize(kmer_size);
-    kintF.resize(kmer_size);
-#endif
 }
 
 extract_kmers::~extract_kmers(){
-#ifndef _USE_SLICE_
-        kchaF.resize(0);
-        kintF.resize(0);
-#endif
         charF.resize(0);
-        intsF.resize(0);
         valsF.resize(0);
 
-        q.clear();
+#ifdef _DEBUG_
+        intsF.resize(0);
+#endif
+
+        //q.clear();
 }
 
 ulong         extract_kmers::size() {
@@ -208,7 +202,18 @@ void          extract_kmers::print_all() {
 void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
     std::ifstream infhd(infile);
 
-    if(infhd.is_open()) {
+    if (!infhd) {
+        perror((std::string("Error opening input file: ") + infile).c_str());
+        throw std::runtime_error("error opening input file: " + infile);
+        //return;
+    }
+
+    if(!infhd.is_open()) {
+        perror((std::string("Error reading input file: ") + infile).c_str());
+        throw std::runtime_error("error opening input file: " + infile);
+        //return;
+
+    } else {
         std::string line;
         //std::valarray<const char *> l;
 
@@ -223,9 +228,6 @@ void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
 #endif
 
         infhd.close();
-
-    } else {//if(infhd.is_open()) {
-        perror("Error reading file");
     }
 }
 
@@ -236,9 +238,8 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
     }
 #endif
 
-#ifdef _USE_SLICE_
+
     std::slice sl;
-#endif
     //charValArr kchaF(kmer_size);
     //uIntValArr kintF(kmer_size);
 
@@ -250,18 +251,18 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
         std::cout << " Line :: Length: " << ll << " Num: " << lineNum;
 #endif
 
+        charF = charValArr( line.c_str(), ll);
+        valsF = boolValArr(               ll);
+
 #ifdef _DEBUG_
-        charF = charValArr(line.c_str(), ll);
-        intsF = uIntValArr(              ll);
-#else
-        charF = charValArr(line.c_str(), ll);
+        intsF = uLongValArr(              ll);
 #endif
 
-        valsF = boolValArr(              ll);
 
 #ifdef _PRINT_LINE_LENGTHS_
         std::cout << " Line Loaded" << std::endl;
 #endif
+
 
         for ( long i = 0; i < ll; i++ ) {
             c        = charF[i];
@@ -269,7 +270,7 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
 
 #ifdef _DEBUG_
             intsF[i] = vF;
-            std::cout << "i " << i << " c " << c << " vF " << vF << std::endl;
+            std::cout << "i " << i << " c " << c << " (" << (int)c << ") "<< " vF " << vF << std::endl;
 #else
             charF[i] = vF;
 #endif
@@ -289,6 +290,7 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
                 if ( js <  0  ) { js =  0; }
                 if ( js >= ll ) { js =  0; }
                 if ( je >= ll ) { je = ll; }
+
 #ifdef _DEBUG_
                 std::cout << "   js " << js << " je " << je << std::endl;
 #endif
@@ -322,6 +324,8 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
             } else {
 #ifdef _DEBUG_
                 std::cout << " seq long enough: " << i << " >= " << (kmer_size-1) << std::endl;
+                std::cout << "  SEQ1  :           " << charF << std::endl;
+                std::cout << "  INTS1 :           " << intsF << std::endl;
 #endif
                 bool valF = valsF[ i  ];
 
@@ -333,30 +337,25 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
                 } else {
 #ifdef _DEBUG_
                     std::cout << "  position valid" << std::endl;
+                    std::cout << "  SEQ2  :           " << charF << std::endl;
+                    std::cout << "  INTS2 :           " << intsF << std::endl;
 #endif
 
 
-#ifdef _USE_SLICE_
                     sl               = std::slice(i - kmer_size + 1, kmer_size, 1);
-                    charValArr kchaF = charF[ sl ];
-#else
-                    std::copy(std::begin(charF) + i - kmer_size + 1, std::begin(charF) + i + kmer_size, std::begin(kchaF));
-#endif
-
+                    const charValArr  kchaF = charF[ sl ];
+#ifdef _DEBUG_
+                    const uLongValArr kintF = intsF[ sl ];
+#endif //_DEBUG_
 
 
 #ifdef _DEBUG_
-#ifdef _USE_SLICE_
-                    uIntValArr kintF = intsF[ sl ];
-#else
-                    std::copy(std::begin(intsF) + i - kmer_size + 1, std::begin(intsF) + i + kmer_size, std::begin(kintF));
-#endif
-
-                    std::cout << " I   : " << i;
+                    std::cout << "  I: "   << i;
                     std::cout << " KMER: " << kchaF;
                     std::cout << " VALS: " << kintF;
                     std::cout << "\n";
-#endif
+#endif //_DEBUG_
+
 
                     resF = 0;
                     resR = 0;
@@ -371,18 +370,20 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
                     cvR  = 0;
 
                     for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
-			/*
-			 * TODO: rolling kmer
-			*/
+                    /*
+                     * TODO: rolling kmer
+                    */
 #ifdef _DEBUG_
                         kcF   = kintF[             pos     ];
 #else
                         kcF   = kchaF[             pos     ];
 #endif
+
                         kcR   = 3 - kcF;
                         pvF   = pows[              pos     ];
                         pvR   = pows[  kmer_size - pos - 1 ];
 
+                        
 #ifdef _DEBUG_
                         std::cout << "  I: "     << i    << " POS : "   << (pos+1)
                                   << " VALID: "  << valF
@@ -416,24 +417,34 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
 }
 
 void          extract_kmers::save_kmer_db(        const std::string &outfile ) {
-    if ( size() > 0 ) {
+    if ( size() == 0 ) {
+        std::cout << "NO KMER TO SAVE" << std::endl;
+
+    } else {
         std::cout << "SAVING TO: " << outfile << " SIZE " << (size()*sizeof(ulong)) << std::endl;
 
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
         std::ofstream outfhd(outfile, std::ios::out | std::ofstream::binary);
-        if (!outfhd) throw std::runtime_error("error opening file");
+        
+        if (!outfhd) {
+            perror((std::string("error saving kmer file: ") + outfile).c_str());
+            throw std::runtime_error("error saving kmer file: " + outfile);
+            //return;
+        }
+        
         //std::copy(q.begin(), q.end(), std::ostreambuf_iterator<ulong>(outfhd));
         //outfhd.write(reinterpret_cast<const char*>(&q.begin()), q.size()*sizeof(ulong));
         for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
             outfhd.write(reinterpret_cast<const char*>(&(*it)), sizeof(ulong));
         }
+
         outfhd.close();
 
+        std::cout << "SAVED" << std::endl;
+
 #ifdef _DEBUG_
-        read_kmer(outfile);
+        //read_kmer_db(outfile);
 #endif
-    } else {
-        std::cout << "NO KMER TO SAVE" << std::endl;
     }
 }
 
@@ -443,8 +454,12 @@ ulong         extract_kmers::get_db_size(         const std::string &infile  ) {
      */
     std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
 
-    if (!infhd) throw std::runtime_error("error opening file");
-
+    if (!infhd) {
+        perror((std::string("error reading input file: ") + infile).c_str());
+        throw std::runtime_error("error reading input file: " + infile);
+        //return;
+    }
+    
     infhd.seekg(0, std::ios::end);
 
     ulong fileSize = infhd.tellg();
@@ -495,6 +510,8 @@ void          extract_kmers::read_kmer_db(        const std::string &infile  ) {
     std::cout << "   READ" << std::endl;
 
     std::cout << "    LENGHT: " << q.size() << std::endl;
+
+    std::cout << "   DONE" << std::endl;
 }
 
 ulongVec      extract_kmers::get_kmer_db() {
@@ -587,7 +604,13 @@ void          extract_kmers::save_matrix(         const std::string &outfile, co
         
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
         std::ofstream outfhd(matrix, std::ios::out | std::ofstream::binary);
-        if (!outfhd) throw std::runtime_error("error opening file");
+
+        if (!outfhd) {
+            perror((std::string("error saving matrix file: ") + matrix).c_str());
+            throw std::runtime_error("error saving matrix file: " + matrix);
+            //return;
+        }
+        
         //std::copy(q.begin(), q.end(), std::ostreambuf_iterator<ulong>(outfhd));
         //outfhd.write(reinterpret_cast<const char*>(&q.begin()), q.size()*sizeof(ulong));
         for (auto it=mat.begin(); it!=mat.end(); ++it) {
@@ -598,7 +621,12 @@ void          extract_kmers::save_matrix(         const std::string &outfile, co
         
         
         std::ofstream outind(index, std::ios::out | std::ofstream::binary);
-        if (!outind) throw std::runtime_error("error opening file");
+        
+        if (!outind) {
+            perror((std::string("error saving index file: ") + index).c_str());
+            throw std::runtime_error("error saving index file: " + index);
+            //return;
+        }
 
         ulong c = 0;
         char* nl = new char[1];

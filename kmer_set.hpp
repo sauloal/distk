@@ -57,13 +57,15 @@ class extract_kmers {
         int         dictF[256];
         ulong       pows[32] = {};
 
-#ifndef _USE_SLICE_
         charValArr  kchaF;
+#ifdef _DEBUG_
         uLongValArr kintF;
 #endif
 
         charValArr  charF;
+#ifdef _DEBUG_
         uLongValArr intsF;
+#endif
         boolValArr  valsF;
 
         setuLongLess q;

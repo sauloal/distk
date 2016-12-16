@@ -27,6 +27,10 @@ clean:
 test:
 	./test.sh
 
+.PHONY: debug
+debug:
+	./debug.sh
+
 $(BASE)_wrap.cpp: $(BASE).i $(BASE).cpp $(BASE).hpp
 	swig -c++ -python -outdir $(PWD) -I$(PWD) -o $@ $(BASE).i
 

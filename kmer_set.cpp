@@ -324,8 +324,10 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
             } else {
 #ifdef _DEBUG_
                 std::cout << " seq long enough: " << i << " >= " << (kmer_size-1) << std::endl;
+                if ( line.length() <= 100 ) {
                 std::cout << "  SEQ1  :           " << charF << std::endl;
                 std::cout << "  INTS1 :           " << intsF << std::endl;
+                }
 #endif
                 bool valF = valsF[ i  ];
 
@@ -337,8 +339,10 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
                 } else {
 #ifdef _DEBUG_
                     std::cout << "  position valid" << std::endl;
+                    if ( line.length() <= 100 ) {
                     std::cout << "  SEQ2  :           " << charF << std::endl;
                     std::cout << "  INTS2 :           " << intsF << std::endl;
+                    }
 #endif
 
 
@@ -369,10 +373,12 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
                     pvR  = 0;
                     cvR  = 0;
 
+                    
                     for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
                     /*
                      * TODO: rolling kmer
                     */
+                    
 #ifdef _DEBUG_
                         kcF   = kintF[             pos     ];
 #else
@@ -380,27 +386,35 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
 #endif
 
                         kcR   = 3 - kcF;
+
+#ifdef _USE_POW_
                         pvF   = pows[              pos     ];
                         pvR   = pows[  kmer_size - pos - 1 ];
 
-                        
+                        cvF   = kcF * pvF;
+                        cvR   = kcR * pvR;
+#else // _USE_POW_
+                        cvF   = (kcF << ((kmer_size - pos - 1)*2));
+                        cvR   = (kcR << (             pos     *2));
+#endif // _USE_POW_
+
+
 #ifdef _DEBUG_
                         std::cout << "  I: "     << i    << " POS : "   << (pos+1)
                                   << " VALID: "  << valF
                                   << " SUM BF: " << resF << " SUM BR: " << resR
                                   << " KCF: "    << kcF  << " KCR: "    << kcR
+                                  << " VALF: "   << cvF  << " VALR: "   << cvR
                                   << " PVF: "    << pvF  << " PVR: "    << pvR;
 #endif
-                        cvF   = kcF * pvF;
-                        cvR   = kcR * pvR;
 
                         resF += cvF;
                         resR += cvR;
 
 #ifdef _DEBUG_
-                        std::cout << " VALF: "   << cvF  << " VALR: "   << cvR
-                                  << " SUM AF: " << resF << " SUM AR: " << resR << std::endl;
+                        std::cout << " SUM AF: " << resF << " SUM AR: " << resR << std::endl;
 #endif
+
                     } //for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
 
                     resM = ( resF <= resR ) ? resF : resR;

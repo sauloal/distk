@@ -1,6 +1,6 @@
 BASE=kmer_set
 
-__PROG_VERSION__=$(shell git rev-parse HEAD)
+__PROG_VERSION__=$(shell git describe --tags --always --dirty)
 __COMPILE_DATE__=$(shell date)
 
 CPP_INCL=-I/usr/include/python2.7 -Itree-3.1/src/

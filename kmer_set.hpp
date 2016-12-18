@@ -26,7 +26,7 @@ void version ();
 
 typedef std::valarray<char>                charValArr;
 typedef std::valarray<ulong>               uLongValArr;
-typedef std::valarray<int>                 intValArr;
+typedef std::valarray<unsigned int>        uIntValArr;
 typedef std::valarray<int>                 boolValArr;
 
 typedef std::vector<std::string>           strVec;
@@ -56,15 +56,17 @@ class extract_kmers {
 
         int         dictF[256];
         ulong       pows[32] = {};
-
+    
+        ulong       clean;
+    
         charValArr  kchaF;
 #ifdef _DEBUG_
-        uLongValArr kintF;
+        uIntValArr  kintF;
 #endif
 
         charValArr  charF;
 #ifdef _DEBUG_
-        uLongValArr intsF;
+        uIntValArr  intsF;
 #endif
         boolValArr  valsF;
 

@@ -10,7 +10,7 @@ rm core || true
 
 ./kmer.py
 
-for kmer_len in 21; do
+for kmer_len in 15; do
 fls=""
 
 kmer_len_num=$kmer_len

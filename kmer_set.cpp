@@ -37,21 +37,88 @@ int fact (int n) {
 #define STRING2(x) #x
 #define STRING(x) STRING2(x)
 void version () {
-   std::cout   << "version      : " << STRING(__PROG_VERSION__) << "\n"
-               << "build date   : " << STRING(__COMPILE_DATE__) << std::endl;
+    std::cout << "version     : " << STRING(__PROG_VERSION__) << "\n"
+              << "build date  : " << STRING(__COMPILE_DATE__) << std::endl;
 
 #ifdef _DEBUG_
-    std::cout   << "COMPILE FLAG: _DEBUG_" << std::endl;
+    std::cout << "COMPILE FLAG: _DEBUG_" << std::endl;
 #endif
 
 #ifdef _PRINT_LINE_LENGTHS_
-    std::cout   << "COMPILE FLAG: _PRINT_LINE_LENGTHS_" << std::endl;
+    std::cout << "COMPILE FLAG: _PRINT_LINE_LENGTHS_" << std::endl;
 #endif
 
+#ifdef _USE_BITSHIFT_
+    std::cout << "COMPILE FLAG: _USE_BITSHIFT_" << std::endl;
+#endif
 /*
  *7 7           2m52.768s
  *7 7 use slice 4m32.193s
 */
+
+/*
+KMER SIZE: 11
+clean 1048575
+TOTAL: 2096814
+SAVING TO: test/test7.11.kmer SIZE 16774512
+SAVED
+FINISHED
+
+real    9m53.257s
+user    9m46.047s
+sys     0m6.375s
+
+
+version      : 9072332-dirty
+build date   : Mon 19 Dec 18:41:34 STD 2016
+COMPILE FLAG: _USE_BITSHIFT_
+ KMER SIZE: 11
+clean 1048575
+TOTAL: 2096814
+SAVING TO: test/test7.11.kmer SIZE 16774512
+SAVED
+FINISHED
+
+real    8m36.025s
+user    8m30.031s
+sys     0m5.719s
+
+
+
+
+
+
+
+version      : 9072332-dirty
+build date   : Mon 19 Dec 18:41:34 STD 2016
+COMPILE FLAG: _USE_BITSHIFT_
+ KMER SIZE: 15
+clean 268435455
+TOTAL: 185771860
+SAVING TO: test/test7.15.kmer SIZE 1486174880
+SAVED
+
+FINISHED
+
+real    24m17.492s
+user    23m14.953s
+sys     0m58.906s
+
+version     : 9072332-dirty
+build date  : Mon 19 Dec 22:24:12 STD 2016
+ KMER SIZE: 15
+clean 268435455
+TOTAL: 185771860
+SAVING TO: test/test7.15.kmer SIZE 1486174880
+SAVED
+FINISHED
+
+real    25m13.121s
+user    24m23.984s
+sys     0m45.391s
+*/
+
+
 }
 
 
@@ -359,6 +426,7 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
 #endif
 
 
+#ifdef _USE_BITSHIFT_
                     if ( valid ) {
 #ifdef _DEBUG_
                         std::cout << " VALID :: B :: resF: " << resF << " resR: " << resR << std::endl;
@@ -387,7 +455,7 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
 
                     } else {
                         valid = true;
-
+#endif //#ifdef _USE_BITSHIFT_
                         sl               = std::slice(i - kmer_size + 1, kmer_size, 1);
 
                         const charValArr  kchaF = charF[ sl ];
@@ -459,7 +527,10 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
 #endif
 
                         } //for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
+
+#ifdef _USE_BITSHIFT_
                     } // else if ( valid ) {
+#endif //ifdef _USE_BITSHIFT_
                     
                     resM = ( resF <= resR ) ? resF : resR;
 

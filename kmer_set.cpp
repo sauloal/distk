@@ -84,6 +84,19 @@ user    8m30.031s
 sys     0m5.719s
 
 
+//NO COPY
+version     : 46466e7-dirty
+build date  : Tue 20 Dec 01:58:06 STD 2016
+ KMER SIZE: 11
+clean 1048575
+TOTAL: 2096814
+SAVING TO: test/test7.11.kmer SIZE 16774512
+SAVED
+FINISHED
+
+real    9m25.364s
+user    9m21.766s
+sys     0m2.984s
 
 
 
@@ -226,7 +239,7 @@ extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), re
     std::cout << " KMER SIZE: " << kmer_size << std::endl;
 
     for ( int i = 0; i < 256; i++ ) {
-        dictF[i] = 127;
+        dictF[i] = 78;
     }
 
     dictF['a'] = 0;
@@ -293,6 +306,7 @@ void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
         //std::valarray<const char *> l;
 
         while (getline(infhd,line)) {
+            //std::cout << "Got line" << std::endl;
             parse_line(line);
         }//while (getline(infhd,line)) {
 
@@ -306,7 +320,202 @@ void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
     }
 }
 
-void          extract_kmers::parse_line(          const std::string &line    ) {
+
+
+
+void          extract_kmers::parse_line(          std::string &line    ) {
+#ifdef _DEBUG_
+    if ( line.length() <= 100 ) {
+        std::cout << "Line: " << line << std::endl;
+    }
+#endif
+
+    ulong tainted = 0;
+    bool valid   = false;
+
+    ll                = line.length();
+    if ( ll >= kmer_size ) {
+        lineNum          += 1;
+
+#ifdef _PRINT_LINE_LENGTHS_
+        std::cout << " Line :: Length: " << ll << " Num: " << lineNum;
+#endif
+
+
+#ifdef _PRINT_LINE_LENGTHS_
+        std::cout << " Line Loaded" << std::endl;
+#endif
+
+        for ( long i = 0; i < ll; i++ ) {
+            c        = line[i];
+            vF       = dictF[c];
+
+            line[i]  = vF;
+#ifdef _DEBUG_
+            std::cout << "i " << i << " c " << c << " (" << (int)c << ") "<< " vF " << vF << std::endl;
+#endif
+
+            if ( vF == 78 ) {
+                valid = false;
+
+#ifdef _DEBUG_
+                if ( line.length() <= 100 ) {
+                    std::cout << " BAD"                          << std::endl;
+                    //std::cout << "  VALS  :           " << valsF << std::endl;
+                }
+#endif
+                long js = i - kmer_size + 1;
+                long je = i + kmer_size;
+
+                if ( js <  0  ) { js =  0; }
+                if ( js >= ll ) { js =  0; }
+                if ( je >= ll ) { je = ll; }
+
+#ifdef _DEBUG_
+                std::cout << "   js " << js << " je " << je << std::endl;
+#endif
+
+                tainted = je;
+
+//                for ( ulong j = js; j < je; j++ ) {
+//                    valsF[j] = 1;
+//#ifdef _DEBUG_
+//                    std::cout << "   js " << js << " je " << je << " j " << j;
+//
+//                    if ( line.length() <= 100 ) {
+//                        std::cout << " " << valsF;
+//                    }
+//
+//                    std::cout << " " << valsF.size() << std::endl;
+//#endif
+//                }
+            }//if ( vF == 78 ) {
+
+
+            if ( i < (kmer_size-1) ) {
+                valid = false;
+#ifdef _DEBUG_
+                std::cout << " seq too small  : " << i << " <  " << (kmer_size-1) << std::endl;
+#endif
+            } else {
+#ifdef _DEBUG_
+                std::cout << " seq long enough: " << i << " >= " << (kmer_size-1) << std::endl;
+#endif
+                bool valF = (i < tainted);
+
+                if ( valF ) {
+                    valid = false;
+#ifdef _DEBUG_
+                    std::cout << "  position not valid. i: " << i << " tainted: " << tainted << std::endl;
+#endif
+
+                } else {
+#ifdef _DEBUG_
+                    std::cout << "  position valid" << std::endl;
+#endif
+
+
+#ifdef _USE_BITSHIFT_
+                    if ( valid ) {
+#ifdef _DEBUG_
+                        std::cout << " VALID :: B :: resF: " << resF << " resR: " << resR << std::endl;
+#endif //_DEBUG_
+
+                        resF &= clean;
+                        //resR &= clean;
+
+#ifdef _DEBUG_
+                        std::cout << " VALID :: & :: resF: " << resF << " resR: " << resR << std::endl;
+#endif //_DEBUG_
+
+                        resF = (resF << 2);
+                        resR = (resR >> 2);
+
+#ifdef _DEBUG_
+                        std::cout << " VALID :: S :: resF: " << resF << " resR: " << resR << std::endl;
+#endif //_DEBUG_
+
+                        resF += (   vF                      );
+                        resR += ((3-vF) << ((kmer_size-1)*2));
+
+#ifdef _DEBUG_
+                        std::cout << " VALID :: R :: resF: " << resF << " resR: " << resR << std::endl;
+#endif //_DEBUG_
+
+                    } else {
+                        valid = true;
+#endif //#ifdef _USE_BITSHIFT_
+                        auto p_begin = line.begin() + (i - kmer_size + 1);
+
+                        resF = 0;
+                        resR = 0;
+                        resM = 0;
+
+                        kcF  = 0;
+                        pvF  = 0;
+                        cvF  = 0;
+
+                        kcR  = 0;
+                        pvR  = 0;
+                        cvR  = 0;
+
+
+                        for ( unsigned long pos = 0; pos < kmer_size; pos++ ) {
+                            auto a_pos = p_begin + pos;
+
+                            kcF   = *a_pos;
+                            kcR   = 3 - kcF;
+
+#ifdef _USE_POW_
+                            pvF   = pows[              pos     ];
+                            pvR   = pows[  kmer_size - pos - 1 ];
+
+                            cvF   = kcF * pvF;
+                            cvR   = kcR * pvR;
+#else // _USE_POW_
+                            cvF   = (kcF << ((kmer_size - pos - 1)*2));
+                            cvR   = (kcR << (             pos     *2));
+#endif // _USE_POW_
+
+
+#ifdef _DEBUG_
+                            std::cout << "  I: "     << i    << " POS : "   << (pos+1)
+                                      << " VALID: "  << valF
+                                      << " SUM BF: " << resF << " SUM BR: " << resR
+                                      << " KCF: "    << kcF  << " KCR: "    << kcR
+                                      << " VALF: "   << cvF  << " VALR: "   << cvR
+                                      << " PVF: "    << pvF  << " PVR: "    << pvR;
+#endif
+
+                            resF += cvF;
+                            resR += cvR;
+
+#ifdef _DEBUG_
+                            std::cout << " SUM AF: " << resF << " SUM AR: " << resR << std::endl;
+#endif
+
+                        } //for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
+
+#ifdef _USE_BITSHIFT_
+                    } // else if ( valid ) {
+#endif //ifdef _USE_BITSHIFT_
+                    
+                    resM = ( resF <= resR ) ? resF : resR;
+
+                    q.insert(resM);
+
+#ifdef _DEBUG_
+                    std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
+#endif
+                }// if ( valF == 0 ) {
+            }//if ( i >= kmer_size ) {
+        }//for (ulong i = 0; i < ll; i++) {
+    }//if ( line.length() >= kmer_size ) {
+}
+
+
+
+void          extract_kmers::parse_line_2(          const std::string &line    ) {
 #ifdef _DEBUG_
     if ( line.length() <= 100 ) {
         std::cout << "Line: " << line << std::endl;
@@ -319,9 +528,9 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
     //charValArr kchaF(kmer_size);
     //uIntValArr kintF(kmer_size);
 
-    if ( line.length() >= kmer_size ) {
+    ll                = line.length();
+    if ( ll >= kmer_size ) {
         lineNum          += 1;
-        ll                = line.length();
 
 #ifdef _PRINT_LINE_LENGTHS_
         std::cout << " Line :: Length: " << ll << " Num: " << lineNum;
@@ -351,7 +560,7 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
             charF[i] = vF;
 #endif
 
-            if ( vF == 127 ) {
+            if ( vF == 78 ) {
                 valid = false;
 
 #ifdef _DEBUG_
@@ -385,7 +594,7 @@ void          extract_kmers::parse_line(          const std::string &line    ) {
                     std::cout << " " << valsF.size() << std::endl;
 #endif
                 }
-            }//if ( vF == 127 ) {
+            }//if ( vF == 78 ) {
 
 /*
 #ifdef _DEBUG_

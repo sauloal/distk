@@ -410,6 +410,9 @@ class extract_kmers(_object):
     def parse_line(self, line):
         return _kmer_set.extract_kmers_parse_line(self, line)
 
+    def parse_line_2(self, line):
+        return _kmer_set.extract_kmers_parse_line_2(self, line)
+
     def save_kmer_db(self, outfile):
         return _kmer_set.extract_kmers_save_kmer_db(self, outfile)
 

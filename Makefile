@@ -4,7 +4,7 @@ __PROG_VERSION__=$(shell git describe --tags --always --dirty)
 __COMPILE_DATE__=$(shell date)
 
 CPP_INCL=-I/usr/include/python2.7 -Itree-3.1/src/
-CPP_OPTS=-fPIC -std=c++11
+CPP_OPTS=-fPIC -march=native -std=c++0x
 CPP_VARS_F=$(CPP_VARS)
 CPP_VARS_F+=-D__PROG_VERSION__="$(__PROG_VERSION__)" -D__COMPILE_DATE__="$(__COMPILE_DATE__)"
 
@@ -21,7 +21,7 @@ CPP=g++
 all: _$(BASE).so
 
 clean:
-	rm -v $(BASE)_wrap.* $(BASE).o $(BASE).py $(BASE).pyc _$(BASE).so test/*.kmer test/*.log test/*.matrix core || true
+	rm -v $(BASE)_wrap.* $(BASE).o $(BASE).py $(BASE).pyc _$(BASE).so test/*.kmer test/*.log test/*.matrix  test/*.index core || true
 
 .PHONY: test
 test:

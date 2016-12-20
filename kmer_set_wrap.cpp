@@ -3019,17 +3019,18 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[7]
 #define SWIGTYPE_p_std__invalid_argument swig_types[8]
 #define SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t swig_types[9]
-#define SWIGTYPE_p_std__valarrayT_char_t swig_types[10]
-#define SWIGTYPE_p_std__valarrayT_int_t swig_types[11]
-#define SWIGTYPE_p_std__valarrayT_unsigned_int_t swig_types[12]
-#define SWIGTYPE_p_std__valarrayT_unsigned_long_t swig_types[13]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[14]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[15]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[16]
-#define SWIGTYPE_p_unsigned_long swig_types[17]
-#define SWIGTYPE_p_value_type swig_types[18]
-static swig_type_info *swig_types[20];
-static swig_module_info swig_module = {swig_types, 19, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__string swig_types[10]
+#define SWIGTYPE_p_std__valarrayT_char_t swig_types[11]
+#define SWIGTYPE_p_std__valarrayT_int_t swig_types[12]
+#define SWIGTYPE_p_std__valarrayT_unsigned_int_t swig_types[13]
+#define SWIGTYPE_p_std__valarrayT_unsigned_long_t swig_types[14]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[15]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[16]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[17]
+#define SWIGTYPE_p_unsigned_long swig_types[18]
+#define SWIGTYPE_p_value_type swig_types[19]
+static swig_type_info *swig_types[21];
+static swig_module_info swig_module = {swig_types, 20, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -9951,7 +9952,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_parse_line(PyObject *SWIGUNUSEDPARM(sel
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -9961,18 +9963,50 @@ SWIGINTERN PyObject *_wrap_extract_kmers_parse_line(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_parse_line" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_parse_line" "', argument " "2"" of type '" "std::string &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_parse_line" "', argument " "2"" of type '" "std::string &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->parse_line(*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_parse_line_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:extract_kmers_parse_line_2",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_parse_line_2" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_parse_line" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_parse_line_2" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_parse_line" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_parse_line_2" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
-  (arg1)->parse_line((std::string const &)*arg2);
+  (arg1)->parse_line_2((std::string const &)*arg2);
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -10509,6 +10543,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_extract_kmers", _wrap_delete_extract_kmers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_file_one_liner", _wrap_extract_kmers_read_file_one_liner, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_parse_line", _wrap_extract_kmers_parse_line, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_parse_line_2", _wrap_extract_kmers_parse_line_2, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_save_kmer_db", _wrap_extract_kmers_save_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_kmer_db", _wrap_extract_kmers_read_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_merge_kmers", _wrap_extract_kmers_merge_kmers, METH_VARARGS, NULL},
@@ -10534,6 +10569,7 @@ static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__alloca
 static swig_type_info _swigt__p_std__allocatorT_unsigned_long_t = {"_p_std__allocatorT_unsigned_long_t", "std::vector< unsigned long >::allocator_type *|std::allocator< unsigned long > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t = {"_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t", "std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > > *|setuLongLess *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_char_t = {"_p_std__valarrayT_char_t", "std::valarray< char > *|charValArr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_int_t = {"_p_std__valarrayT_int_t", "boolValArr *|std::valarray< int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_unsigned_int_t = {"_p_std__valarrayT_unsigned_int_t", "uIntValArr *|std::valarray< unsigned int > *", 0, 0, (void*)0, 0};
@@ -10555,6 +10591,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__allocatorT_unsigned_long_t,
   &_swigt__p_std__invalid_argument,
   &_swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t,
+  &_swigt__p_std__string,
   &_swigt__p_std__valarrayT_char_t,
   &_swigt__p_std__valarrayT_int_t,
   &_swigt__p_std__valarrayT_unsigned_int_t,
@@ -10576,6 +10613,7 @@ static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p
 static swig_cast_info _swigc__p_std__allocatorT_unsigned_long_t[] = {  {&_swigt__p_std__allocatorT_unsigned_long_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t[] = {  {&_swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__valarrayT_char_t[] = {  {&_swigt__p_std__valarrayT_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__valarrayT_int_t[] = {  {&_swigt__p_std__valarrayT_int_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__valarrayT_unsigned_int_t[] = {  {&_swigt__p_std__valarrayT_unsigned_int_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -10597,6 +10635,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__allocatorT_unsigned_long_t,
   _swigc__p_std__invalid_argument,
   _swigc__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t,
+  _swigc__p_std__string,
   _swigc__p_std__valarrayT_char_t,
   _swigc__p_std__valarrayT_int_t,
   _swigc__p_std__valarrayT_unsigned_int_t,

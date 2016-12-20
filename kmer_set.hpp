@@ -76,7 +76,8 @@ class extract_kmers {
         extract_kmers(    const int ks);
         ~extract_kmers();
         void          read_file_one_liner( const std::string &infile  );
-        void          parse_line(          const std::string &line    );
+        void          parse_line(                std::string &line    );
+        void          parse_line_2(        const std::string &line    );
         void          save_kmer_db(        const std::string &outfile );
         void          read_kmer_db(        const std::string &infile  );
         void          merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat );

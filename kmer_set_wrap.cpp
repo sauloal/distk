@@ -3009,30 +3009,32 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_allocator_type swig_types[0]
-#define SWIGTYPE_p_char swig_types[1]
-#define SWIGTYPE_p_difference_type swig_types[2]
-#define SWIGTYPE_p_extract_kmers swig_types[3]
-#define SWIGTYPE_p_p_PyObject swig_types[4]
-#define SWIGTYPE_p_size_type swig_types[5]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[6]
-#define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[7]
-#define SWIGTYPE_p_std__ifstream swig_types[8]
-#define SWIGTYPE_p_std__invalid_argument swig_types[9]
-#define SWIGTYPE_p_std__ofstream swig_types[10]
-#define SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t swig_types[11]
-#define SWIGTYPE_p_std__string swig_types[12]
-#define SWIGTYPE_p_std__valarrayT_char_t swig_types[13]
-#define SWIGTYPE_p_std__valarrayT_int_t swig_types[14]
-#define SWIGTYPE_p_std__valarrayT_unsigned_int_t swig_types[15]
-#define SWIGTYPE_p_std__valarrayT_unsigned_long_t swig_types[16]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[17]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[18]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[19]
-#define SWIGTYPE_p_unsigned_long swig_types[20]
-#define SWIGTYPE_p_value_type swig_types[21]
-static swig_type_info *swig_types[23];
-static swig_module_info swig_module = {swig_types, 22, 0, 0, 0, 0};
+#define SWIGTYPE_p_MutexType swig_types[0]
+#define SWIGTYPE_p_ScopedLock swig_types[1]
+#define SWIGTYPE_p_allocator_type swig_types[2]
+#define SWIGTYPE_p_char swig_types[3]
+#define SWIGTYPE_p_difference_type swig_types[4]
+#define SWIGTYPE_p_extract_kmers swig_types[5]
+#define SWIGTYPE_p_p_PyObject swig_types[6]
+#define SWIGTYPE_p_size_type swig_types[7]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[8]
+#define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[9]
+#define SWIGTYPE_p_std__ifstream swig_types[10]
+#define SWIGTYPE_p_std__invalid_argument swig_types[11]
+#define SWIGTYPE_p_std__ofstream swig_types[12]
+#define SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t swig_types[13]
+#define SWIGTYPE_p_std__string swig_types[14]
+#define SWIGTYPE_p_std__valarrayT_char_t swig_types[15]
+#define SWIGTYPE_p_std__valarrayT_int_t swig_types[16]
+#define SWIGTYPE_p_std__valarrayT_unsigned_int_t swig_types[17]
+#define SWIGTYPE_p_std__valarrayT_unsigned_long_t swig_types[18]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[19]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[20]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[21]
+#define SWIGTYPE_p_unsigned_long swig_types[22]
+#define SWIGTYPE_p_value_type swig_types[23]
+static swig_type_info *swig_types[25];
+static swig_module_info swig_module = {swig_types, 24, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -9834,6 +9836,184 @@ SWIGINTERN PyObject *ULongVector_swigregister(PyObject *SWIGUNUSEDPARM(self), Py
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_MutexType_Lock(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  MutexType *arg1 = (MutexType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MutexType_Lock",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MutexType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MutexType_Lock" "', argument " "1"" of type '" "MutexType *""'"); 
+  }
+  arg1 = reinterpret_cast< MutexType * >(argp1);
+  (arg1)->Lock();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MutexType_Unlock(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  MutexType *arg1 = (MutexType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MutexType_Unlock",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MutexType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MutexType_Unlock" "', argument " "1"" of type '" "MutexType *""'"); 
+  }
+  arg1 = reinterpret_cast< MutexType * >(argp1);
+  (arg1)->Unlock();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_MutexType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  MutexType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_MutexType")) SWIG_fail;
+  result = (MutexType *)new MutexType();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_MutexType, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_MutexType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  MutexType *arg1 = (MutexType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MutexType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MutexType, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MutexType" "', argument " "1"" of type '" "MutexType *""'"); 
+  }
+  arg1 = reinterpret_cast< MutexType * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *MutexType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_MutexType, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ScopedLock(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  MutexType *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  ScopedLock *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedLock",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_MutexType,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedLock" "', argument " "1"" of type '" "MutexType &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedLock" "', argument " "1"" of type '" "MutexType &""'"); 
+  }
+  arg1 = reinterpret_cast< MutexType * >(argp1);
+  result = (ScopedLock *)new ScopedLock(*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_ScopedLock, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedLock(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  ScopedLock *arg1 = (ScopedLock *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedLock",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_ScopedLock, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedLock" "', argument " "1"" of type '" "ScopedLock *""'"); 
+  }
+  arg1 = reinterpret_cast< ScopedLock * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedLock_Unlock(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  ScopedLock *arg1 = (ScopedLock *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedLock_Unlock",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_ScopedLock, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedLock_Unlock" "', argument " "1"" of type '" "ScopedLock *""'"); 
+  }
+  arg1 = reinterpret_cast< ScopedLock * >(argp1);
+  (arg1)->Unlock();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedLock_LockAgain(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  ScopedLock *arg1 = (ScopedLock *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedLock_LockAgain",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_ScopedLock, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedLock_LockAgain" "', argument " "1"" of type '" "ScopedLock *""'"); 
+  }
+  arg1 = reinterpret_cast< ScopedLock * >(argp1);
+  (arg1)->LockAgain();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedLock_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_ScopedLock, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_fact(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
@@ -9884,6 +10064,27 @@ SWIGINTERN PyObject *_wrap_new_extract_kmers(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = static_cast< int >(val1);
   result = (extract_kmers *)new extract_kmers(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_extract_kmers, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_extract_kmers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_extract_kmers",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_extract_kmers" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -10730,27 +10931,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_extract_kmers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_extract_kmers",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_extract_kmers" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *extract_kmers_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
@@ -10846,9 +11026,20 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ULongVector_capacity", _wrap_ULongVector_capacity, METH_VARARGS, NULL},
 	 { (char *)"delete_ULongVector", _wrap_delete_ULongVector, METH_VARARGS, NULL},
 	 { (char *)"ULongVector_swigregister", ULongVector_swigregister, METH_VARARGS, NULL},
+	 { (char *)"MutexType_Lock", _wrap_MutexType_Lock, METH_VARARGS, NULL},
+	 { (char *)"MutexType_Unlock", _wrap_MutexType_Unlock, METH_VARARGS, NULL},
+	 { (char *)"new_MutexType", _wrap_new_MutexType, METH_VARARGS, NULL},
+	 { (char *)"delete_MutexType", _wrap_delete_MutexType, METH_VARARGS, NULL},
+	 { (char *)"MutexType_swigregister", MutexType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ScopedLock", _wrap_new_ScopedLock, METH_VARARGS, NULL},
+	 { (char *)"delete_ScopedLock", _wrap_delete_ScopedLock, METH_VARARGS, NULL},
+	 { (char *)"ScopedLock_Unlock", _wrap_ScopedLock_Unlock, METH_VARARGS, NULL},
+	 { (char *)"ScopedLock_LockAgain", _wrap_ScopedLock_LockAgain, METH_VARARGS, NULL},
+	 { (char *)"ScopedLock_swigregister", ScopedLock_swigregister, METH_VARARGS, NULL},
 	 { (char *)"fact", _wrap_fact, METH_VARARGS, NULL},
 	 { (char *)"version", _wrap_version, METH_VARARGS, NULL},
 	 { (char *)"new_extract_kmers", _wrap_new_extract_kmers, METH_VARARGS, NULL},
+	 { (char *)"delete_extract_kmers", _wrap_delete_extract_kmers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_file_one_liner", _wrap_extract_kmers_read_file_one_liner, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_fasta", _wrap_extract_kmers_read_fasta, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_fastq", _wrap_extract_kmers_read_fastq, METH_VARARGS, NULL},
@@ -10864,7 +11055,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"extract_kmers_get_db_num_registers", _wrap_extract_kmers_get_db_num_registers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_size", _wrap_extract_kmers_size, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_print_all", _wrap_extract_kmers_print_all, METH_VARARGS, NULL},
-	 { (char *)"delete_extract_kmers", _wrap_delete_extract_kmers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_swigregister", extract_kmers_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
@@ -10872,6 +11062,8 @@ static PyMethodDef SwigMethods[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static swig_type_info _swigt__p_MutexType = {"_p_MutexType", "MutexType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ScopedLock = {"_p_ScopedLock", "ScopedLock *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
@@ -10896,6 +11088,8 @@ static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "ulong *|un
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
+  &_swigt__p_MutexType,
+  &_swigt__p_ScopedLock,
   &_swigt__p_allocator_type,
   &_swigt__p_char,
   &_swigt__p_difference_type,
@@ -10920,6 +11114,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_value_type,
 };
 
+static swig_cast_info _swigc__p_MutexType[] = {  {&_swigt__p_MutexType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ScopedLock[] = {  {&_swigt__p_ScopedLock, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
@@ -10944,6 +11140,8 @@ static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
+  _swigc__p_MutexType,
+  _swigc__p_ScopedLock,
   _swigc__p_allocator_type,
   _swigc__p_char,
   _swigc__p_difference_type,

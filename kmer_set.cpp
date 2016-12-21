@@ -20,6 +20,7 @@
 //#include <math.h>       /* pow */
 //#include <cstddef>      // std::size_t
 
+
 int fact (int n) {
     if (n < 0){
         return 0;
@@ -270,11 +271,11 @@ extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0) {
     std::cout << "clean " << clean << std::endl;
 }
 
-/*
+
 extract_kmers::~extract_kmers(){
-        //q.clear();
+    //q.clear();
 }
-*/
+
 
 ulong         extract_kmers::size() {
     return q.size();
@@ -287,7 +288,7 @@ void          extract_kmers::print_all() {
     }
 }
 
-void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
+void          extract_kmers::read_file_one_liner( const std::string   &infile  ) {
     std::ifstream infhd(infile);
 
     if (!infhd) {
@@ -303,12 +304,13 @@ void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
 
     } else {
         std::string line;
-        //std::valarray<const char *> l;
 
         while (getline(infhd,line)) {
             //std::cout << "Got line" << std::endl;
+#pragma omp task firstprivate(line)
             parse_line(line);
         }//while (getline(infhd,line)) {
+#pragma omp taskwait
 
         std::cout << "TOTAL: " <<  size() << std::endl;
 
@@ -320,7 +322,7 @@ void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
     }
 }
 
-void          extract_kmers::read_fasta(          const std::string &infile  ) {
+void          extract_kmers::read_fasta(          const std::string   &infile  ) {
     /*
      * TODO: IMPLEMENT + GZ VERSION
      */
@@ -328,7 +330,7 @@ void          extract_kmers::read_fasta(          const std::string &infile  ) {
     infhd.close();
 }
 
-void          extract_kmers::read_fastq(          const std::string &infile  ) {
+void          extract_kmers::read_fastq(          const std::string   &infile  ) {
     /*
      * TODO: IMPLEMENT + GZ VERSION
      */
@@ -336,7 +338,7 @@ void          extract_kmers::read_fastq(          const std::string &infile  ) {
     infhd.close();
 }
 
-void          extract_kmers::parse_line(                std::string &line    ) {
+void          extract_kmers::parse_line(                std::string   &line    ) {
     ulong       ll = line.length();
 
 #ifdef _DEBUG_
@@ -505,7 +507,10 @@ void          extract_kmers::parse_line(                std::string &line    ) {
                     
                     resM = ( resF <= resR ) ? resF : resR;
 
+                    ScopedLock lck(lock);
+#pragma omp critical(dbupdate)
                     q.insert(resM);
+                    lck.Unlock();
 
 #ifdef _DEBUG_
                     std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
@@ -516,7 +521,7 @@ void          extract_kmers::parse_line(                std::string &line    ) {
     }//if ( line.length() >= kmer_size ) {
 }
 
-void          extract_kmers::save_kmer_db(        const std::string &outfile ) {
+void          extract_kmers::save_kmer_db(        const std::string   &outfile ) {
     if ( size() == 0 ) {
         std::cout << "NO KMER TO SAVE" << std::endl;
 
@@ -552,7 +557,7 @@ void          extract_kmers::save_kmer_db(        const std::string &outfile ) {
     }
 }
 
-ulong         extract_kmers::get_db_file_size(    const std::string &infile  ) {
+ulong         extract_kmers::get_db_file_size(    const std::string   &infile  ) {
     /*
      * TODO: read delta format
      */
@@ -567,7 +572,7 @@ ulong         extract_kmers::get_db_file_size(    const std::string &infile  ) {
     return get_db_file_size(infhd);
 }
 
-ulong         extract_kmers::get_db_file_size(    std::ifstream &infhd  ) {
+ulong         extract_kmers::get_db_file_size(          std::ifstream &infhd   ) {
     ulong startPos = infhd.tellg();
 
     infhd.seekg(0, std::ios::end);
@@ -579,7 +584,7 @@ ulong         extract_kmers::get_db_file_size(    std::ifstream &infhd  ) {
     return fileSize;
 }
 
-ulong         extract_kmers::get_db_num_registers(const std::string &infile  ) {
+ulong         extract_kmers::get_db_num_registers(const std::string   &infile  ) {
     ulong numRegs = 0;
 
 #ifdef _NO_DIFF_ENCODING_
@@ -602,7 +607,7 @@ ulong         extract_kmers::get_db_num_registers(const std::string &infile  ) {
     return numRegs;
 }
 
-ulong         extract_kmers::get_db_num_registers(std::ifstream &infhd) {
+ulong         extract_kmers::get_db_num_registers(      std::ifstream &infhd   ) {
     ulong numRegs = 0;
 #ifdef _NO_DIFF_ENCODING_
     ulong fileSize = get_db_file_size(infhd);
@@ -617,7 +622,7 @@ ulong         extract_kmers::get_db_num_registers(std::ifstream &infhd) {
     return numRegs;
 }
 
-void          extract_kmers::read_kmer_db(        const std::string &infile  ) {
+void          extract_kmers::read_kmer_db(        const std::string   &infile  ) {
     /*
      * TODO: load into q
      *       read delta format
@@ -665,7 +670,7 @@ void          extract_kmers::read_kmer_db(        const std::string &infile  ) {
     std::cout << "   DONE" << std::endl;
 }
 
-void  extract_kmers::diff_encoder(std::ofstream &outfhd) {
+void          extract_kmers::diff_encoder(              std::ofstream &outfhd  ) {
     /*
      * TODO: Implement roling difference encoding
      *       <int8>[<char>,n]
@@ -714,7 +719,7 @@ void  extract_kmers::diff_encoder(std::ofstream &outfhd) {
     }
 }
 
-void  extract_kmers::diff_decoder(std::ifstream &infhd) {
+void          extract_kmers::diff_decoder(              std::ifstream &infhd   ) {
     //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
     std::cout << "   READING" << std::endl;
 
@@ -761,6 +766,7 @@ void          extract_kmers::merge_kmers(         const std::string &outfile, co
 
     mat.resize(size * size);
 
+#pragma omp parallel for
     for( strVec::size_type i = 0; i < size; i++ ) {
         auto file1  = infiles[i];
 
@@ -805,8 +811,13 @@ void          extract_kmers::merge_kmers(         const std::string &outfile, co
             
             std::cout << "   COUNT " << count << std::endl;
             
-            mat[pos1] = count;
-            mat[pos2] = count;
+            ScopedLock lck(lock);
+#pragma omp critical(matrixupdate)
+            {
+                mat[pos1] = count;
+                mat[pos2] = count;
+            }
+            lck.Unlock();
         }
     }
     

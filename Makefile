@@ -3,10 +3,17 @@ BASE=kmer_set
 __PROG_VERSION__=$(shell git describe --tags --always --dirty)
 __COMPILE_DATE__=$(shell date)
 
+
 CPP_INCL=-I/usr/include/python2.7 -Itree-3.1/src/
 CPP_OPTS=-fPIC -march=native -std=c++0x
 CPP_VARS_F=$(CPP_VARS)
 CPP_VARS_F+=-D__PROG_VERSION__="$(__PROG_VERSION__)" -D__COMPILE_DATE__="$(__COMPILE_DATE__)"
+LNK_OPTS=
+
+ifneq ($(THREADS),)
+CPP_OPTS+=-fopenmp
+LNK_OPTS+=-fopenmp
+endif
 
 ifeq ($(DEBUG),)
 #no debug
@@ -38,5 +45,5 @@ $(BASE)_wrap.cpp: $(BASE).i $(BASE).cpp $(BASE).hpp
 	$(CPP) $(CPP_OPTS) $(CPP_INCL) $(CPP_VARS_F) -c $< -o $@
 
 _$(BASE).so: $(BASE).o $(BASE)_wrap.o
-	$(CPP) -shared $? -o $@
+	$(CPP) -shared $(LNK_OPTS) $? -o $@
 

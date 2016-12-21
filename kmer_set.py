@@ -380,6 +380,54 @@ class ULongVector(_object):
 ULongVector_swigregister = _kmer_set.ULongVector_swigregister
 ULongVector_swigregister(ULongVector)
 
+class MutexType(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MutexType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MutexType, name)
+    __repr__ = _swig_repr
+
+    def Lock(self):
+        return _kmer_set.MutexType_Lock(self)
+
+    def Unlock(self):
+        return _kmer_set.MutexType_Unlock(self)
+
+    def __init__(self):
+        this = _kmer_set.new_MutexType()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _kmer_set.delete_MutexType
+    __del__ = lambda self: None
+MutexType_swigregister = _kmer_set.MutexType_swigregister
+MutexType_swigregister(MutexType)
+
+class ScopedLock(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedLock, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedLock, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, m):
+        this = _kmer_set.new_ScopedLock(m)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _kmer_set.delete_ScopedLock
+    __del__ = lambda self: None
+
+    def Unlock(self):
+        return _kmer_set.ScopedLock_Unlock(self)
+
+    def LockAgain(self):
+        return _kmer_set.ScopedLock_LockAgain(self)
+ScopedLock_swigregister = _kmer_set.ScopedLock_swigregister
+ScopedLock_swigregister(ScopedLock)
+
 
 def fact(n):
     return _kmer_set.fact(n)
@@ -401,6 +449,8 @@ class extract_kmers(_object):
             self.this.append(this)
         except Exception:
             self.this = this
+    __swig_destroy__ = _kmer_set.delete_extract_kmers
+    __del__ = lambda self: None
 
     def read_file_one_liner(self, infile):
         return _kmer_set.extract_kmers_read_file_one_liner(self, infile)
@@ -446,8 +496,6 @@ class extract_kmers(_object):
 
     def print_all(self):
         return _kmer_set.extract_kmers_print_all(self)
-    __swig_destroy__ = _kmer_set.delete_extract_kmers
-    __del__ = lambda self: None
 extract_kmers_swigregister = _kmer_set.extract_kmers_swigregister
 extract_kmers_swigregister(extract_kmers)
 

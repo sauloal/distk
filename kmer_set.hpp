@@ -35,29 +35,12 @@ typedef std::vector<ulong>                 ulongVec;
 
 class extract_kmers {
     private:
-        int         kmer_size;
-        ulong       lineNum;
-        ulong       ll;
-
-        ulong       resF;
-        ulong       resR;
-        ulong       resM;
-
-        ulong       kcF;
-        ulong       pvF;
-        ulong       cvF;
-
-        ulong       kcR;
-        ulong       pvR;
-        ulong       cvR;
-
-        char        c;
-        int         vF;
-
-        int         dictF[256];
-        ulong       pows[32] = {};
+        int          kmer_size;
+        int          dictF[256];
+        ulong        pows[32] = {};
     
-        ulong       clean;
+        ulong        lineNum;
+        ulong        clean;
 
         setuLongLess q;
         

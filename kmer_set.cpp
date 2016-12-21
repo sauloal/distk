@@ -231,7 +231,7 @@ size_t intersection_size(const T1& s1, const T2& s2)
 
 
 
-extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), resF(0), resR(0), resM(0), kcF(0), pvF(0), cvF(0), kcR(0), pvR(0), cvR(0) {
+extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0) {
     std::cout << " KMER SIZE: " << kmer_size << std::endl;
 
     for ( int i = 0; i < 256; i++ ) {
@@ -252,9 +252,6 @@ extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), re
         pows[pos] = std::pow(4, ind);
     }
 
-    //cleanF = ((ulong)(pow(2, 64)-1)) xor 3;
-    //cleanR = ((ulong)(pow(2, 64)-1)) xor (3 << (kmer_size * 2));
-    
     //cleans first two bits
     clean = ((ulong)(pow(2, ((kmer_size-1)*2)))-1);
 
@@ -328,17 +325,36 @@ void          extract_kmers::read_fastq( const std::string &infile  ) {
 }
 
 void          extract_kmers::parse_line(          std::string &line    ) {
+    ulong       ll = line.length();
+
 #ifdef _DEBUG_
-    if ( line.length() <= 100 ) {
+    if ( ll <= 100 ) {
         std::cout << "Line: " << line << std::endl;
     }
 #endif
 
-    ulong tainted = 0;
-    bool valid   = false;
+    ulong resF = 0;
+    ulong resR = 0;
+    ulong resM = 0;
 
-    ll                = line.length();
+    ulong kcF  = 0;
+    ulong pvF  = 0;
+    ulong cvF  = 0;
+
+    ulong kcR  = 0;
+    ulong pvR  = 0;
+    ulong cvR  = 0;
+
+    char  c;
+    int   vF;
+
+    ulong tainted = 0;
+    bool  valid   = false;
+
     if ( ll >= kmer_size ) {
+        /*
+         * TODO: Add mutex
+         */
         lineNum          += 1;
 
 #ifdef _PRINT_LINE_LENGTHS_
@@ -355,6 +371,7 @@ void          extract_kmers::parse_line(          std::string &line    ) {
             vF       = dictF[c];
 
             line[i]  = vF;
+
 #ifdef _DEBUG_
             std::cout << "i " << i << " c " << c << " (" << (int)c << ") "<< " vF " << vF << std::endl;
 #endif
@@ -380,7 +397,6 @@ void          extract_kmers::parse_line(          std::string &line    ) {
 #endif
 
                 tainted = je;
-
             }//if ( vF == 78 ) {
 
 
@@ -405,7 +421,6 @@ void          extract_kmers::parse_line(          std::string &line    ) {
 #ifdef _DEBUG_
                     std::cout << "  position valid" << std::endl;
 #endif
-
 
                     if ( valid ) {
 #ifdef _DEBUG_
@@ -437,7 +452,7 @@ void          extract_kmers::parse_line(          std::string &line    ) {
                         valid = true;
 
                         auto p_begin = line.begin() + (i - kmer_size + 1);
-
+                        
                         resF = 0;
                         resR = 0;
                         resM = 0;
@@ -449,7 +464,6 @@ void          extract_kmers::parse_line(          std::string &line    ) {
                         kcR  = 0;
                         pvR  = 0;
                         cvR  = 0;
-
 
                         for ( unsigned long pos = 0; pos < kmer_size; pos++ ) {
                             auto a_pos = p_begin + pos;
@@ -475,9 +489,7 @@ void          extract_kmers::parse_line(          std::string &line    ) {
 #ifdef _DEBUG_
                             std::cout << " SUM AF: " << resF << " SUM AR: " << resR << std::endl;
 #endif
-
                         } //for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
-
                     } // else if ( valid ) {
                     
                     resM = ( resF <= resR ) ? resF : resR;

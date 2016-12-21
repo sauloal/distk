@@ -1,5 +1,4 @@
-test6.fasta
-test7.fasta
+*.fasta
 *.kmer
 *.log
 *.matrix

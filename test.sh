@@ -10,7 +10,7 @@ rm core || true
 
 ./kmer.py
 
-for kmer_len in 15; do
+for kmer_len in 7; do
 fls=""
 
 kmer_len_num=$kmer_len
@@ -19,7 +19,7 @@ if [[ "$kmer_len" -lt "10" ]]; then
 kmer_len_num="0"$kmer_len
 fi
 
-for test_index in 7; do
+for test_index in 6; do
 
 #for kmer_len in 3; do
 #for test_index in 7; do

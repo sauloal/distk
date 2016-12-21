@@ -47,6 +47,11 @@ void version () {
 #ifdef _PRINT_LINE_LENGTHS_
     std::cout << "COMPILE FLAG: _PRINT_LINE_LENGTHS_" << std::endl;
 #endif
+
+#ifdef _NO_DIFF_ENCODING_
+    std::cout << "COMPILE FLAG: _NO_DIFF_ENCODING_" << std::endl;
+#endif
+
 /*
  *7 7           2m52.768s
  *7 7 use slice 4m32.193s
@@ -125,6 +130,10 @@ FINISHED
 real    25m13.121s
 user    24m23.984s
 sys     0m45.391s
+
+test6.07.kmer kmer           gz
+normal        65536          12320 (18.79%) 
+diff          40968 (62.51%)   419 ( 0.63% - gz 3.35%)
 */
 
 
@@ -231,6 +240,9 @@ size_t intersection_size(const T1& s1, const T2& s2)
 
 
 
+
+
+
 extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0) {
     std::cout << " KMER SIZE: " << kmer_size << std::endl;
 
@@ -308,7 +320,7 @@ void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
     }
 }
 
-void          extract_kmers::read_fasta( const std::string &infile  ) {
+void          extract_kmers::read_fasta(          const std::string &infile  ) {
     /*
      * TODO: IMPLEMENT + GZ VERSION
      */
@@ -316,7 +328,7 @@ void          extract_kmers::read_fasta( const std::string &infile  ) {
     infhd.close();
 }
 
-void          extract_kmers::read_fastq( const std::string &infile  ) {
+void          extract_kmers::read_fastq(          const std::string &infile  ) {
     /*
      * TODO: IMPLEMENT + GZ VERSION
      */
@@ -324,7 +336,7 @@ void          extract_kmers::read_fastq( const std::string &infile  ) {
     infhd.close();
 }
 
-void          extract_kmers::parse_line(          std::string &line    ) {
+void          extract_kmers::parse_line(                std::string &line    ) {
     ulong       ll = line.length();
 
 #ifdef _DEBUG_
@@ -369,7 +381,6 @@ void          extract_kmers::parse_line(          std::string &line    ) {
         for ( long i = 0; i < ll; i++ ) {
             c        = line[i];
             vF       = dictF[c];
-
             line[i]  = vF;
 
 #ifdef _DEBUG_
@@ -505,7 +516,6 @@ void          extract_kmers::parse_line(          std::string &line    ) {
     }//if ( line.length() >= kmer_size ) {
 }
 
-
 void          extract_kmers::save_kmer_db(        const std::string &outfile ) {
     if ( size() == 0 ) {
         std::cout << "NO KMER TO SAVE" << std::endl;
@@ -524,10 +534,14 @@ void          extract_kmers::save_kmer_db(        const std::string &outfile ) {
         
         //std::copy(q.begin(), q.end(), std::ostreambuf_iterator<ulong>(outfhd));
         //outfhd.write(reinterpret_cast<const char*>(&q.begin()), q.size()*sizeof(ulong));
+
+#ifdef _NO_DIFF_ENCODING_
         for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
             outfhd.write(reinterpret_cast<const char*>(&(*it)), sizeof(ulong));
         }
-
+#else
+        diff_encoder(outfhd);
+#endif
         outfhd.close();
 
         std::cout << "SAVED" << std::endl;
@@ -538,7 +552,7 @@ void          extract_kmers::save_kmer_db(        const std::string &outfile ) {
     }
 }
 
-ulong         extract_kmers::get_db_size(         const std::string &infile  ) {
+ulong         extract_kmers::get_db_file_size(    const std::string &infile  ) {
     /*
      * TODO: read delta format
      */
@@ -550,11 +564,57 @@ ulong         extract_kmers::get_db_size(         const std::string &infile  ) {
         //return;
     }
     
+    return get_db_file_size(infhd);
+}
+
+ulong         extract_kmers::get_db_file_size(    std::ifstream &infhd  ) {
+    ulong startPos = infhd.tellg();
+
     infhd.seekg(0, std::ios::end);
 
     ulong fileSize = infhd.tellg();
 
+    infhd.seekg(startPos, std::ios::beg);
+
     return fileSize;
+}
+
+ulong         extract_kmers::get_db_num_registers(const std::string &infile  ) {
+    ulong numRegs = 0;
+
+#ifdef _NO_DIFF_ENCODING_
+    ulong fileSize = get_db_file_size(infile);
+    numRegs        = fileSize / sizeof(ulong);
+#else
+
+    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
+
+    if (!infhd) {
+        perror((std::string("error reading input file: ") + infile).c_str());
+        throw std::runtime_error("error reading input file: " + infile);
+        //return;
+    }
+
+    numRegs = get_db_num_registers(infhd);
+    
+    infhd.close();
+#endif
+    return numRegs;
+}
+
+ulong         extract_kmers::get_db_num_registers(std::ifstream &infhd) {
+    ulong numRegs = 0;
+#ifdef _NO_DIFF_ENCODING_
+    ulong fileSize = get_db_file_size(infhd);
+    numRegs = fileSize / sizeof(ulong);
+#else
+    ulong startPos = infhd.tellg();
+    
+    infhd.read((char *)&numRegs,sizeof(numRegs));
+
+    infhd.seekg(startPos, std::ios::beg);
+#endif
+    return numRegs;
 }
 
 void          extract_kmers::read_kmer_db(        const std::string &infile  ) {
@@ -562,11 +622,15 @@ void          extract_kmers::read_kmer_db(        const std::string &infile  ) {
      * TODO: load into q
      *       read delta format
      */
-    std::cout << "  READING BACK FROM: " << infile << std::endl;
 
-    //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
-    ulong fileSize = get_db_size(infile);
-    ulong regs     = fileSize / sizeof(ulong);
+    std::cout << "  READING BACK FROM: " << infile << std::endl;
+    
+    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
+
+    std::cout << "    OPEN" << std::endl;
+
+    ulong fileSize = get_db_file_size(infile);
+    ulong regs     = get_db_num_registers(infile);
 
     std::cout << "    SIZE: " << fileSize << " REGISTERS " << regs << std::endl;
 
@@ -577,23 +641,20 @@ void          extract_kmers::read_kmer_db(        const std::string &infile  ) {
     std::cout << "   ALLOCATING " << regs << " REGS" << std::endl;
 
     q.get_allocator().allocate(regs);
-
-    std::cout << "   READING" << std::endl;
     
-    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
-
-    std::cout << "    OPEN" << std::endl;
-
     //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
     //infhd.read((char*)&(*q.cbegin()), fileSize);
 
+#ifdef _NO_DIFF_ENCODING_
     ulong buffer;
     while(infhd.read((char *)&buffer,sizeof(buffer)))
     {
         q.insert(buffer);
     }
-    
-    
+#else
+    diff_decoder(infhd);
+#endif
+
     std::cout << "    CLOSE" << std::endl;
     infhd.close();
 
@@ -602,6 +663,82 @@ void          extract_kmers::read_kmer_db(        const std::string &infile  ) {
     std::cout << "    LENGHT: " << q.size() << std::endl;
 
     std::cout << "   DONE" << std::endl;
+}
+
+void  extract_kmers::diff_encoder(std::ofstream &outfhd) {
+    /*
+     * TODO: Implement roling difference encoding
+     *       <int8>[<char>,n]
+     *       '     '--> Diff from prev to current using the minimum number of chars
+     *       '--------> Number of chars
+     * 1    1    1 <1,1>
+     * 2    1    1 <1,1>
+     * 3    1    1 <1,1>
+     * 5    1    2 <1,1>
+     * 10   1    5 <1,1>
+     * 200  2  190 <2,12,7>  [ 190 as 2 chars]
+     * 2000 3 1800 <3,7,0,8> [1800 as 3 chars]
+     *
+     * check minimum number of bits as n
+     * save n
+     * cast ulong to n chars
+     * save chars
+     *
+     * read 1 char
+     * read n chars
+     * cast n chars to ulong
+     */
+    ulong        diff    = 0;
+    ulong        prev    = 0;
+    unsigned int lenI    = 0;
+    ulong        numRegs = q.size();
+    
+    std::cout << "NUM REGISTERS: " << numRegs << std::endl;
+    
+    outfhd.write(reinterpret_cast<const char*>( &numRegs ), sizeof(numRegs));
+    
+    for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
+        if ( it == q.begin() ) {
+            prev = 0;
+        }
+
+        diff = *it - prev;
+        lenI = diff == 0 ? 1 : lrint(ceil(log2(diff)/8.0));
+        lenI = lenI == 0 ? 1 : lenI;
+//#ifdef _DEBUG_
+        std::cout << "val " << *it << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
+//#endif
+        outfhd.write(reinterpret_cast<const char*>( &lenI ), sizeof(lenI));
+        outfhd.write(reinterpret_cast<const char*>(&(diff)),        lenI );
+        prev = *it;
+    }
+}
+
+void  extract_kmers::diff_decoder(std::ifstream &infhd) {
+    //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
+    std::cout << "   READING" << std::endl;
+
+    ulong        val  = 0;
+    ulong        diff = 0;
+    ulong        prev = 0;
+    unsigned int lenI = 0;
+
+    ulong        regs = 0;
+    infhd.read((char *)&regs,sizeof(ulong));
+    std::cout << "   READING " << regs << " registers" << std::endl;
+    
+    
+    while(infhd.read((char *)&lenI,sizeof(lenI))) {
+        infhd.read((char *)&diff,       lenI );
+        val  = prev + diff;
+//#ifdef _DEBUG_
+        std::cout << "val " << val << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
+//#endif
+        q.insert(val);
+        prev = val;
+        lenI = 0;
+        diff = 0;
+    }
 }
 
 ulongVec      extract_kmers::get_kmer_db() {

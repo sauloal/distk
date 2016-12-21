@@ -4,3 +4,4 @@ test7.fasta
 *.log
 *.matrix
 *.index
+*.gz

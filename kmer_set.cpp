@@ -47,10 +47,6 @@ void version () {
 #ifdef _PRINT_LINE_LENGTHS_
     std::cout << "COMPILE FLAG: _PRINT_LINE_LENGTHS_" << std::endl;
 #endif
-
-#ifdef _USE_BITSHIFT_
-    std::cout << "COMPILE FLAG: _USE_BITSHIFT_" << std::endl;
-#endif
 /*
  *7 7           2m52.768s
  *7 7 use slice 4m32.193s
@@ -265,16 +261,11 @@ extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), ll(0), re
     std::cout << "clean " << clean << std::endl;
 }
 
+/*
 extract_kmers::~extract_kmers(){
-        charF.resize(0);
-        valsF.resize(0);
-
-#ifdef _DEBUG_
-        intsF.resize(0);
-#endif
-
         //q.clear();
 }
+*/
 
 ulong         extract_kmers::size() {
     return q.size();
@@ -320,8 +311,21 @@ void          extract_kmers::read_file_one_liner( const std::string &infile  ) {
     }
 }
 
+void          extract_kmers::read_fasta( const std::string &infile  ) {
+    /*
+     * TODO: IMPLEMENT + GZ VERSION
+     */
+    std::ifstream infhd(infile);
+    infhd.close();
+}
 
-
+void          extract_kmers::read_fastq( const std::string &infile  ) {
+    /*
+     * TODO: IMPLEMENT + GZ VERSION
+     */
+    std::ifstream infhd(infile);
+    infhd.close();
+}
 
 void          extract_kmers::parse_line(          std::string &line    ) {
 #ifdef _DEBUG_
@@ -377,18 +381,6 @@ void          extract_kmers::parse_line(          std::string &line    ) {
 
                 tainted = je;
 
-//                for ( ulong j = js; j < je; j++ ) {
-//                    valsF[j] = 1;
-//#ifdef _DEBUG_
-//                    std::cout << "   js " << js << " je " << je << " j " << j;
-//
-//                    if ( line.length() <= 100 ) {
-//                        std::cout << " " << valsF;
-//                    }
-//
-//                    std::cout << " " << valsF.size() << std::endl;
-//#endif
-//                }
             }//if ( vF == 78 ) {
 
 
@@ -415,28 +407,27 @@ void          extract_kmers::parse_line(          std::string &line    ) {
 #endif
 
 
-#ifdef _USE_BITSHIFT_
                     if ( valid ) {
 #ifdef _DEBUG_
                         std::cout << " VALID :: B :: resF: " << resF << " resR: " << resR << std::endl;
 #endif //_DEBUG_
 
                         resF &= clean;
-                        //resR &= clean;
+                            //resR &= clean;
 
 #ifdef _DEBUG_
                         std::cout << " VALID :: & :: resF: " << resF << " resR: " << resR << std::endl;
 #endif //_DEBUG_
 
-                        resF = (resF << 2);
-                        resR = (resR >> 2);
+                        resF = ( resF << 2 );
+                        resR = ( resR >> 2 );
 
 #ifdef _DEBUG_
                         std::cout << " VALID :: S :: resF: " << resF << " resR: " << resR << std::endl;
 #endif //_DEBUG_
 
-                        resF += (   vF                      );
-                        resR += ((3-vF) << ((kmer_size-1)*2));
+                        resF += (    vF                       );
+                        resR += ( (3-vF) << ((kmer_size-1)*2) );
 
 #ifdef _DEBUG_
                         std::cout << " VALID :: R :: resF: " << resF << " resR: " << resR << std::endl;
@@ -444,7 +435,7 @@ void          extract_kmers::parse_line(          std::string &line    ) {
 
                     } else {
                         valid = true;
-#endif //#ifdef _USE_BITSHIFT_
+
                         auto p_begin = line.begin() + (i - kmer_size + 1);
 
                         resF = 0;
@@ -466,17 +457,8 @@ void          extract_kmers::parse_line(          std::string &line    ) {
                             kcF   = *a_pos;
                             kcR   = 3 - kcF;
 
-#ifdef _USE_POW_
-                            pvF   = pows[              pos     ];
-                            pvR   = pows[  kmer_size - pos - 1 ];
-
-                            cvF   = kcF * pvF;
-                            cvR   = kcR * pvR;
-#else // _USE_POW_
                             cvF   = (kcF << ((kmer_size - pos - 1)*2));
                             cvR   = (kcR << (             pos     *2));
-#endif // _USE_POW_
-
 
 #ifdef _DEBUG_
                             std::cout << "  I: "     << i    << " POS : "   << (pos+1)
@@ -496,9 +478,7 @@ void          extract_kmers::parse_line(          std::string &line    ) {
 
                         } //for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
 
-#ifdef _USE_BITSHIFT_
                     } // else if ( valid ) {
-#endif //ifdef _USE_BITSHIFT_
                     
                     resM = ( resF <= resR ) ? resF : resR;
 
@@ -513,246 +493,6 @@ void          extract_kmers::parse_line(          std::string &line    ) {
     }//if ( line.length() >= kmer_size ) {
 }
 
-
-
-void          extract_kmers::parse_line_2(          const std::string &line    ) {
-#ifdef _DEBUG_
-    if ( line.length() <= 100 ) {
-        std::cout << "Line: " << line << std::endl;
-    }
-#endif
-
-    bool valid   = false;
-
-    std::slice sl;
-    //charValArr kchaF(kmer_size);
-    //uIntValArr kintF(kmer_size);
-
-    ll                = line.length();
-    if ( ll >= kmer_size ) {
-        lineNum          += 1;
-
-#ifdef _PRINT_LINE_LENGTHS_
-        std::cout << " Line :: Length: " << ll << " Num: " << lineNum;
-#endif
-
-        charF = charValArr( line.c_str(), ll);
-        valsF = boolValArr(               ll);
-
-#ifdef _DEBUG_
-        intsF = uIntValArr(               ll);
-#endif
-
-
-#ifdef _PRINT_LINE_LENGTHS_
-        std::cout << " Line Loaded" << std::endl;
-#endif
-
-
-        for ( long i = 0; i < ll; i++ ) {
-            c        = charF[i];
-            vF       = dictF[c];
-
-#ifdef _DEBUG_
-            intsF[i] = vF;
-            std::cout << "i " << i << " c " << c << " (" << (int)c << ") "<< " vF " << vF << std::endl;
-#else
-            charF[i] = vF;
-#endif
-
-            if ( vF == 78 ) {
-                valid = false;
-
-#ifdef _DEBUG_
-                if ( line.length() <= 100 ) {
-                    std::cout << " BAD"                          << std::endl;
-                    std::cout << "  SEQ   :           " << charF << std::endl;
-                    std::cout << "  INTS  :           " << intsF << std::endl;
-                    std::cout << "  VALS  :           " << valsF << std::endl;
-                }
-#endif
-                long js = i - kmer_size + 1;
-                long je = i + kmer_size;
-
-                if ( js <  0  ) { js =  0; }
-                if ( js >= ll ) { js =  0; }
-                if ( je >= ll ) { je = ll; }
-
-#ifdef _DEBUG_
-                std::cout << "   js " << js << " je " << je << std::endl;
-#endif
-
-                for ( ulong j = js; j < je; j++ ) {
-                    valsF[j] = 1;
-#ifdef _DEBUG_
-                    std::cout << "   js " << js << " je " << je << " j " << j;
-
-                    if ( line.length() <= 100 ) {
-                        std::cout << " " << valsF;
-                    }
-
-                    std::cout << " " << valsF.size() << std::endl;
-#endif
-                }
-            }//if ( vF == 78 ) {
-
-/*
-#ifdef _DEBUG_
-        std::cout << " SEQ   : " << charF << std::endl;
-        std::cout << " INTS  : " << intsF << std::endl;
-        std::cout << " VALIDS: " << valsF << std::endl;
-#endif
-*/
-
-            if ( i < (kmer_size-1) ) {
-                valid = false;
-#ifdef _DEBUG_
-                std::cout << " seq too small  : " << i << " <  " << (kmer_size-1) << std::endl;
-#endif
-            } else {
-#ifdef _DEBUG_
-                std::cout << " seq long enough: " << i << " >= " << (kmer_size-1) << std::endl;
-                if ( line.length() <= 100 ) {
-                std::cout << "  SEQ1  :           " << charF << std::endl;
-                std::cout << "  INTS1 :           " << intsF << std::endl;
-                }
-#endif
-                bool valF = valsF[ i  ];
-
-                if ( valF ) {
-                    valid = false;
-#ifdef _DEBUG_
-                    std::cout << "  position not valid" << std::endl;
-#endif
-
-                } else {
-#ifdef _DEBUG_
-                    std::cout << "  position valid" << std::endl;
-                    if ( line.length() <= 100 ) {
-                    std::cout << "  SEQ2  :           " << charF << std::endl;
-                    std::cout << "  INTS2 :           " << intsF << std::endl;
-                    }
-#endif
-
-
-#ifdef _USE_BITSHIFT_
-                    if ( valid ) {
-#ifdef _DEBUG_
-                        std::cout << " VALID :: B :: resF: " << resF << " resR: " << resR << std::endl;
-#endif //_DEBUG_
-
-                        resF &= clean;
-                        //resR &= clean;
-
-#ifdef _DEBUG_
-                        std::cout << " VALID :: & :: resF: " << resF << " resR: " << resR << std::endl;
-#endif //_DEBUG_
-
-                        resF = (resF << 2);
-                        resR = (resR >> 2);
-                        
-#ifdef _DEBUG_
-                        std::cout << " VALID :: S :: resF: " << resF << " resR: " << resR << std::endl;
-#endif //_DEBUG_
-
-                        resF += (   vF                      );
-                        resR += ((3-vF) << ((kmer_size-1)*2));
-                        
-#ifdef _DEBUG_
-                        std::cout << " VALID :: R :: resF: " << resF << " resR: " << resR << std::endl;
-#endif //_DEBUG_
-
-                    } else {
-                        valid = true;
-#endif //#ifdef _USE_BITSHIFT_
-                        sl               = std::slice(i - kmer_size + 1, kmer_size, 1);
-
-                        const charValArr  kchaF = charF[ sl ];
-#ifdef _DEBUG_
-                        const uIntValArr  kintF = intsF[ sl ];
-#endif //_DEBUG_
-
-
-#ifdef _DEBUG_
-                        std::cout << "  I: "   << i;
-                        std::cout << " KMER: " << kchaF;
-                        std::cout << " VALS: " << kintF;
-                        std::cout << "\n";
-#endif //_DEBUG_
-
-
-                        resF = 0;
-                        resR = 0;
-                        resM = 0;
-    
-                        kcF  = 0;
-                        pvF  = 0;
-                        cvF  = 0;
-    
-                        kcR  = 0;
-                        pvR  = 0;
-                        cvR  = 0;
-    
-                        
-                        for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
-                        /*
-                         * TODO: rolling kmer
-                        */
-                        
-#ifdef _DEBUG_
-                            kcF   = kintF[             pos     ];
-#else
-                            kcF   = kchaF[             pos     ];
-#endif
-
-                            kcR   = 3 - kcF;
-
-#ifdef _USE_POW_
-                            pvF   = pows[              pos     ];
-                            pvR   = pows[  kmer_size - pos - 1 ];
-
-                            cvF   = kcF * pvF;
-                            cvR   = kcR * pvR;
-#else // _USE_POW_
-                            cvF   = (kcF << ((kmer_size - pos - 1)*2));
-                            cvR   = (kcR << (             pos     *2));
-#endif // _USE_POW_
-
-
-#ifdef _DEBUG_
-                            std::cout << "  I: "     << i    << " POS : "   << (pos+1)
-                                      << " VALID: "  << valF
-                                      << " SUM BF: " << resF << " SUM BR: " << resR
-                                      << " KCF: "    << kcF  << " KCR: "    << kcR
-                                      << " VALF: "   << cvF  << " VALR: "   << cvR
-                                      << " PVF: "    << pvF  << " PVR: "    << pvR;
-#endif
-
-                            resF += cvF;
-                            resR += cvR;
-
-#ifdef _DEBUG_
-                            std::cout << " SUM AF: " << resF << " SUM AR: " << resR << std::endl;
-#endif
-
-                        } //for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
-
-#ifdef _USE_BITSHIFT_
-                    } // else if ( valid ) {
-#endif //ifdef _USE_BITSHIFT_
-                    
-                    resM = ( resF <= resR ) ? resF : resR;
-
-                    q.insert(resM);
-
-#ifdef _DEBUG_
-                    std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
-#endif
-                }// if ( valF == 0 ) {
-            }//if ( i >= kmer_size ) {
-        }//for (ulong i = 0; i < ll; i++) {
-    }//if ( line.length() >= kmer_size ) {
-}
 
 void          extract_kmers::save_kmer_db(        const std::string &outfile ) {
     if ( size() == 0 ) {

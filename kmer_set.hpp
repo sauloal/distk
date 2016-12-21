@@ -58,26 +58,17 @@ class extract_kmers {
         ulong       pows[32] = {};
     
         ulong       clean;
-    
-        charValArr  kchaF;
-#ifdef _DEBUG_
-        uIntValArr  kintF;
-#endif
-
-        charValArr  charF;
-#ifdef _DEBUG_
-        uIntValArr  intsF;
-#endif
-        boolValArr  valsF;
 
         setuLongLess q;
         
     public:
         extract_kmers(    const int ks);
-        ~extract_kmers();
+        //~extract_kmers();
         void          read_file_one_liner( const std::string &infile  );
+        void          read_fasta(          const std::string &infile  );
+        void          read_fastq(          const std::string &infile  );
         void          parse_line(                std::string &line    );
-        void          parse_line_2(        const std::string &line    );
+        //void          parse_line_2(        const std::string &line    );
         void          save_kmer_db(        const std::string &outfile );
         void          read_kmer_db(        const std::string &infile  );
         void          merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat );

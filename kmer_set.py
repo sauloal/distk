@@ -401,17 +401,18 @@ class extract_kmers(_object):
             self.this.append(this)
         except Exception:
             self.this = this
-    __swig_destroy__ = _kmer_set.delete_extract_kmers
-    __del__ = lambda self: None
 
     def read_file_one_liner(self, infile):
         return _kmer_set.extract_kmers_read_file_one_liner(self, infile)
 
+    def read_fasta(self, infile):
+        return _kmer_set.extract_kmers_read_fasta(self, infile)
+
+    def read_fastq(self, infile):
+        return _kmer_set.extract_kmers_read_fastq(self, infile)
+
     def parse_line(self, line):
         return _kmer_set.extract_kmers_parse_line(self, line)
-
-    def parse_line_2(self, line):
-        return _kmer_set.extract_kmers_parse_line_2(self, line)
 
     def save_kmer_db(self, outfile):
         return _kmer_set.extract_kmers_save_kmer_db(self, outfile)
@@ -436,6 +437,8 @@ class extract_kmers(_object):
 
     def print_all(self):
         return _kmer_set.extract_kmers_print_all(self)
+    __swig_destroy__ = _kmer_set.delete_extract_kmers
+    __del__ = lambda self: None
 extract_kmers_swigregister = _kmer_set.extract_kmers_swigregister
 extract_kmers_swigregister(extract_kmers)
 

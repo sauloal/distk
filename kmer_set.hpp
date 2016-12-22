@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <sys/types.h>
+#include <gzstream.h>
 
 //http://bisqwit.iki.fi/story/howto/openmp/
 #ifdef _OPENMP
@@ -89,24 +90,31 @@ class extract_kmers {
     public:
         extract_kmers(    const int ks);
         ~extract_kmers();
-        void          read_file_one_liner( const std::string   &infile  );
-        void          read_fasta(          const std::string   &infile  );
-        void          read_fastq(          const std::string   &infile  );
-        void          parse_line(                std::string   &line    );
-        void          save_kmer_db(        const std::string   &outfile );
-        void          read_kmer_db(        const std::string   &infile  );
-        void          merge_kmers(         const std::string   &outfile, const strVec &infiles, ulongVec &mat );
-        ulongVec      merge_kmers(         const std::string   &outfile, const strVec &infiles   );
-        void          save_matrix(         const std::string   &outfile, const strVec &infiles, const ulongVec &mat );
-        void          diff_encoder(              std::ofstream &outfhd  );
-        void          diff_decoder(              std::ifstream &infhd   );
+        void          read_one_liner(      const std::string    &infile  );
+        void          read_fasta(          const std::string    &infile  );
+        void          read_fastq(          const std::string    &infile  );
+        void          parse_line(                std::string    &line    );
+        void          save_kmer_db(        const std::string    &outfile );
+        void          read_kmer_db(        const std::string    &infile  );
+        void          merge_kmers(         const std::string    &outfile, const strVec &infiles, ulongVec &mat );
+        ulongVec      merge_kmers(         const std::string    &outfile, const strVec &infiles   );
+        void          save_matrix(         const std::string    &outfile, const strVec &infiles, const ulongVec &mat );
+        ulong         get_db_file_size(    const std::string    &infile  );
+        ulong         get_db_num_registers(const std::string    &infile  );
         ulongVec      get_kmer_db();
-        ulong         get_db_file_size(    const std::string   &infile  );
-        ulong         get_db_file_size(          std::ifstream &infhd   );
-        ulong         get_db_num_registers(const std::string   &infile  );
-        ulong         get_db_num_registers(      std::ifstream &infhd   );
         ulong         size();
         void          print_all();
+    private:
+        template<typename T>
+        void          read_one_liner(            const std::string   &infile, T  &infhd   );
+        template<typename T>
+        ulong         get_db_file_size(          T  &infhd   );
+        template<typename T>
+        ulong         get_db_num_registers(      T  &infhd   );
+        template<typename T>
+        void          diff_encoder(              T  &outfhd  );
+        template<typename T>
+        void          diff_decoder(              T  &infhd   );
 };
 
 #endif //__H_KMET_SET__

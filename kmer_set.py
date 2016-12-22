@@ -452,8 +452,8 @@ class extract_kmers(_object):
     __swig_destroy__ = _kmer_set.delete_extract_kmers
     __del__ = lambda self: None
 
-    def read_file_one_liner(self, infile):
-        return _kmer_set.extract_kmers_read_file_one_liner(self, infile)
+    def read_one_liner(self, infile):
+        return _kmer_set.extract_kmers_read_one_liner(self, infile)
 
     def read_fasta(self, infile):
         return _kmer_set.extract_kmers_read_fasta(self, infile)
@@ -476,20 +476,14 @@ class extract_kmers(_object):
     def save_matrix(self, outfile, infiles, mat):
         return _kmer_set.extract_kmers_save_matrix(self, outfile, infiles, mat)
 
-    def diff_encoder(self, outfhd):
-        return _kmer_set.extract_kmers_diff_encoder(self, outfhd)
+    def get_db_file_size(self, infile):
+        return _kmer_set.extract_kmers_get_db_file_size(self, infile)
 
-    def diff_decoder(self, infhd):
-        return _kmer_set.extract_kmers_diff_decoder(self, infhd)
+    def get_db_num_registers(self, infile):
+        return _kmer_set.extract_kmers_get_db_num_registers(self, infile)
 
     def get_kmer_db(self):
         return _kmer_set.extract_kmers_get_kmer_db(self)
-
-    def get_db_file_size(self, *args):
-        return _kmer_set.extract_kmers_get_db_file_size(self, *args)
-
-    def get_db_num_registers(self, *args):
-        return _kmer_set.extract_kmers_get_db_num_registers(self, *args)
 
     def size(self):
         return _kmer_set.extract_kmers_size(self)

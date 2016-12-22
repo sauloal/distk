@@ -238,6 +238,14 @@ size_t intersection_size(const T1& s1, const T2& s2)
     return c.count;
 }
 
+//https://stackoverflow.com/questions/874134/find-if-string-ends-with-another-string-in-c
+bool hasEnding (std::string const &fullString, std::string const &ending) {
+    if (fullString.length() >= ending.length()) {
+        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+    } else {
+        return false;
+    }
+}
 
 
 
@@ -288,16 +296,27 @@ void          extract_kmers::print_all() {
     }
 }
 
-void          extract_kmers::read_file_one_liner( const std::string   &infile  ) {
-    std::ifstream infhd(infile);
+void          extract_kmers::read_one_liner(      const std::string   &infile  ) {
+    if ( hasEnding(infile, ".gz") ) {
+        igzstream infhd(infile.c_str());
+        read_one_liner(infile, infhd);
+        infhd.close();
+    } else {
+        std::ifstream infhd(infile);
+        read_one_liner(infile, infhd);
+        infhd.close();
+    }
+}
 
+template<typename T>
+void          extract_kmers::read_one_liner(      const std::string   &infile, T                   &infhd  ) {
     if (!infhd) {
         perror((std::string("Error opening input file: ") + infile).c_str());
         throw std::runtime_error("error opening input file: " + infile);
         //return;
     }
 
-    if(!infhd.is_open()) {
+    if(!infhd.good()) {
         perror((std::string("Error reading input file: ") + infile).c_str());
         throw std::runtime_error("error opening input file: " + infile);
         //return;
@@ -317,8 +336,6 @@ void          extract_kmers::read_file_one_liner( const std::string   &infile  )
 #ifdef _DEBUG_
         print_all();
 #endif
-
-        infhd.close();
     }
 }
 
@@ -529,7 +546,7 @@ void          extract_kmers::save_kmer_db(        const std::string   &outfile )
         std::cout << "SAVING TO: " << outfile << " SIZE " << (size()*sizeof(ulong)) << std::endl;
 
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
-        std::ofstream outfhd(outfile, std::ios::out | std::ofstream::binary);
+        ogzstream outfhd(outfile.c_str());
         
         if (!outfhd) {
             perror((std::string("error saving kmer file: ") + outfile).c_str());
@@ -561,18 +578,32 @@ ulong         extract_kmers::get_db_file_size(    const std::string   &infile  )
     /*
      * TODO: read delta format
      */
-    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
-
-    if (!infhd) {
-        perror((std::string("error reading input file: ") + infile).c_str());
-        throw std::runtime_error("error reading input file: " + infile);
-        //return;
-    }
     
-    return get_db_file_size(infhd);
+    if ( hasEnding(infile, ".gz") ) {
+        igzstream infhd(infile.c_str());
+    
+        if (!infhd.good()) {
+            perror((std::string("error reading input file: ") + infile).c_str());
+            throw std::runtime_error("error reading input file: " + infile);
+            //return;
+        }
+        
+        return get_db_file_size(infhd);
+    } else {
+        std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
+    
+        if (!infhd) {
+            perror((std::string("error reading input file: ") + infile).c_str());
+            throw std::runtime_error("error reading input file: " + infile);
+            //return;
+        }
+        
+        return get_db_file_size(infhd);
+    }
 }
 
-ulong         extract_kmers::get_db_file_size(          std::ifstream &infhd   ) {
+template<typename T>
+ulong         extract_kmers::get_db_file_size(          T             &infhd   ) {
     ulong startPos = infhd.tellg();
 
     infhd.seekg(0, std::ios::end);
@@ -592,9 +623,9 @@ ulong         extract_kmers::get_db_num_registers(const std::string   &infile  )
     numRegs        = fileSize / sizeof(ulong);
 #else
 
-    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
+    igzstream infhd(infile.c_str());
 
-    if (!infhd) {
+    if (!infhd.good()) {
         perror((std::string("error reading input file: ") + infile).c_str());
         throw std::runtime_error("error reading input file: " + infile);
         //return;
@@ -607,12 +638,15 @@ ulong         extract_kmers::get_db_num_registers(const std::string   &infile  )
     return numRegs;
 }
 
-ulong         extract_kmers::get_db_num_registers(      std::ifstream &infhd   ) {
-    ulong numRegs = 0;
+template<typename T>
+ulong         extract_kmers::get_db_num_registers(      T             &infhd   ) {
+    ulong numRegs  = 0;
+
 #ifdef _NO_DIFF_ENCODING_
     ulong fileSize = get_db_file_size(infhd);
-    numRegs = fileSize / sizeof(ulong);
+    numRegs        = fileSize / sizeof(ulong);
 #else
+
     ulong startPos = infhd.tellg();
     
     infhd.read((char *)&numRegs,sizeof(numRegs));
@@ -630,7 +664,7 @@ void          extract_kmers::read_kmer_db(        const std::string   &infile  )
 
     std::cout << "  READING BACK FROM: " << infile << std::endl;
     
-    std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
+    igzstream infhd(infile.c_str());
 
     std::cout << "    OPEN" << std::endl;
 
@@ -670,7 +704,8 @@ void          extract_kmers::read_kmer_db(        const std::string   &infile  )
     std::cout << "   DONE" << std::endl;
 }
 
-void          extract_kmers::diff_encoder(              std::ofstream &outfhd  ) {
+template<typename T>
+void          extract_kmers::diff_encoder(              T             &outfhd  ) {
     /*
      * TODO: Implement roling difference encoding
      *       <int8>[<char>,n]
@@ -719,7 +754,8 @@ void          extract_kmers::diff_encoder(              std::ofstream &outfhd  )
     }
 }
 
-void          extract_kmers::diff_decoder(              std::ifstream &infhd   ) {
+template<typename T>
+void          extract_kmers::diff_decoder(              T             &infhd   ) {
     //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
     std::cout << "   READING" << std::endl;
 
@@ -753,7 +789,7 @@ ulongVec      extract_kmers::get_kmer_db() {
     return ulongVec(q.begin(), q.end());
 }
 
-void          extract_kmers::merge_kmers(         const std::string &outfile, const strVec &infiles, ulongVec &mat ) {
+void          extract_kmers::merge_kmers(         const std::string   &outfile, const strVec &infiles, ulongVec &mat ) {
     /*
      * TODO: read q
      */
@@ -824,7 +860,7 @@ void          extract_kmers::merge_kmers(         const std::string &outfile, co
     save_matrix(outfile, infiles, mat);
 }
 
-ulongVec      extract_kmers::merge_kmers(         const std::string &outfile, const strVec &infiles   ) {
+ulongVec      extract_kmers::merge_kmers(         const std::string   &outfile, const strVec &infiles   ) {
     /*
      * TODO: return q
      */
@@ -833,7 +869,7 @@ ulongVec      extract_kmers::merge_kmers(         const std::string &outfile, co
     return mat;
 }
 
-void          extract_kmers::save_matrix(         const std::string &outfile, const strVec &infiles, const ulongVec &mat ) {
+void          extract_kmers::save_matrix(         const std::string   &outfile, const strVec &infiles, const ulongVec &mat ) {
     if ( mat.size() > 0 ) {
         std::cout << "SAVING TO: " << outfile << ".matrix SIZE " << (mat.size()*sizeof(ulong)) << std::endl;
 

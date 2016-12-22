@@ -21,14 +21,18 @@ fi
 
 for test_index in 6; do
 
+if [[ "$test_index" -lt "10" ]]; then
+test_index_num="0"$test_index
+fi
+
 #for kmer_len in 3; do
 #for test_index in 7; do
 
 #for kmer_len in 3 5 7 9 11 13 15 17 19 21 23 25; do
 #for test_index in 1 2 3 4 5 6 7; do
 
-fa=test/test${test_index}.fasta
-km=test/test${test_index}.${kmer_len_num}.kmer
+fa=test/test${test_index_num}.fasta.gz
+km=test/test${test_index_num}.${kmer_len_num}.kmer
 lo=${km}.log
 
 if [[ "${fls}" != "" ]]; then

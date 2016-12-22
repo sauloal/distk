@@ -1,0 +1,4 @@
+gzstream.tgz
+*.a
+test_gzip
+test_gunzip

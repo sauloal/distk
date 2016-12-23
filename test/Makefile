@@ -85,63 +85,162 @@ test01:
 	./run_test.py "3" "1"
 
 test02:
-	./run_test.py "3 5" "2"
+	./run_test.py "3" "2"
+	./run_test.py "5" "2"
 
 test03:
-	./run_test.py "3 5 7" "3"
+	./run_test.py "3" "3"
+	./run_test.py "5" "3"
+	./run_test.py "7" "3"
 
 test04:
-	./run_test.py "3 5 7 9" "4"
+	./run_test.py "3" "4"
+	./run_test.py "5" "4"
+	./run_test.py "7" "4"
+	./run_test.py "9" "4"
 
 test05:
-	./run_test.py "3 5 7 9 11" "5"
+	./run_test.py "3" "5"
+	./run_test.py "5" "5"
+	./run_test.py "7" "5"
+	./run_test.py "9" "5"
+	./run_test.py "11" "5"
 
 test06:
-	./run_test.py "3 5 7 9 11 13" "6"
-
+	./run_test.py "3" "6"
+	./run_test.py "5" "6"
+	./run_test.py "7" "6"
+	./run_test.py "9" "6"
+	./run_test.py "11" "6"
+	./run_test.py "13" "6"
+    
 test07:
-	./run_test.py "3 5 7 9 11 13 15" "7"
+	./run_test.py "3" "7"
+	./run_test.py "5" "7"
+	./run_test.py "7" "7"
+	./run_test.py "9" "7"
+	./run_test.py "11" "7"
+	./run_test.py "13" "7"
+	#./run_test.py "15" "7"
 
 test08:
-	./run_test.py "3 5 7 9 11 13 15 17" "8"
+	./run_test.py "3" "8"
+	./run_test.py "5" "8"
+	./run_test.py "7" "8"
+	./run_test.py "9" "8"
+	./run_test.py "11" "8"
+	./run_test.py "13" "8"
+	#./run_test.py "15" "8"
+	#./run_test.py "17" "8"
 
-test09:
-	./run_test.py "3 5 7 9 11 13 15 17 19" "9"
-
-test10:
-	./run_test.py "3 5 7 9 11 13 15 17 19 21" "10"
+#test09:
+#	./run_test.py "3" "9"
+#	./run_test.py "5" "9"
+#	./run_test.py "7" "9"
+#	./run_test.py "9" "9"
+#	./run_test.py "11" "9"
+#	./run_test.py "13" "9"
+#	./run_test.py "15" "9"
+#	./run_test.py "17" "9"
+#	./run_test.py "19" "9"
+#
+#test10:
+#	./run_test.py "3 5 7 9 11 13 15 17 19 21" "10"
 
 test11:
 	@#all triplets
 	./run_test.py "3" "10"
 
 test12:
-	@#shot sequence
-	./run_test.py "3 5 7 9 11 13 15 17 19 21" "12"
+	@#short sequence
+	./run_test.py "3" "12"
+	./run_test.py "5" "12"
+	./run_test.py "7" "12"
+	./run_test.py "9" "12"
+	./run_test.py "11" "12"
+	./run_test.py "13" "12"
+	#./run_test.py "15" "12"
+	#./run_test.py "17" "12"
+	#./run_test.py "19" "12"
+	#./run_test.py "21" "12"
 
 test13:
 	@#1 N
-	./run_test.py "3 5 7 9 11 13 15 17 19 21" "13"
+	./run_test.py "3" "13"
+	./run_test.py "5" "13"
+	./run_test.py "7" "13"
+	./run_test.py "9" "13"
+	./run_test.py "11" "13"
+	./run_test.py "13" "13"
+	#./run_test.py "15" "13"
+	#./run_test.py "17" "13"
+	#./run_test.py "19" "13"
+	#./run_test.py "21" "13"
 
 test14:
 	@#sequence
-	./run_test.py "3 5 7 9 11 13 15 17 19 21" "14"
+	./run_test.py "3" "14"
+	./run_test.py "5" "14"
+	./run_test.py "7" "14"
+	./run_test.py "9" "14"
+	./run_test.py "11" "14"
+	./run_test.py "13" "14"
+	#./run_test.py "15" "14"
+	#./run_test.py "17" "14"
+	#./run_test.py "19" "14"
+	#./run_test.py "21" "14"
 
 test15:
 	@#2 Ns
-	./run_test.py "3 5 7 9 11 13 15 17 19 21" "15"
+	./run_test.py "3" "15"
+	./run_test.py "5" "15"
+	./run_test.py "7" "15"
+	./run_test.py "9" "15"
+	./run_test.py "11" "15"
+	./run_test.py "13" "15"
+	#./run_test.py "15" "15"
+	#./run_test.py "17" "15"
+	#./run_test.py "19" "15"
+	#./run_test.py "21" "15"
 
 test16:
 	@#tomato chromosome 00
-	./run_test.py "3 5 7 9 11 13 15 17 19 21" "16"
+	./run_test.py "3" "16"
+	./run_test.py "5" "16"
+	./run_test.py "7" "16"
+	./run_test.py "9" "16"
+	./run_test.py "11" "16"
+	./run_test.py "13" "16"
+	#./run_test.py "15" "16"
+	#./run_test.py "17" "16"
+	#./run_test.py "19" "16"
+	#./run_test.py "21" "16"
 
 test17:
 	@#tomato chromosomes as one
-	./run_test.py "3 5 7 9 11 13 15 17 19 21" "17"
+	./run_test.py "3" "17"
+	./run_test.py "5" "17"
+	./run_test.py "7" "17"
+	./run_test.py "9" "17"
+	./run_test.py "11" "17"
+	./run_test.py "13" "17"
+	#./run_test.py "15" "17"
+	#./run_test.py "17" "17"
+	#./run_test.py "19" "17"
+	#./run_test.py "21" "17"
 
 test18:
 	@#tomato chromosomes each line
-	./run_test.py "3 5 7 9 11 13 15 17 19 21" "18"
+	./run_test.py "3" "18"
+	./run_test.py "5" "18"
+	./run_test.py "7" "18"
+	./run_test.py "9" "18"
+	./run_test.py "11" "18"
+	./run_test.py "13" "18"
+	#./run_test.py "15" "18"
+	#./run_test.py "17" "18"
+	#./run_test.py "19" "18"
+	#./run_test.py "21" "18"
 
 testMatrix:
 
@@ -151,31 +250,31 @@ testMatrix:
 .PHONY: gen_check check_fasta.sha256 check_kmer.sha256 check_index.sha256 check_matrix.sha256
 gen_check: check_fasta.sha256 check_kmer.sha256 check_index.sha256 check_matrix.sha256
 
-check_fasta.sha256: get
-	sha256sum *.fasta.gz > $@
+check_fasta.sha256:
+	sha256sum *.fasta.gz > $@ || true
 
 check_kmer.sha256:
-	sha256sum *.kmer     > $@
+	sha256sum *.kmer     > $@ || true
 
 check_index.sha256:
-	sha256sum *.index    > $@
+	sha256sum *.index    > $@ || true
 
 check_matrix.sha256:
-	sha256sum *.matrix   > $@
+	sha256sum *.matrix   > $@ || true
 
 
 
 .PHONY: check check_fasta check_kmer check_index text_matrix
-check: run check_fasta check_kmer check_index check_matrix
+check: check_fasta check_kmer check_index check_matrix
 
-check_fasta: check_fasta.sha256
+check_fasta:
 	sha256sum -c check_fasta.sha256
 
-check_kmer: run check_kmer.sha256
+check_kmer:
 	sha256sum -c check_kmer.sha256
 
-check_index: run check_index.sha256
+check_index:
 	sha256sum -c check_index.sha256
 
-check_matrix: run check_matrix.sha256
+check_matrix:
 	sha256sum -c check_matrix.sha256

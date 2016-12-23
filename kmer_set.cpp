@@ -762,7 +762,7 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
             prev = 0;
         } else {
             if ( prev == *it ) {
-                printf ("previous %d and next %d are the same\n", prev, *it);
+                printf ("previous %lu and next %lu are the same\n", prev, *it);
                 assert(prev != *it);
             }
         }
@@ -770,9 +770,9 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
         diff = *it - prev;
         lenI = diff == 0 ? 1 : lrint(ceil(log2(diff+1)/8.0));
         lenI = lenI == 0 ? 1 : lenI;
-//#ifdef _DEBUG_
+#ifdef _DEBUG_
         std::cout << "num " << regCount << " val " << *it << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
-//#endif
+#endif
         outfhd.write(reinterpret_cast<const char*>( &lenI ), sizeof(lenI));
         outfhd.write(reinterpret_cast<const char*>(&(diff)),        lenI );
         prev = *it;
@@ -782,7 +782,7 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
     std::cout << "SAVED REGISTERS: " << regCount << std::endl;
 
     if ( numRegs != regCount ) {
-        printf ("expected %d registers. got %d\n", numRegs, regCount);
+        printf ("expected %lu registers. got %lu\n", numRegs, regCount);
         assert(numRegs == regCount);
     }
 }
@@ -810,9 +810,9 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
             assert(false);
         }
         val  = prev + diff;
-//#ifdef _DEBUG_
+#ifdef _DEBUG_
         std::cout << "num " << regCount << " val " << val << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
-//#endif
+#endif
         q.insert(val);
         prev = val;
         lenI = 0;
@@ -823,12 +823,12 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
     std::cout << "READ " << regCount << " REGISTERS" << std::endl;
 
     if ( numRegs != regCount ) {
-        printf ("expected %d registers. got %d\n", numRegs, regCount);
+        printf ("expected %lu registers. got %lu\n", numRegs, regCount);
         assert(numRegs == regCount);
     }
     
     if ( numRegs != size() ) {
-        printf ("expected %d registers. inserted %d\n", numRegs, size());
+        printf ("expected %lu registers. inserted %lu\n", numRegs, size());
         assert(numRegs == size());
     }
 }

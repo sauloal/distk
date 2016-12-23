@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>     /* assert */
 
 //#include <numeric>
 //#include <sstream>
@@ -543,7 +544,7 @@ void          extract_kmers::save_kmer_db(        const std::string   &outfile )
         std::cout << "NO KMER TO SAVE" << std::endl;
 
     } else {
-        std::cout << "SAVING TO: " << outfile << " SIZE " << (size()*sizeof(ulong)) << std::endl;
+        std::cout << "SAVING TO: " << outfile << " REGISTERS: " << size() << " FILE SIZE: " << (size()*sizeof(ulong)) << std::endl;
 
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
         ogzstream outfhd(outfile.c_str());
@@ -556,10 +557,12 @@ void          extract_kmers::save_kmer_db(        const std::string   &outfile )
         
         //std::copy(q.begin(), q.end(), std::ostreambuf_iterator<ulong>(outfhd));
         //outfhd.write(reinterpret_cast<const char*>(&q.begin()), q.size()*sizeof(ulong));
-
+        ulong numRegs = 0;
+        
 #ifdef _NO_DIFF_ENCODING_
         for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
             outfhd.write(reinterpret_cast<const char*>(&(*it)), sizeof(ulong));
+            numRegs += 1;
         }
 #else
         diff_encoder(outfhd);
@@ -619,8 +622,10 @@ ulong         extract_kmers::get_db_num_registers(const std::string   &infile  )
     ulong numRegs = 0;
 
 #ifdef _NO_DIFF_ENCODING_
+
     ulong fileSize = get_db_file_size(infile);
     numRegs        = fileSize / sizeof(ulong);
+
 #else
 
     igzstream infhd(infile.c_str());
@@ -634,7 +639,9 @@ ulong         extract_kmers::get_db_num_registers(const std::string   &infile  )
     numRegs = get_db_num_registers(infhd);
     
     infhd.close();
+
 #endif
+
     return numRegs;
 }
 
@@ -643,8 +650,10 @@ ulong         extract_kmers::get_db_num_registers(      T             &infhd   )
     ulong numRegs  = 0;
 
 #ifdef _NO_DIFF_ENCODING_
+
     ulong fileSize = get_db_file_size(infhd);
     numRegs        = fileSize / sizeof(ulong);
+
 #else
 
     ulong startPos = infhd.tellg();
@@ -652,7 +661,9 @@ ulong         extract_kmers::get_db_num_registers(      T             &infhd   )
     infhd.read((char *)&numRegs,sizeof(numRegs));
 
     infhd.seekg(startPos, std::ios::beg);
+
 #endif
+
     return numRegs;
 }
 
@@ -671,7 +682,7 @@ void          extract_kmers::read_kmer_db(        const std::string   &infile  )
     ulong fileSize = get_db_file_size(infile);
     ulong regs     = get_db_num_registers(infile);
 
-    std::cout << "    SIZE: " << fileSize << " REGISTERS " << regs << std::endl;
+    std::cout << "    SIZE: " << fileSize << " REGISTERS: " << regs << std::endl;
 
     std::cout << "   CLEARING" << std::endl;
 
@@ -685,10 +696,18 @@ void          extract_kmers::read_kmer_db(        const std::string   &infile  )
     //infhd.read((char*)&(*q.cbegin()), fileSize);
 
 #ifdef _NO_DIFF_ENCODING_
+    ulong numRegs = 0;
     ulong buffer;
+
     while(infhd.read((char *)&buffer,sizeof(buffer)))
     {
         q.insert(buffer);
+        numRegs++;
+    }
+
+    if ( numRegs != size() ) {
+        printf ("expected %d registers. got %d\n", numRegs, size());
+        assert(numRegs == size());
     }
 #else
     diff_decoder(infhd);
@@ -699,8 +718,8 @@ void          extract_kmers::read_kmer_db(        const std::string   &infile  )
 
     std::cout << "   READ" << std::endl;
 
-    std::cout << "    LENGHT: " << q.size() << std::endl;
-
+    std::cout << "    LENGHT: " << size() << std::endl;
+    
     std::cout << "   DONE" << std::endl;
 }
 
@@ -731,26 +750,40 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
     ulong        diff    = 0;
     ulong        prev    = 0;
     unsigned int lenI    = 0;
-    ulong        numRegs = q.size();
+    ulong        numRegs = size();
     
     std::cout << "NUM REGISTERS: " << numRegs << std::endl;
     
     outfhd.write(reinterpret_cast<const char*>( &numRegs ), sizeof(numRegs));
-    
+
+    ulong regCount = 0;    
     for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
         if ( it == q.begin() ) {
             prev = 0;
+        } else {
+            if ( prev == *it ) {
+                printf ("previous %d and next %d are the same\n", prev, *it);
+                assert(prev != *it);
+            }
         }
 
         diff = *it - prev;
-        lenI = diff == 0 ? 1 : lrint(ceil(log2(diff)/8.0));
+        lenI = diff == 0 ? 1 : lrint(ceil(log2(diff+1)/8.0));
         lenI = lenI == 0 ? 1 : lenI;
 //#ifdef _DEBUG_
-        std::cout << "val " << *it << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
+        std::cout << "num " << regCount << " val " << *it << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
 //#endif
         outfhd.write(reinterpret_cast<const char*>( &lenI ), sizeof(lenI));
         outfhd.write(reinterpret_cast<const char*>(&(diff)),        lenI );
         prev = *it;
+        regCount++;
+    }
+
+    std::cout << "SAVED REGISTERS: " << regCount << std::endl;
+
+    if ( numRegs != regCount ) {
+        printf ("expected %d registers. got %d\n", numRegs, regCount);
+        assert(numRegs == regCount);
     }
 }
 
@@ -759,26 +792,44 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
     //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
     std::cout << "   READING" << std::endl;
 
-    ulong        val  = 0;
-    ulong        diff = 0;
-    ulong        prev = 0;
-    unsigned int lenI = 0;
-
-    ulong        regs = 0;
-    infhd.read((char *)&regs,sizeof(ulong));
-    std::cout << "   READING " << regs << " registers" << std::endl;
+    ulong        val     = 0;
+    ulong        diff    = 0;
+    ulong        prev    = 0;
+    unsigned int lenI    = 0;
+    ulong        numRegs = 0;
     
+    infhd.read((char *)&numRegs,sizeof(numRegs));
+    std::cout << "   READING " << numRegs << " registers" << std::endl;
+    
+    ulong        regCount = 0;
     
     while(infhd.read((char *)&lenI,sizeof(lenI))) {
         infhd.read((char *)&diff,       lenI );
+        if (( regCount != 0 ) && (diff == 0 )) {
+            printf ("zero difference\n");
+            assert(false);
+        }
         val  = prev + diff;
 //#ifdef _DEBUG_
-        std::cout << "val " << val << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
+        std::cout << "num " << regCount << " val " << val << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
 //#endif
         q.insert(val);
         prev = val;
         lenI = 0;
         diff = 0;
+        regCount++;
+    }
+    
+    std::cout << "READ " << regCount << " REGISTERS" << std::endl;
+
+    if ( numRegs != regCount ) {
+        printf ("expected %d registers. got %d\n", numRegs, regCount);
+        assert(numRegs == regCount);
+    }
+    
+    if ( numRegs != size() ) {
+        printf ("expected %d registers. inserted %d\n", numRegs, size());
+        assert(numRegs == size());
     }
 }
 

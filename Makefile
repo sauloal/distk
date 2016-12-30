@@ -1,6 +1,6 @@
 BASE=kmer_set
 
-__PROG_VERSION__=$(shell git describe --tags --always --dirty)
+__PROG_VERSION__=$(shell git rev-list --all --count && git describe --tags --always --dirty)
 __COMPILE_DATE__=$(shell date)
 
 
@@ -23,12 +23,16 @@ else
 CPP_OPTS+=-Og -g -D_DEBUG_
 endif
 
-CPP=g++
+CPP:=g++
 
-all: _$(BASE).so
+all:_$(BASE).so
 
 clean:
 	rm -v $(BASE)_wrap.* $(BASE).o $(BASE).py $(BASE).pyc _$(BASE).so test/*.kmer test/*.log test/*.matrix  test/*.index core || true
+
+print:
+	@echo PROG_VERSION $(__PROG_VERSION__)
+	@echo COMPILE_DATE $(__COMPILE_DATE__)
 
 .PHONY: test
 test:

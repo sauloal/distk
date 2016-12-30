@@ -10,10 +10,20 @@ endif
 all: run
 
 
+clean:
+	rm -v *.kmer *.matrix || true
+
+.PHONY: wipe
+wipe: clean
+	rm -v *.fasta.gz || true
+
 
 .PHONY: get
-get: test01.fasta.gz test02.fasta.gz test03.fasta.gz test04.fasta.gz test05.fasta.gz test06.fasta.gz test07.fasta.gz test08.fasta.gz test11.fasta.gz test12.fasta.gz test13.fasta.gz test14.fasta.gz test15.fasta.gz test16.fasta.gz test17.fasta.gz test18.fasta.gz
-#test09.fasta.gz test10.fasta.gz 
+ifdef SERVER
+get: test01.fasta.gz test02.fasta.gz test03.fasta.gz test04.fasta.gz test05.fasta.gz test06.fasta.gz test07.fasta.gz test08.fasta.gz test09.fasta.gz test10.fasta.gz test11.fasta.gz test12.fasta.gz test13.fasta.gz test14.fasta.gz test15.fasta.gz test16.fasta.gz test17.fasta.gz test18.fasta.gz test19.fasta.gz
+else
+get: test01.fasta.gz test02.fasta.gz test03.fasta.gz test04.fasta.gz test05.fasta.gz test06.fasta.gz test07.fasta.gz test08.fasta.gz                                                 test12.fasta.gz test13.fasta.gz test14.fasta.gz test15.fasta.gz test16.fasta.gz test17.fasta.gz test18.fasta.gz test19.fasta.gz
+endif
 
 test01.fasta.gz:
 	$(PYTHON) ./debruijn.py 1 | gzip -1 > $@
@@ -39,208 +49,405 @@ test07.fasta.gz:
 test08.fasta.gz:
 	$(PYTHON) ./debruijn.py 15 | gzip -1 > $@
 
-#test09.fasta.gz:
-#	$(PYTHON) ./debruijn.py 19 | gzip -1 > $@
-#
-#test10.fasta.gz:
-#	$(PYTHON) ./debruijn.py 21 | gzip -1 > $@
+ifdef SERVER
+test09.fasta.gz:
+	$(PYTHON) ./debruijn.py 17 | gzip -1 > $@
+
+test10.fasta.gz:
+	$(PYTHON) ./debruijn.py 19 | gzip -1 > $@
 
 test11.fasta.gz:
-	echo -e 'AAA\nAAC\nAAG\nAAT\n\nACA\nACC\nACG\nACT\n\nAGA\nAGC\nAGG\nAGT\n\nATA\nATC\nATG\nATT\n\n\n\n\nCAA\nCAC\nCAG\nCAT\n\nCCA\nCCC\nCCG\nCCT\n\nCGA\nCGC\nCGG\nCGT\n\nCTA\nCTC\nCTG\nCTT\n\n\n\n\nGAA\nGAC\nGAG\nGAT\n\nGCA\nGCC\nGCG\nGCT\n\nGGA\nGGC\nGGG\nGGT\n\nGTA\nGTC\nGTG\nGTT\n\n\n\n\nTAA\nTAC\nTAG\nTAT\n\nTCA\nTCC\nTCG\nTCT\n\nTGA\nTGC\nTGG\nTGT\n\nTTA\nTTC\nTTG\nTTT\n\n' | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 21 | gzip -1 > $@
+endif
 
 test12.fasta.gz:
-	echo "CGTACGTACGTACGTACGT" | gzip -1 > $@
+	echo -e 'AAA\nAAC\nAAG\nAAT\n\nACA\nACC\nACG\nACT\n\nAGA\nAGC\nAGG\nAGT\n\nATA\nATC\nATG\nATT\n\n\n\n\nCAA\nCAC\nCAG\nCAT\n\nCCA\nCCC\nCCG\nCCT\n\nCGA\nCGC\nCGG\nCGT\n\nCTA\nCTC\nCTG\nCTT\n\n\n\n\nGAA\nGAC\nGAG\nGAT\n\nGCA\nGCC\nGCG\nGCT\n\nGGA\nGGC\nGGG\nGGT\n\nGTA\nGTC\nGTG\nGTT\n\n\n\n\nTAA\nTAC\nTAG\nTAT\n\nTCA\nTCC\nTCG\nTCT\n\nTGA\nTGC\nTGG\nTGT\n\nTTA\nTTC\nTTG\nTTT\n\n' | gzip -1 > $@
 
 test13.fasta.gz:
-	echo "ACGTACGTACGTACGTACGTNACGTACGTACGTACGTACGT" | gzip -1 > $@
+	echo "CGTACGTACGTACGTACGT" | gzip -1 > $@
 
 test14.fasta.gz:
 	echo "AAACAAGAATACACGACTAGCAGGAGTATCATGATT" | gzip -1 > $@
 
 test15.fasta.gz:
-	echo "AAACAAGAATACACGACNNTAGCAGGAGTATCATGATT" | gzip -1 > $@
+	echo "ACGTACGTACGTACGTACGTNACGTACGTACGTACGTACGT" | gzip -1 > $@
 
 test16.fasta.gz:
-	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch00.fa                                       | grep -v '>' | tr -d '\n' | gzip -1 > $@
+	echo "AAACAAGAATACACGACNNTAGCAGGAGTATCATGATT" | gzip -1 > $@
 
 test17.fasta.gz:
-	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch{00,01,02,03,04,05,06,07,08,09,10,11,12}.fa | grep -v '>' | tr -d '\n' | gzip -1 > $@
+	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch00.fa                                       | grep -v '>' | tr -d '\n' | gzip -1 > $@
 
 test18.fasta.gz:
+	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch{00,01,02,03,04,05,06,07,08,09,10,11,12}.fa | grep -v '>' | tr -d '\n' | gzip -1 > $@
+
+test19.fasta.gz:
 	for i in 00 01 02 03 04 05 06 07 08 09 10 11 12; do \
-		curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch${i}.fa | grep -v '>' | tr -d '\n' >> test8.fasta; \
-		echo >> test8.fasta; \
+		curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch${i}.fa | grep -v '>' | tr -d '\n' >> test19.fasta; \
+		echo >> test19.fasta; \
 	done
-	gzip -1 test18.fasta
+	gzip -1 test19.fasta
 
 
 
 
 
 .PHONY: run
-run: get test01 test02 test03 test04 test05 test06 test07 test08 test11 test12 test13 test14 test15 test16 test17 test18 testMatrix
-# test09 test10
+ifdef SERVER
+run: get test01 test02 test03 test04 test05 test06 test07 test08 test09 test10 test11 test12 test13 test14 test15 test16 test17 test18 test19 testMatrix
+else
+run: get test01 test02 test03 test04 test05 test06 test07 test08                      test12 test13 test14 test15 test16 test17 test18 test19 testMatrix
+endif
 
-test01:
-	./run_test.py "3" "1"
 
-test02:
-	./run_test.py "3" "2"
-	./run_test.py "5" "2"
+test01: test01.fasta.gz
+	@#debruijn - all 1 mers
+	$(eval TEST_NUM=1)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
 
-test03:
-	./run_test.py "3" "3"
-	./run_test.py "5" "3"
-	./run_test.py "7" "3"
 
-test04:
-	./run_test.py "3" "4"
-	./run_test.py "5" "4"
-	./run_test.py "7" "4"
-	./run_test.py "9" "4"
+test02: test02.fasta.gz
+	@#debruijn - all 3 mers
+	$(eval TEST_NUM=2)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
 
-test05:
-	./run_test.py "3" "5"
-	./run_test.py "5" "5"
-	./run_test.py "7" "5"
-	./run_test.py "9" "5"
-	./run_test.py "11" "5"
 
-test06:
-	./run_test.py "3" "6"
-	./run_test.py "5" "6"
-	./run_test.py "7" "6"
-	./run_test.py "9" "6"
-	./run_test.py "11" "6"
-	./run_test.py "13" "6"
-    
-test07:
-	./run_test.py "3" "7"
-	./run_test.py "5" "7"
-	./run_test.py "7" "7"
-	./run_test.py "9" "7"
-	./run_test.py "11" "7"
-	./run_test.py "13" "7"
-	#./run_test.py "15" "7"
+test03: test03.fasta.gz
+	@#debruijn - all 5 mers
+	$(eval TEST_NUM=3)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
 
-test08:
-	./run_test.py "3" "8"
-	./run_test.py "5" "8"
-	./run_test.py "7" "8"
-	./run_test.py "9" "8"
-	./run_test.py "11" "8"
-	./run_test.py "13" "8"
-	#./run_test.py "15" "8"
-	#./run_test.py "17" "8"
 
-#test09:
-#	./run_test.py "3" "9"
-#	./run_test.py "5" "9"
-#	./run_test.py "7" "9"
-#	./run_test.py "9" "9"
-#	./run_test.py "11" "9"
-#	./run_test.py "13" "9"
-#	./run_test.py "15" "9"
-#	./run_test.py "17" "9"
-#	./run_test.py "19" "9"
-#
-#test10:
-#	./run_test.py "3 5 7 9 11 13 15 17 19 21" "10"
+test04: test04.fasta.gz
+	@#debruijn - all 7 mers
+	$(eval TEST_NUM=4)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
 
-test11:
-	@#all triplets
-	./run_test.py "3" "10"
 
-test12:
+test05: test05.fasta.gz
+	@#debruijn - all 9 mers
+	$(eval TEST_NUM=5)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
+
+
+test06: test06.fasta.gz
+	@#debruijn - all 11 mers
+	$(eval TEST_NUM=6)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
+
+
+test07: test07.fasta.gz
+	@#debruijn - all 13 mers
+	$(eval TEST_NUM=7)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
+
+
+test08: test08.fasta.gz
+	@#debruijn - all 15 mers
+	$(eval TEST_NUM=8)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
+
+
+ifdef SERVER
+test09: test09.fasta.gz
+	@#debruijn - all 17 mers
+	$(eval TEST_NUM=9)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+
+test10: test10.fasta.gz
+	@#debruijn - all 19 mers
+	$(eval TEST_NUM=10)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+
+test11: test11.fasta.gz
+	@#debruijn - all 21 mers
+	$(eval TEST_NUM=11)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+endif
+
+
+test12: test12.fasta.gz
+	@#all triplets - one each line
+	$(eval TEST_NUM=12)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+
+
+test13: test13.fasta.gz
 	@#short sequence
-	./run_test.py "3" "12"
-	./run_test.py "5" "12"
-	./run_test.py "7" "12"
-	./run_test.py "9" "12"
-	./run_test.py "11" "12"
-	./run_test.py "13" "12"
-	#./run_test.py "15" "12"
-	#./run_test.py "17" "12"
-	#./run_test.py "19" "12"
-	#./run_test.py "21" "12"
+	$(eval TEST_NUM=13)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
 
-test13:
+
+test14: test14.fasta.gz
+	@#short sequence 2
+	$(eval TEST_NUM=14)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
+
+
+test15: test15.fasta.gz
 	@#1 N
-	./run_test.py "3" "13"
-	./run_test.py "5" "13"
-	./run_test.py "7" "13"
-	./run_test.py "9" "13"
-	./run_test.py "11" "13"
-	./run_test.py "13" "13"
-	#./run_test.py "15" "13"
-	#./run_test.py "17" "13"
-	#./run_test.py "19" "13"
-	#./run_test.py "21" "13"
+	$(eval TEST_NUM=15)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
 
-test14:
-	@#sequence
-	./run_test.py "3" "14"
-	./run_test.py "5" "14"
-	./run_test.py "7" "14"
-	./run_test.py "9" "14"
-	./run_test.py "11" "14"
-	./run_test.py "13" "14"
-	#./run_test.py "15" "14"
-	#./run_test.py "17" "14"
-	#./run_test.py "19" "14"
-	#./run_test.py "21" "14"
 
-test15:
+test16: test16.fasta.gz
 	@#2 Ns
-	./run_test.py "3" "15"
-	./run_test.py "5" "15"
-	./run_test.py "7" "15"
-	./run_test.py "9" "15"
-	./run_test.py "11" "15"
-	./run_test.py "13" "15"
-	#./run_test.py "15" "15"
-	#./run_test.py "17" "15"
-	#./run_test.py "19" "15"
-	#./run_test.py "21" "15"
+	$(eval TEST_NUM=16)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
 
-test16:
+
+test17: test17.fasta.gz
 	@#tomato chromosome 00
-	./run_test.py "3" "16"
-	./run_test.py "5" "16"
-	./run_test.py "7" "16"
-	./run_test.py "9" "16"
-	./run_test.py "11" "16"
-	./run_test.py "13" "16"
-	#./run_test.py "15" "16"
-	#./run_test.py "17" "16"
-	#./run_test.py "19" "16"
-	#./run_test.py "21" "16"
+	$(eval TEST_NUM=17)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
 
-test17:
-	@#tomato chromosomes as one
-	./run_test.py "3" "17"
-	./run_test.py "5" "17"
-	./run_test.py "7" "17"
-	./run_test.py "9" "17"
-	./run_test.py "11" "17"
-	./run_test.py "13" "17"
-	#./run_test.py "15" "17"
-	#./run_test.py "17" "17"
-	#./run_test.py "19" "17"
-	#./run_test.py "21" "17"
 
-test18:
-	@#tomato chromosomes each line
-	./run_test.py "3" "18"
-	./run_test.py "5" "18"
-	./run_test.py "7" "18"
-	./run_test.py "9" "18"
-	./run_test.py "11" "18"
-	./run_test.py "13" "18"
-	#./run_test.py "15" "18"
-	#./run_test.py "17" "18"
-	#./run_test.py "19" "18"
-	#./run_test.py "21" "18"
+test18: test18.fasta.gz
+	@#all tomato chromosomes as one
+	$(eval TEST_NUM=18)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
+
+
+test19: test19.fasta.gz
+	@#all tomato chromosomes - one each line
+	$(eval TEST_NUM=19)
+	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
+	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
+	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
+	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
+	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+ifdef SERVER
+	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
+	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
+	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+else
+	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
+endif
+
 
 testMatrix:
 

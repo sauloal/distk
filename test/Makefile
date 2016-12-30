@@ -9,7 +9,6 @@ endif
 
 all: run
 
-
 clean:
 	rm -v *.kmer *.matrix || true
 
@@ -24,6 +23,22 @@ get: test01.fasta.gz test02.fasta.gz test03.fasta.gz test04.fasta.gz test05.fast
 else
 get: test01.fasta.gz test02.fasta.gz test03.fasta.gz test04.fasta.gz test05.fasta.gz test06.fasta.gz test07.fasta.gz test08.fasta.gz                                                 test12.fasta.gz test13.fasta.gz test14.fasta.gz test15.fasta.gz test16.fasta.gz test17.fasta.gz test18.fasta.gz test19.fasta.gz
 endif
+
+.PHONY: run
+ifdef SERVER
+run: get test01 test02 test03 test04 test05 test06 test07 test08 test09 test10 test11 test12 test13 test14 test15 test16 test17 test18 test19 testMatrix
+else
+run: get test01 test02 test03 test04 test05 test06 test07 test08                      test12 test13 test14 test15 test16 test17 test18 test19 testMatrix
+endif
+
+.PHONY: gen_check check_fasta.sha256 check_kmer.sha256 check_index.sha256 check_matrix.sha256
+gen_check: check_fasta.sha256 check_kmer.sha256 check_index.sha256 check_matrix.sha256
+
+.PHONY: check check_fasta check_kmer check_index text_matrix
+check: check_fasta check_kmer check_index check_matrix
+
+
+
 
 test01.fasta.gz:
 	$(PYTHON) ./debruijn.py 1 | gzip -1 > $@.tmp && mv $@.tmp $@
@@ -78,26 +93,21 @@ test16.fasta.gz:
 test17.fasta.gz:
 	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch00.fa                                       | grep -v '>' | tr -d '\n' | gzip -1 > $@.tmp && mv $@.tmp $@
 
-test18.fasta.gz:
-	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch{00,01,02,03,04,05,06,07,08,09,10,11,12}.fa | grep -v '>' | tr -d '\n' | gzip -1 > $@.tmp && mv $@.tmp $@
+test18.fasta.gz: test19.fasta.gz
+	zcat test19.fasta.gz | tr -d '\n' | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test19.fasta.gz:
+	rm -v test19.fasta.tmp test19.fasta test19.fasta.gz || true
 	for i in 00 01 02 03 04 05 06 07 08 09 10 11 12; do \
-		curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch${i}.fa | grep -v '>' | tr -d '\n' >> test19.fasta; \
-		echo >> test19.fasta; \
+		curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch$${i}.fa | grep -v '>' | tr -d '\n' >> test19.fasta.tmp; \
+		echo >> test19.fasta.tmp; \
 	done
-	gzip -1 test19.fasta
+	mv test19.fasta.tmp test19.fasta && gzip -1 test19.fasta
 
 
 
 
 
-.PHONY: run
-ifdef SERVER
-run: get test01 test02 test03 test04 test05 test06 test07 test08 test09 test10 test11 test12 test13 test14 test15 test16 test17 test18 test19 testMatrix
-else
-run: get test01 test02 test03 test04 test05 test06 test07 test08                      test12 test13 test14 test15 test16 test17 test18 test19 testMatrix
-endif
 
 
 test01: test01.fasta.gz
@@ -454,8 +464,7 @@ testMatrix:
 
 
 
-.PHONY: gen_check check_fasta.sha256 check_kmer.sha256 check_index.sha256 check_matrix.sha256
-gen_check: check_fasta.sha256 check_kmer.sha256 check_index.sha256 check_matrix.sha256
+
 
 check_fasta.sha256:
 	sha256sum *.fasta.gz > $@.tmp && mv $@.tmp $@
@@ -471,8 +480,7 @@ check_matrix.sha256:
 
 
 
-.PHONY: check check_fasta check_kmer check_index text_matrix
-check: check_fasta check_kmer check_index check_matrix
+
 
 check_fasta:
 	sha256sum -c check_fasta.sha256

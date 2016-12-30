@@ -28,7 +28,7 @@ CPP:=g++
 all:_$(BASE).so
 
 clean:
-	rm -v $(BASE)_wrap.* $(BASE).o $(BASE).py $(BASE).pyc _$(BASE).so test/*.kmer test/*.log test/*.matrix  test/*.index core || true
+	rm -v $(BASE)_wrap.* $(BASE).o $(BASE).py $(BASE).pyc _$(BASE).so core || true
 
 print:
 	@echo PROG_VERSION $(__PROG_VERSION__)
@@ -36,7 +36,7 @@ print:
 
 .PHONY: test
 test:
-	./test.sh
+	$(MAKE) -C test
 
 .PHONY: debug
 debug:

@@ -9,6 +9,9 @@
 #include <string.h>
 #include <assert.h>     /* assert */
 
+#include <sys/stat.h>
+#include <unistd.h>
+
 //#include <numeric>
 //#include <sstream>
 //#include <unistd.h>
@@ -220,8 +223,28 @@ std::vector<T> reversed(std::vector<T> v) {
 #endif
 
 
+//https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
+inline bool file_exists (const std::string& name) {
+  struct stat buffer;   
+  return (stat (name.c_str(), &buffer) == 0); 
+}
 
+inline void remove_if_exists( const std::string& name ) {
+    if ( file_exists( name ) ) {
+        if ( remove( name.c_str() ) != 0 ) {
+            perror((std::string("error deleting file: ") + name).c_str());
+            throw std::runtime_error("error deleting file: " + name);
+        }
+    }
+}
 
+inline void rename_and_check( const std::string& src, const std::string& dst ) {
+    int r = rename(src.c_str(), dst.c_str() );
+    if ( r != 0 ) {
+        perror((std::string("error renaming file: ") + src + " to: " + dst).c_str());
+        throw std::runtime_error(std::string("error renaming file: ") + src + " to: " + dst);
+    }
+}
 
 //https://stackoverflow.com/questions/32640327/how-to-compute-the-size-of-an-intersection-of-two-stl-sets-in-c
 struct Counter
@@ -547,8 +570,14 @@ void          extract_kmers::save_kmer_db(        const std::string   &outfile )
         std::cout << "SAVING TO: " << outfile << " REGISTERS: " << size() << " FILE SIZE: " << (size()*sizeof(ulong)) << std::endl;
 
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
-        ogzstream outfhd(outfile.c_str());
+
+        std::string  outfileT = outfile + ".tmp";
         
+        remove_if_exists(outfile );
+        remove_if_exists(outfileT);
+
+        ogzstream outfhd(outfileT.c_str());
+
         if (!outfhd) {
             perror((std::string("error saving kmer file: ") + outfile).c_str());
             throw std::runtime_error("error saving kmer file: " + outfile);
@@ -568,6 +597,8 @@ void          extract_kmers::save_kmer_db(        const std::string   &outfile )
         diff_encoder(outfhd);
 #endif
         outfhd.close();
+
+        rename_and_check( outfileT, outfile );
 
         std::cout << "SAVED" << std::endl;
 
@@ -924,11 +955,18 @@ void          extract_kmers::save_matrix(         const std::string   &outfile, 
     if ( mat.size() > 0 ) {
         std::cout << "SAVING TO: " << outfile << ".matrix SIZE " << (mat.size()*sizeof(ulong)) << std::endl;
 
-        std::string matrix = outfile.c_str() + std::string(".matrix");
-        std::string index  = outfile.c_str() + std::string(".index" );
+        std::string matrix  = outfile + std::string(".matrix");
+        std::string index   = outfile + std::string(".index" );
+        std::string matrixT = matrix  + std::string(".tmp");
+        std::string indexT  = index   + std::string(".tmp" );
+
+        remove_if_exists(matrix );
+        remove_if_exists(matrixT);
+        remove_if_exists(index  );
+        remove_if_exists(indexT );
         
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
-        std::ofstream outfhd(matrix, std::ios::out | std::ofstream::binary);
+        std::ofstream outfhd(matrixT, std::ios::out | std::ofstream::binary);
 
         if (!outfhd) {
             perror((std::string("error saving matrix file: ") + matrix).c_str());
@@ -945,7 +983,7 @@ void          extract_kmers::save_matrix(         const std::string   &outfile, 
 
         
         
-        std::ofstream outind(index, std::ios::out | std::ofstream::binary);
+        std::ofstream outind(indexT, std::ios::out | std::ofstream::binary);
         
         if (!outind) {
             perror((std::string("error saving index file: ") + index).c_str());
@@ -967,6 +1005,9 @@ void          extract_kmers::save_matrix(         const std::string   &outfile, 
         }
 
         outind.close();
+
+        rename_and_check( indexT , index  );
+        rename_and_check( matrixT, matrix );
     } else {
         std::cout << "NO MATRIX TO SAVE" << std::endl;
     }

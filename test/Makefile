@@ -15,7 +15,7 @@ clean:
 
 .PHONY: wipe
 wipe: clean
-	rm -v *.fasta.gz || true
+	rm -v *.fasta.gz *.sha256 || true
 
 
 .PHONY: get
@@ -26,60 +26,60 @@ get: test01.fasta.gz test02.fasta.gz test03.fasta.gz test04.fasta.gz test05.fast
 endif
 
 test01.fasta.gz:
-	$(PYTHON) ./debruijn.py 1 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 1 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test02.fasta.gz:
-	$(PYTHON) ./debruijn.py 3 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 3 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test03.fasta.gz:
-	$(PYTHON) ./debruijn.py 5 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 5 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test04.fasta.gz:
-	$(PYTHON) ./debruijn.py 7 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 7 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test05.fasta.gz:
-	$(PYTHON) ./debruijn.py 9 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 9 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test06.fasta.gz:
-	$(PYTHON) ./debruijn.py 11 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 11 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test07.fasta.gz:
-	$(PYTHON) ./debruijn.py 13 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 13 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test08.fasta.gz:
-	$(PYTHON) ./debruijn.py 15 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 15 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 ifdef SERVER
 test09.fasta.gz:
-	$(PYTHON) ./debruijn.py 17 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 17 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test10.fasta.gz:
-	$(PYTHON) ./debruijn.py 19 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 19 | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test11.fasta.gz:
-	$(PYTHON) ./debruijn.py 21 | gzip -1 > $@
+	$(PYTHON) ./debruijn.py 21 | gzip -1 > $@.tmp && mv $@.tmp $@
 endif
 
 test12.fasta.gz:
-	echo -e 'AAA\nAAC\nAAG\nAAT\n\nACA\nACC\nACG\nACT\n\nAGA\nAGC\nAGG\nAGT\n\nATA\nATC\nATG\nATT\n\n\n\n\nCAA\nCAC\nCAG\nCAT\n\nCCA\nCCC\nCCG\nCCT\n\nCGA\nCGC\nCGG\nCGT\n\nCTA\nCTC\nCTG\nCTT\n\n\n\n\nGAA\nGAC\nGAG\nGAT\n\nGCA\nGCC\nGCG\nGCT\n\nGGA\nGGC\nGGG\nGGT\n\nGTA\nGTC\nGTG\nGTT\n\n\n\n\nTAA\nTAC\nTAG\nTAT\n\nTCA\nTCC\nTCG\nTCT\n\nTGA\nTGC\nTGG\nTGT\n\nTTA\nTTC\nTTG\nTTT\n\n' | gzip -1 > $@
+	echo -e 'AAA\nAAC\nAAG\nAAT\n\nACA\nACC\nACG\nACT\n\nAGA\nAGC\nAGG\nAGT\n\nATA\nATC\nATG\nATT\n\n\n\n\nCAA\nCAC\nCAG\nCAT\n\nCCA\nCCC\nCCG\nCCT\n\nCGA\nCGC\nCGG\nCGT\n\nCTA\nCTC\nCTG\nCTT\n\n\n\n\nGAA\nGAC\nGAG\nGAT\n\nGCA\nGCC\nGCG\nGCT\n\nGGA\nGGC\nGGG\nGGT\n\nGTA\nGTC\nGTG\nGTT\n\n\n\n\nTAA\nTAC\nTAG\nTAT\n\nTCA\nTCC\nTCG\nTCT\n\nTGA\nTGC\nTGG\nTGT\n\nTTA\nTTC\nTTG\nTTT\n\n' | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test13.fasta.gz:
-	echo "CGTACGTACGTACGTACGT" | gzip -1 > $@
+	echo "CGTACGTACGTACGTACGT" | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test14.fasta.gz:
-	echo "AAACAAGAATACACGACTAGCAGGAGTATCATGATT" | gzip -1 > $@
+	echo "AAACAAGAATACACGACTAGCAGGAGTATCATGATT" | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test15.fasta.gz:
-	echo "ACGTACGTACGTACGTACGTNACGTACGTACGTACGTACGT" | gzip -1 > $@
+	echo "ACGTACGTACGTACGTACGTNACGTACGTACGTACGTACGT" | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test16.fasta.gz:
-	echo "AAACAAGAATACACGACNNTAGCAGGAGTATCATGATT" | gzip -1 > $@
+	echo "AAACAAGAATACACGACNNTAGCAGGAGTATCATGATT" | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test17.fasta.gz:
-	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch00.fa                                       | grep -v '>' | tr -d '\n' | gzip -1 > $@
+	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch00.fa                                       | grep -v '>' | tr -d '\n' | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test18.fasta.gz:
-	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch{00,01,02,03,04,05,06,07,08,09,10,11,12}.fa | grep -v '>' | tr -d '\n' | gzip -1 > $@
+	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch{00,01,02,03,04,05,06,07,08,09,10,11,12}.fa | grep -v '>' | tr -d '\n' | gzip -1 > $@.tmp && mv $@.tmp $@
 
 test19.fasta.gz:
 	for i in 00 01 02 03 04 05 06 07 08 09 10 11 12; do \
@@ -458,16 +458,16 @@ testMatrix:
 gen_check: check_fasta.sha256 check_kmer.sha256 check_index.sha256 check_matrix.sha256
 
 check_fasta.sha256:
-	sha256sum *.fasta.gz > $@ || true
+	sha256sum *.fasta.gz > $@.tmp && mv $@.tmp $@
 
 check_kmer.sha256:
-	sha256sum *.kmer     > $@ || true
+	sha256sum *.kmer     > $@.tmp && mv $@.tmp $@
 
 check_index.sha256:
-	sha256sum *.index    > $@ || true
+	sha256sum *.index    > $@.tmp && mv $@.tmp $@
 
 check_matrix.sha256:
-	sha256sum *.matrix   > $@ || true
+	sha256sum *.matrix   > $@.tmp && mv $@.tmp $@
 
 
 

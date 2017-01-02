@@ -57,6 +57,11 @@ void version () {
     std::cout << "COMPILE FLAG: _NO_DIFF_ENCODING_" << std::endl;
 #endif
 
+#ifdef _DO_NOT_USE_ZLIB_
+    std::cout << "COMPILE FLAG: _DO_NOT_USE_ZLIB_" << std::endl;
+#endif
+
+
 /*
  *7 7           2m52.768s
  *7 7 use slice 4m32.193s
@@ -145,10 +150,10 @@ diff          40968 (62.51%)   419 ( 0.63% - gz 3.35%)
 }
 
 
-std::ostream& operator<< (std::ostream& out, const std::vector<std::string>& v) {
+std::ostream& operator<< (std::ostream& out, const std::vector<string>& v) {
   if ( v.size() != 0 ) {
     out << '[';
-    std::copy (std::begin(v), std::end(v), std::ostream_iterator<std::string>(out, ", "));
+    std::copy (std::begin(v), std::end(v), std::ostream_iterator<string>(out, ", "));
     out << "\b\b]";
   }
   return out;
@@ -224,25 +229,25 @@ std::vector<T> reversed(std::vector<T> v) {
 
 
 //https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
-inline bool file_exists (const std::string& name) {
+inline bool file_exists (const string& name) {
   struct stat buffer;   
   return (stat (name.c_str(), &buffer) == 0); 
 }
 
-inline void remove_if_exists( const std::string& name ) {
+inline void remove_if_exists( const string& name ) {
     if ( file_exists( name ) ) {
         if ( remove( name.c_str() ) != 0 ) {
-            perror((std::string("error deleting file: ") + name).c_str());
+            perror((string("error deleting file: ") + name).c_str());
             throw std::runtime_error("error deleting file: " + name);
         }
     }
 }
 
-inline void rename_and_check( const std::string& src, const std::string& dst ) {
+inline void rename_and_check( const string& src, const string& dst ) {
     int r = rename(src.c_str(), dst.c_str() );
     if ( r != 0 ) {
-        perror((std::string("error renaming file: ") + src + " to: " + dst).c_str());
-        throw std::runtime_error(std::string("error renaming file: ") + src + " to: " + dst);
+        perror((string("error renaming file: ") + src + " to: " + dst).c_str());
+        throw std::runtime_error(string("error renaming file: ") + src + " to: " + dst);
     }
 }
 
@@ -263,7 +268,7 @@ size_t intersection_size(const T1& s1, const T2& s2)
 }
 
 //https://stackoverflow.com/questions/874134/find-if-string-ends-with-another-string-in-c
-bool hasEnding (std::string const &fullString, std::string const &ending) {
+bool hasEnding (string const &fullString, string const &ending) {
     if (fullString.length() >= ending.length()) {
         return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
     } else {
@@ -320,7 +325,12 @@ void          extract_kmers::print_all() {
     }
 }
 
-void          extract_kmers::read_one_liner(      const std::string   &infile  ) {
+void          extract_kmers::read_one_liner(      const string   &infile  ) {
+#ifdef _DO_NOT_USE_ZLIB_
+        std::ifstream infhd(infile);
+        read_one_liner(infile, infhd);
+        infhd.close();
+#else
     if ( hasEnding(infile, ".gz") ) {
         igzstream infhd(infile.c_str());
         read_one_liner(infile, infhd);
@@ -330,23 +340,24 @@ void          extract_kmers::read_one_liner(      const std::string   &infile  )
         read_one_liner(infile, infhd);
         infhd.close();
     }
+#endif
 }
 
 template<typename T>
-void          extract_kmers::read_one_liner(      const std::string   &infile, T                   &infhd  ) {
+void          extract_kmers::read_one_liner(      const string   &infile, T                   &infhd  ) {
     if (!infhd) {
-        perror((std::string("Error opening input file: ") + infile).c_str());
+        perror((string("Error opening input file: ") + infile).c_str());
         throw std::runtime_error("error opening input file: " + infile);
         //return;
     }
 
     if(!infhd.good()) {
-        perror((std::string("Error reading input file: ") + infile).c_str());
+        perror((string("Error reading input file: ") + infile).c_str());
         throw std::runtime_error("error opening input file: " + infile);
         //return;
 
     } else {
-        std::string line;
+        string line;
 
         while (getline(infhd,line)) {
             //std::cout << "Got line" << std::endl;
@@ -363,7 +374,7 @@ void          extract_kmers::read_one_liner(      const std::string   &infile, T
     }
 }
 
-void          extract_kmers::read_fasta(          const std::string   &infile  ) {
+void          extract_kmers::read_fasta(          const string   &infile  ) {
     /*
      * TODO: IMPLEMENT + GZ VERSION
      */
@@ -371,7 +382,7 @@ void          extract_kmers::read_fasta(          const std::string   &infile  )
     infhd.close();
 }
 
-void          extract_kmers::read_fastq(          const std::string   &infile  ) {
+void          extract_kmers::read_fastq(          const string   &infile  ) {
     /*
      * TODO: IMPLEMENT + GZ VERSION
      */
@@ -379,7 +390,7 @@ void          extract_kmers::read_fastq(          const std::string   &infile  )
     infhd.close();
 }
 
-void          extract_kmers::parse_line(                std::string   &line    ) {
+void          extract_kmers::parse_line(                string   &line    ) {
     ulong       ll = line.length();
 
 #ifdef _DEBUG_
@@ -562,7 +573,7 @@ void          extract_kmers::parse_line(                std::string   &line    )
     }//if ( line.length() >= kmer_size ) {
 }
 
-void          extract_kmers::save_kmer_db(        const std::string   &outfile ) {
+void          extract_kmers::save_kmer_db(        const string   &outfile ) {
     if ( size() == 0 ) {
         std::cout << "NO KMER TO SAVE" << std::endl;
 
@@ -571,15 +582,19 @@ void          extract_kmers::save_kmer_db(        const std::string   &outfile )
 
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
 
-        std::string  outfileT = outfile + ".tmp";
+        string  outfileT = outfile + ".tmp";
         
         remove_if_exists(outfile );
         remove_if_exists(outfileT);
 
+#ifdef _DO_NOT_USE_ZLIB_
+        ofstream  outfhd(outfileT.c_str());
+#else
         ogzstream outfhd(outfileT.c_str());
+#endif
 
         if (!outfhd) {
-            perror((std::string("error saving kmer file: ") + outfile).c_str());
+            perror((string("error saving kmer file: ") + outfile).c_str());
             throw std::runtime_error("error saving kmer file: " + outfile);
             //return;
         }
@@ -608,16 +623,20 @@ void          extract_kmers::save_kmer_db(        const std::string   &outfile )
     }
 }
 
-ulong         extract_kmers::get_db_file_size(    const std::string   &infile  ) {
+ulong         extract_kmers::get_db_file_size(    const string   &infile  ) {
     /*
      * TODO: read delta format
      */
     
     if ( hasEnding(infile, ".gz") ) {
+#ifdef _DO_NOT_USE_ZLIB_
+        ifstream  infhd(infile.c_str());
+#else
         igzstream infhd(infile.c_str());
+#endif
     
         if (!infhd.good()) {
-            perror((std::string("error reading input file: ") + infile).c_str());
+            perror((string("error reading input file: ") + infile).c_str());
             throw std::runtime_error("error reading input file: " + infile);
             //return;
         }
@@ -627,7 +646,7 @@ ulong         extract_kmers::get_db_file_size(    const std::string   &infile  )
         std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
     
         if (!infhd) {
-            perror((std::string("error reading input file: ") + infile).c_str());
+            perror((string("error reading input file: ") + infile).c_str());
             throw std::runtime_error("error reading input file: " + infile);
             //return;
         }
@@ -649,7 +668,7 @@ ulong         extract_kmers::get_db_file_size(          T             &infhd   )
     return fileSize;
 }
 
-ulong         extract_kmers::get_db_num_registers(const std::string   &infile  ) {
+ulong         extract_kmers::get_db_num_registers(const string   &infile  ) {
     ulong numRegs = 0;
 
 #ifdef _NO_DIFF_ENCODING_
@@ -662,7 +681,7 @@ ulong         extract_kmers::get_db_num_registers(const std::string   &infile  )
     igzstream infhd(infile.c_str());
 
     if (!infhd.good()) {
-        perror((std::string("error reading input file: ") + infile).c_str());
+        perror((string("error reading input file: ") + infile).c_str());
         throw std::runtime_error("error reading input file: " + infile);
         //return;
     }
@@ -698,7 +717,7 @@ ulong         extract_kmers::get_db_num_registers(      T             &infhd   )
     return numRegs;
 }
 
-void          extract_kmers::read_kmer_db(        const std::string   &infile  ) {
+void          extract_kmers::read_kmer_db(        const string   &infile  ) {
     /*
      * TODO: load into q
      *       read delta format
@@ -871,7 +890,7 @@ ulongVec      extract_kmers::get_kmer_db() {
     return ulongVec(q.begin(), q.end());
 }
 
-void          extract_kmers::merge_kmers(         const std::string   &outfile, const strVec &infiles, ulongVec &mat ) {
+void          extract_kmers::merge_kmers(         const string   &outfile, const strVec &infiles, ulongVec &mat ) {
     /*
      * TODO: read q
      */
@@ -942,7 +961,7 @@ void          extract_kmers::merge_kmers(         const std::string   &outfile, 
     save_matrix(outfile, infiles, mat);
 }
 
-ulongVec      extract_kmers::merge_kmers(         const std::string   &outfile, const strVec &infiles   ) {
+ulongVec      extract_kmers::merge_kmers(         const string   &outfile, const strVec &infiles   ) {
     /*
      * TODO: return q
      */
@@ -951,14 +970,14 @@ ulongVec      extract_kmers::merge_kmers(         const std::string   &outfile, 
     return mat;
 }
 
-void          extract_kmers::save_matrix(         const std::string   &outfile, const strVec &infiles, const ulongVec &mat ) {
+void          extract_kmers::save_matrix(         const string   &outfile, const strVec &infiles, const ulongVec &mat ) {
     if ( mat.size() > 0 ) {
         std::cout << "SAVING TO: " << outfile << ".matrix SIZE " << (mat.size()*sizeof(ulong)) << std::endl;
 
-        std::string matrix  = outfile + std::string(".matrix");
-        std::string index   = outfile + std::string(".index" );
-        std::string matrixT = matrix  + std::string(".tmp");
-        std::string indexT  = index   + std::string(".tmp" );
+        string matrix  = outfile + string(".matrix");
+        string index   = outfile + string(".index" );
+        string matrixT = matrix  + string(".tmp");
+        string indexT  = index   + string(".tmp" );
 
         remove_if_exists(matrix );
         remove_if_exists(matrixT);
@@ -969,7 +988,7 @@ void          extract_kmers::save_matrix(         const std::string   &outfile, 
         std::ofstream outfhd(matrixT, std::ios::out | std::ofstream::binary);
 
         if (!outfhd) {
-            perror((std::string("error saving matrix file: ") + matrix).c_str());
+            perror((string("error saving matrix file: ") + matrix).c_str());
             throw std::runtime_error("error saving matrix file: " + matrix);
             //return;
         }
@@ -986,7 +1005,7 @@ void          extract_kmers::save_matrix(         const std::string   &outfile, 
         std::ofstream outind(indexT, std::ios::out | std::ofstream::binary);
         
         if (!outind) {
-            perror((std::string("error saving index file: ") + index).c_str());
+            perror((string("error saving index file: ") + index).c_str());
             throw std::runtime_error("error saving index file: " + index);
             //return;
         }

@@ -10,7 +10,7 @@ endif
 all: run
 
 clean:
-	rm -v *.kmer *.matrix || true
+	rm -v *.kmer *.matrix *.index || true
 
 .PHONY: wipe
 wipe: clean
@@ -21,14 +21,14 @@ wipe: clean
 ifdef SERVER
 get: test01.fasta.gz test02.fasta.gz test03.fasta.gz test04.fasta.gz test05.fasta.gz test06.fasta.gz test07.fasta.gz test08.fasta.gz test09.fasta.gz test10.fasta.gz test11.fasta.gz test12.fasta.gz test13.fasta.gz test14.fasta.gz test15.fasta.gz test16.fasta.gz test17.fasta.gz test18.fasta.gz test19.fasta.gz
 else
-get: test01.fasta.gz test02.fasta.gz test03.fasta.gz test04.fasta.gz test05.fasta.gz test06.fasta.gz test07.fasta.gz test08.fasta.gz                                                 test12.fasta.gz test13.fasta.gz test14.fasta.gz test15.fasta.gz test16.fasta.gz test17.fasta.gz test18.fasta.gz test19.fasta.gz
+get: test01.fasta.gz test02.fasta.gz test03.fasta.gz test04.fasta.gz test05.fasta.gz test06.fasta.gz test07.fasta.gz                                                                 test12.fasta.gz test13.fasta.gz test14.fasta.gz test15.fasta.gz test16.fasta.gz test17.fasta.gz test18.fasta.gz test19.fasta.gz
 endif
 
 .PHONY: run
 ifdef SERVER
 run: get test01 test02 test03 test04 test05 test06 test07 test08 test09 test10 test11 test12 test13 test14 test15 test16 test17 test18 test19 testMatrix
 else
-run: get test01 test02 test03 test04 test05 test06 test07 test08                      test12 test13 test14 test15 test16 test17 test18 test19 testMatrix
+run: get test01 test02 test03 test04 test05 test06 test07                             test12 test13 test14 test15 test16 test17 test18 test19 testMatrix
 endif
 
 .PHONY: gen_check check_fasta.sha256 check_kmer.sha256 check_index.sha256 check_matrix.sha256
@@ -250,6 +250,7 @@ else
 endif
 
 
+ifdef SERVER
 test08: test08.fasta.gz
 	@#debruijn - all 15 mers
 	$(eval TEST_NUM=8)
@@ -259,17 +260,12 @@ test08: test08.fasta.gz
 	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
 	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
 	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-ifdef SERVER
-	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
 	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
 	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
 	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
-else
-	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
-endif
 
 
-ifdef SERVER
 test09: test09.fasta.gz
 	@#debruijn - all 17 mers
 	$(eval TEST_NUM=9)
@@ -409,9 +405,9 @@ test17: test17.fasta.gz
 	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
 	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
 	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
 	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
 	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
 	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
@@ -429,9 +425,9 @@ test18: test18.fasta.gz
 	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
 	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
 	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
 	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
 	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
 	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
@@ -451,6 +447,7 @@ test19: test19.fasta.gz
 	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
+	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
 	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
 	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
 	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)

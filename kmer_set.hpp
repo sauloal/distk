@@ -6,11 +6,14 @@
 #include <vector>
 #include <string>
 #include <sys/types.h>
+
+#ifndef _DO_NOT_USE_ZLIB_
 #include <gzstream.h>
+#endif
 
 //http://bisqwit.iki.fi/story/howto/openmp/
 #ifdef _OPENMP
-# include <omp.h>
+#include <omp.h>
 struct MutexType {
     MutexType()   { omp_init_lock(   &lock); }
     ~MutexType()  { omp_destroy_lock(&lock); }
@@ -66,12 +69,13 @@ typedef std::set<ulong, std::less<ulong> > setuLongLess;
 int  fact (int n);
 void version ();
 
+typedef std::string                        string;
 typedef std::valarray<char>                charValArr;
 typedef std::valarray<ulong>               uLongValArr;
 typedef std::valarray<unsigned int>        uIntValArr;
 typedef std::valarray<int>                 boolValArr;
 
-typedef std::vector<std::string>           strVec;
+typedef std::vector<string>                strVec;
 typedef std::vector<ulong>                 ulongVec;
 //typedef std::vector<double>                doubleVec;
 
@@ -90,23 +94,23 @@ class extract_kmers {
     public:
         extract_kmers(    const int ks);
         ~extract_kmers();
-        void          read_one_liner(      const std::string    &infile  );
-        void          read_fasta(          const std::string    &infile  );
-        void          read_fastq(          const std::string    &infile  );
-        void          parse_line(                std::string    &line    );
-        void          save_kmer_db(        const std::string    &outfile );
-        void          read_kmer_db(        const std::string    &infile  );
-        void          merge_kmers(         const std::string    &outfile, const strVec &infiles, ulongVec &mat );
-        ulongVec      merge_kmers(         const std::string    &outfile, const strVec &infiles   );
-        void          save_matrix(         const std::string    &outfile, const strVec &infiles, const ulongVec &mat );
-        ulong         get_db_file_size(    const std::string    &infile  );
-        ulong         get_db_num_registers(const std::string    &infile  );
+        void          read_one_liner(      const string    &infile  );
+        void          read_fasta(          const string    &infile  );
+        void          read_fastq(          const string    &infile  );
+        void          parse_line(                string    &line    );
+        void          save_kmer_db(        const string    &outfile );
+        void          read_kmer_db(        const string    &infile  );
+        void          merge_kmers(         const string    &outfile, const strVec &infiles, ulongVec &mat );
+        ulongVec      merge_kmers(         const string    &outfile, const strVec &infiles                );
+        void          save_matrix(         const string    &outfile, const strVec &infiles, const ulongVec &mat );
+        ulong         get_db_file_size(    const string    &infile  );
+        ulong         get_db_num_registers(const string    &infile  );
         ulongVec      get_kmer_db();
         ulong         size();
         void          print_all();
     private:
         template<typename T>
-        void          read_one_liner(            const std::string   &infile, T  &infhd   );
+        void          read_one_liner(            const string   &infile, T  &infhd   );
         template<typename T>
         ulong         get_db_file_size(          T  &infhd   );
         template<typename T>

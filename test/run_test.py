@@ -2,6 +2,8 @@
 
 import os
 import sys
+import time
+
 sys.path.insert(0, '..')
 
 import kmer_set
@@ -30,20 +32,24 @@ def main():
 				if os.path.exists(km):
 					os.remove(km)
 	
+				time1 = time.time()
 				ek = kmer_set.extract_kmers(kmer_len)
 				ek.read_one_liner(fa)
 				ek.save_kmer_db(km)
-				print 'FINISHED SAVING'
+				time2 = time.time()
+				print 'FINISHED SAVING TEST %d KMER LEN %d IN %0.3f s' % (test_index, kmer_len, (time2-time1))
 
 			elif exec_type == 'read':
 				if os.path.exists(km):
+					time1 = time.time()
 					ek2 = kmer_set.extract_kmers(kmer_len)
 					ek2.read_kmer_db(km)
 					re = ek2.get_kmer_db()
+					time2 = time.time()
 	
-					print 'RE:', (re if (kmer_len <= 9) else '')
+					print 'RE:', (re if (kmer_len <= 7) else '')
 	
-					print 'FINISHED READING'
+					print 'FINISHED READING TEST %d KMER LEN %d IN %0.3f s' % (test_index, kmer_len, (time2-time1))
 
 if __name__ == "__main__":
 	main()

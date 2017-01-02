@@ -10092,7 +10092,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_read_one_liner(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -10109,14 +10109,14 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_one_liner(PyObject *SWIGUNUSEDPARM
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_one_liner" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_one_liner" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_one_liner" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_one_liner" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
-  (arg1)->read_one_liner((std::string const &)*arg2);
+  (arg1)->read_one_liner((string const &)*arg2);
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -10129,7 +10129,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_read_fasta(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -10146,14 +10146,14 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_fasta(PyObject *SWIGUNUSEDPARM(sel
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_fasta" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_fasta" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_fasta" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_fasta" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
-  (arg1)->read_fasta((std::string const &)*arg2);
+  (arg1)->read_fasta((string const &)*arg2);
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -10166,7 +10166,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_read_fastq(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -10183,14 +10183,14 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_fastq(PyObject *SWIGUNUSEDPARM(sel
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_fastq" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_fastq" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_fastq" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_fastq" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
-  (arg1)->read_fastq((std::string const &)*arg2);
+  (arg1)->read_fastq((string const &)*arg2);
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -10203,7 +10203,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_parse_line(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -10219,12 +10219,12 @@ SWIGINTERN PyObject *_wrap_extract_kmers_parse_line(PyObject *SWIGUNUSEDPARM(sel
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_parse_line" "', argument " "2"" of type '" "std::string &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_parse_line" "', argument " "2"" of type '" "string &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_parse_line" "', argument " "2"" of type '" "std::string &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_parse_line" "', argument " "2"" of type '" "string &""'"); 
   }
-  arg2 = reinterpret_cast< std::string * >(argp2);
+  arg2 = reinterpret_cast< string * >(argp2);
   (arg1)->parse_line(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -10236,7 +10236,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_save_kmer_db(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -10253,14 +10253,14 @@ SWIGINTERN PyObject *_wrap_extract_kmers_save_kmer_db(PyObject *SWIGUNUSEDPARM(s
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_save_kmer_db" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_save_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_kmer_db" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
-  (arg1)->save_kmer_db((std::string const &)*arg2);
+  (arg1)->save_kmer_db((string const &)*arg2);
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -10273,7 +10273,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -10290,14 +10290,14 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db(PyObject *SWIGUNUSEDPARM(s
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
-  (arg1)->read_kmer_db((std::string const &)*arg2);
+  (arg1)->read_kmer_db((string const &)*arg2);
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -10310,7 +10310,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   strVec *arg3 = 0 ;
   ulongVec *arg4 = 0 ;
   void *argp1 = 0 ;
@@ -10334,10 +10334,10 @@ SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers__SWIG_0(PyObject *SWIGUNUSE
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -10360,7 +10360,7 @@ SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers__SWIG_0(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "4"" of type '" "ulongVec &""'"); 
   }
   arg4 = reinterpret_cast< ulongVec * >(argp4);
-  (arg1)->merge_kmers((std::string const &)*arg2,(strVec const &)*arg3,*arg4);
+  (arg1)->merge_kmers((string const &)*arg2,(strVec const &)*arg3,*arg4);
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
@@ -10375,7 +10375,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   strVec *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10396,10 +10396,10 @@ SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers__SWIG_1(PyObject *SWIGUNUSE
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -10414,7 +10414,7 @@ SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers__SWIG_1(PyObject *SWIGUNUSE
     }
     arg3 = ptr;
   }
-  result = (arg1)->merge_kmers((std::string const &)*arg2,(strVec const &)*arg3);
+  result = (arg1)->merge_kmers((string const &)*arg2,(strVec const &)*arg3);
   resultobj = swig::from(static_cast< std::vector< unsigned long,std::allocator< unsigned long > > >(result));
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
@@ -10481,8 +10481,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers(PyObject *self, PyObject *a
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'extract_kmers_merge_kmers'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    extract_kmers::merge_kmers(std::string const &,strVec const &,ulongVec &)\n"
-    "    extract_kmers::merge_kmers(std::string const &,strVec const &)\n");
+    "    extract_kmers::merge_kmers(string const &,strVec const &,ulongVec &)\n"
+    "    extract_kmers::merge_kmers(string const &,strVec const &)\n");
   return 0;
 }
 
@@ -10490,7 +10490,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_save_matrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   strVec *arg3 = 0 ;
   ulongVec *arg4 = 0 ;
   void *argp1 = 0 ;
@@ -10513,10 +10513,10 @@ SWIGINTERN PyObject *_wrap_extract_kmers_save_matrix(PyObject *SWIGUNUSEDPARM(se
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_save_matrix" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_save_matrix" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_matrix" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_matrix" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -10542,7 +10542,7 @@ SWIGINTERN PyObject *_wrap_extract_kmers_save_matrix(PyObject *SWIGUNUSEDPARM(se
     }
     arg4 = ptr;
   }
-  (arg1)->save_matrix((std::string const &)*arg2,(strVec const &)*arg3,(ulongVec const &)*arg4);
+  (arg1)->save_matrix((string const &)*arg2,(strVec const &)*arg3,(ulongVec const &)*arg4);
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
@@ -10559,7 +10559,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_get_db_file_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -10577,14 +10577,14 @@ SWIGINTERN PyObject *_wrap_extract_kmers_get_db_file_size(PyObject *SWIGUNUSEDPA
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_get_db_file_size" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_get_db_file_size" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_get_db_file_size" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_get_db_file_size" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
-  result = (ulong)(arg1)->get_db_file_size((std::string const &)*arg2);
+  result = (ulong)(arg1)->get_db_file_size((string const &)*arg2);
   resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -10597,7 +10597,7 @@ fail:
 SWIGINTERN PyObject *_wrap_extract_kmers_get_db_num_registers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
-  std::string *arg2 = 0 ;
+  string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -10615,14 +10615,14 @@ SWIGINTERN PyObject *_wrap_extract_kmers_get_db_num_registers(PyObject *SWIGUNUS
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_get_db_num_registers" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_get_db_num_registers" "', argument " "2"" of type '" "string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_get_db_num_registers" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_get_db_num_registers" "', argument " "2"" of type '" "string const &""'"); 
     }
     arg2 = ptr;
   }
-  result = (ulong)(arg1)->get_db_num_registers((std::string const &)*arg2);
+  result = (ulong)(arg1)->get_db_num_registers((string const &)*arg2);
   resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -10838,7 +10838,7 @@ static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__alloca
 static swig_type_info _swigt__p_std__allocatorT_unsigned_long_t = {"_p_std__allocatorT_unsigned_long_t", "std::vector< unsigned long >::allocator_type *|std::allocator< unsigned long > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t = {"_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t", "std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > > *|setuLongLess *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *|string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_char_t = {"_p_std__valarrayT_char_t", "std::valarray< char > *|charValArr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_int_t = {"_p_std__valarrayT_int_t", "boolValArr *|std::valarray< int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_unsigned_int_t = {"_p_std__valarrayT_unsigned_int_t", "uIntValArr *|std::valarray< unsigned int > *", 0, 0, (void*)0, 0};

@@ -5,7 +5,7 @@
 #include <valarray>     // std::valarray, std::slice
 #include <vector>
 #include <string>
-#include <sys/types.h>
+//#include <sys/types.h>
 
 #ifndef _DO_NOT_USE_ZLIB_
 #include <gzstream.h>

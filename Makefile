@@ -3,7 +3,7 @@ BASE=kmer_set
 __PROG_VERSION__=$(shell git rev-list --all --count && git describe --tags --always --dirty)
 __COMPILE_DATE__=$(shell date)
 
-ifneq ($(DEBUG),)
+ifneq ($(_DEBUG_),)
 __PROG_VERSION__+=debug
 endif
 
@@ -28,7 +28,7 @@ CPP_OPTS_F+=-fopenmp
 LDFLAGS_F+=-fopenmp
 endif
 
-ifeq ($(DEBUG),)
+ifeq ($(_DEBUG_),)
 #no debug
 CPP_OPTS_F+=-Ofast
 else
@@ -36,16 +36,32 @@ else
 CPP_OPTS_F+=-Og -g -D_DEBUG_
 endif
 
+LIBS=$(BASE).o $(BASE)_wrap.o
+ifeq ($(_DO_NOT_USE_ZLIB_),)
+LIBS+=gzstream.o
+endif
 
 
-all:$(SO)
+
+
+all:_$(BASE).so
 
 clean:
 	rm -v $(BASE)_wrap.* $(BASE).py $(BASE).pyc _$(BASE).so *.o core || true
 
 print:
-	@echo PROG_VERSION $(__PROG_VERSION__)
-	@echo COMPILE_DATE $(__COMPILE_DATE__)
+	@echo "PROG_VERSION      '$(__PROG_VERSION__)'"
+	@echo "COMPILE_DATE      '$(__COMPILE_DATE__)'"
+	@echo "MAKE              $(MAKE)"
+	@echo "BASE              $(BASE)"
+	@echo "LIBS              $(LIBS)"
+	@echo "_DEBUG_           $(_DEBUG_)"
+	@echo "_DO_NOT_USE_ZLIB_ $(_DO_NOT_USE_ZLIB_)"
+	@echo "THREADS           $(THREADS)"
+	@echo "CPP_OPTS_F        $(CPP_OPTS_F)"
+	@echo "CPP_INCL_F        $(CPP_INCL_F)"
+	@echo "CPP_VARS_F        $(CPP_VARS_F)"
+	@echo "LDFLAGS_F         $(LDFLAGS_F)"
 
 .PHONY: test
 test:
@@ -54,8 +70,6 @@ test:
 .PHONY: debug
 debug:
 	./debug.sh
-
-
 
 $(BASE)_wrap.cpp: $(BASE).i $(BASE).cpp $(BASE).hpp
 	swig -c++ -python -outdir $(PWD) -I$(PWD) -o $@ $(BASE).i
@@ -66,10 +80,5 @@ $(BASE)_wrap.cpp: $(BASE).i $(BASE).cpp $(BASE).hpp
 gzstream.o: gzstream/gzstream/gzstream.C
 	$(CPP) $(CPP_OPTS_F) $(CPP_INCL_F) $(CPP_VARS_F) -c $< -o $@
 
-ifeq ($(_DO_NOT_USE_ZLIB_),)
-_$(BASE).so: $(BASE).o $(BASE)_wrap.o gzstream.o
-else
-_$(BASE).so: $(BASE).o $(BASE)_wrap.o
-endif
+_$(BASE).so: $(LIBS)
 	$(CPP) -shared $? -o $@ $(LDFLAGS_F)
-

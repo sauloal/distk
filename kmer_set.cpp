@@ -238,7 +238,11 @@ inline void remove_if_exists( const string& name ) {
     if ( file_exists( name ) ) {
         if ( remove( name.c_str() ) != 0 ) {
             perror((string("error deleting file: ") + name).c_str());
+#ifdef __CHEERP__
+            assert(false);
+#else
             throw std::runtime_error("error deleting file: " + name);
+#endif
         }
     }
 }
@@ -247,7 +251,11 @@ inline void rename_and_check( const string& src, const string& dst ) {
     int r = rename(src.c_str(), dst.c_str() );
     if ( r != 0 ) {
         perror((string("error renaming file: ") + src + " to: " + dst).c_str());
+#ifdef __CHEERP__
+        assert(false);
+#else
         throw std::runtime_error(string("error renaming file: ") + src + " to: " + dst);
+#endif
     }
 }
 
@@ -347,13 +355,21 @@ template<typename T>
 void          extract_kmers::read_one_liner(      const string   &infile, T                   &infhd  ) {
     if (!infhd) {
         perror((string("Error opening input file: ") + infile).c_str());
+#ifdef __CHEERP__
+        assert(false);
+#else
         throw std::runtime_error("error opening input file: " + infile);
+#endif
         //return;
     }
 
     if(!infhd.good()) {
         perror((string("Error reading input file: ") + infile).c_str());
+#ifdef __CHEERP__
+        assert(false);
+#else
         throw std::runtime_error("error opening input file: " + infile);
+#endif
         //return;
 
     } else {
@@ -588,14 +604,18 @@ void          extract_kmers::save_kmer_db(        const string   &outfile ) {
         remove_if_exists(outfileT);
 
 #ifdef _DO_NOT_USE_ZLIB_
-        ofstream  outfhd(outfileT.c_str());
+        std::ofstream outfhd(outfileT.c_str());
 #else
-        ogzstream outfhd(outfileT.c_str());
+        ogzstream     outfhd(outfileT.c_str());
 #endif
 
         if (!outfhd) {
             perror((string("error saving kmer file: ") + outfile).c_str());
+#ifdef __CHEERP__
+            assert(false);
+#else
             throw std::runtime_error("error saving kmer file: " + outfile);
+#endif
             //return;
         }
         
@@ -630,14 +650,18 @@ ulong         extract_kmers::get_db_file_size(    const string   &infile  ) {
     
     if ( hasEnding(infile, ".gz") ) {
 #ifdef _DO_NOT_USE_ZLIB_
-        ifstream  infhd(infile.c_str());
+        std::ifstream infhd(infile.c_str());
 #else
-        igzstream infhd(infile.c_str());
+        igzstream     infhd(infile.c_str());
 #endif
     
         if (!infhd.good()) {
             perror((string("error reading input file: ") + infile).c_str());
+#ifdef __CHEERP__
+            assert(false);
+#else
             throw std::runtime_error("error reading input file: " + infile);
+#endif
             //return;
         }
         
@@ -647,7 +671,11 @@ ulong         extract_kmers::get_db_file_size(    const string   &infile  ) {
     
         if (!infhd) {
             perror((string("error reading input file: ") + infile).c_str());
+#ifdef __CHEERP__
+            assert(false);
+#else
             throw std::runtime_error("error reading input file: " + infile);
+#endif
             //return;
         }
         
@@ -678,11 +706,19 @@ ulong         extract_kmers::get_db_num_registers(const string   &infile  ) {
 
 #else
 
-    igzstream infhd(infile.c_str());
+#ifdef _DO_NOT_USE_ZLIB_
+    std::ifstream infhd(infile.c_str());
+#else
+    igzstream     infhd(infile.c_str());
+#endif
 
     if (!infhd.good()) {
         perror((string("error reading input file: ") + infile).c_str());
+#ifdef __CHEERP__
+        assert(false);
+#else
         throw std::runtime_error("error reading input file: " + infile);
+#endif
         //return;
     }
 
@@ -725,7 +761,11 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
 
     std::cout << "  READING BACK FROM: " << infile << std::endl;
     
-    igzstream infhd(infile.c_str());
+#ifdef _DO_NOT_USE_ZLIB_
+    std::ifstream infhd(infile.c_str());
+#else
+    igzstream     infhd(infile.c_str());
+#endif
 
     std::cout << "    OPEN" << std::endl;
 
@@ -989,7 +1029,11 @@ void          extract_kmers::save_matrix(         const string   &outfile, const
 
         if (!outfhd) {
             perror((string("error saving matrix file: ") + matrix).c_str());
+#ifdef __CHEERP__
+            assert(false);
+#else
             throw std::runtime_error("error saving matrix file: " + matrix);
+#endif
             //return;
         }
         
@@ -1006,7 +1050,11 @@ void          extract_kmers::save_matrix(         const string   &outfile, const
         
         if (!outind) {
             perror((string("error saving index file: ") + index).c_str());
+#ifdef __CHEERP__
+            assert(false);
+#else
             throw std::runtime_error("error saving index file: " + index);
+#endif
             //return;
         }
 

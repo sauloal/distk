@@ -1,16 +1,17 @@
 #include "kmer_set.hpp"
 
 //http://www.linuxquestions.org/questions/programming-9/mmap-tutorial-c-c-511265/
-#include <iostream>
-#include <fstream>
-#include <iterator>
 
-#include <stdio.h>
 #include <string.h>
 #include <assert.h>     /* assert */
 
+#include <iterator>
 #include <sys/stat.h>
-#include <unistd.h>
+
+#include <iostream>
+#include <fstream>
+//#include <stdio.h>
+//#include <unistd.h>
 
 //#include <numeric>
 //#include <sstream>

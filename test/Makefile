@@ -1,10 +1,20 @@
 SHELL:=/bin/bash
-PYPY := $(shell command -v pypy 2> /dev/null)
+
+PYPY=$(shell command -v pypy 2> /dev/null)
+GZIP=$(shell command -v pigz 2> /dev/null)
 
 ifdef PYPY
-PYHTON=pypy
+PYTHON=pypy
 else
-PYHTON=python
+PYTHON=python
+endif
+
+ifdef GZIP
+GZIP=pigz
+GUNZIP=pigz -d
+else
+GZIP=gzip
+GUNZIP=gunzip
 endif
 
 all: run
@@ -41,60 +51,60 @@ check: check_fasta check_kmer check_index check_matrix
 
 
 test01.fasta.gz:
-	$(PYTHON) ./debruijn.py 1 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py  1 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test02.fasta.gz:
-	$(PYTHON) ./debruijn.py 3 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py  3 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test03.fasta.gz:
-	$(PYTHON) ./debruijn.py 5 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py  5 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test04.fasta.gz:
-	$(PYTHON) ./debruijn.py 7 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py  7 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test05.fasta.gz:
-	$(PYTHON) ./debruijn.py 9 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py  9 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test06.fasta.gz:
-	$(PYTHON) ./debruijn.py 11 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py 11 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test07.fasta.gz:
-	$(PYTHON) ./debruijn.py 13 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py 13 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test08.fasta.gz:
-	$(PYTHON) ./debruijn.py 15 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py 15 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 ifdef SERVER
 test09.fasta.gz:
-	$(PYTHON) ./debruijn.py 17 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py 17 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test10.fasta.gz:
-	$(PYTHON) ./debruijn.py 19 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py 19 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test11.fasta.gz:
-	$(PYTHON) ./debruijn.py 21 | gzip -1 > $@.tmp && mv $@.tmp $@
+	$(PYTHON) ./debruijn.py 21 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 endif
 
 test12.fasta.gz:
-	echo -e 'AAA\nAAC\nAAG\nAAT\n\nACA\nACC\nACG\nACT\n\nAGA\nAGC\nAGG\nAGT\n\nATA\nATC\nATG\nATT\n\n\n\n\nCAA\nCAC\nCAG\nCAT\n\nCCA\nCCC\nCCG\nCCT\n\nCGA\nCGC\nCGG\nCGT\n\nCTA\nCTC\nCTG\nCTT\n\n\n\n\nGAA\nGAC\nGAG\nGAT\n\nGCA\nGCC\nGCG\nGCT\n\nGGA\nGGC\nGGG\nGGT\n\nGTA\nGTC\nGTG\nGTT\n\n\n\n\nTAA\nTAC\nTAG\nTAT\n\nTCA\nTCC\nTCG\nTCT\n\nTGA\nTGC\nTGG\nTGT\n\nTTA\nTTC\nTTG\nTTT\n\n' | gzip -1 > $@.tmp && mv $@.tmp $@
+	echo -e 'AAA\nAAC\nAAG\nAAT\n\nACA\nACC\nACG\nACT\n\nAGA\nAGC\nAGG\nAGT\n\nATA\nATC\nATG\nATT\n\n\n\n\nCAA\nCAC\nCAG\nCAT\n\nCCA\nCCC\nCCG\nCCT\n\nCGA\nCGC\nCGG\nCGT\n\nCTA\nCTC\nCTG\nCTT\n\n\n\n\nGAA\nGAC\nGAG\nGAT\n\nGCA\nGCC\nGCG\nGCT\n\nGGA\nGGC\nGGG\nGGT\n\nGTA\nGTC\nGTG\nGTT\n\n\n\n\nTAA\nTAC\nTAG\nTAT\n\nTCA\nTCC\nTCG\nTCT\n\nTGA\nTGC\nTGG\nTGT\n\nTTA\nTTC\nTTG\nTTT\n\n' | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test13.fasta.gz:
-	echo "CGTACGTACGTACGTACGT" | gzip -1 > $@.tmp && mv $@.tmp $@
+	echo "CGTACGTACGTACGTACGT"                       | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test14.fasta.gz:
-	echo "AAACAAGAATACACGACTAGCAGGAGTATCATGATT" | gzip -1 > $@.tmp && mv $@.tmp $@
+	echo "AAACAAGAATACACGACTAGCAGGAGTATCATGATT"      | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test15.fasta.gz:
-	echo "ACGTACGTACGTACGTACGTNACGTACGTACGTACGTACGT" | gzip -1 > $@.tmp && mv $@.tmp $@
+	echo "ACGTACGTACGTACGTACGTNACGTACGTACGTACGTACGT" | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test16.fasta.gz:
-	echo "AAACAAGAATACACGACNNTAGCAGGAGTATCATGATT" | gzip -1 > $@.tmp && mv $@.tmp $@
+	echo "AAACAAGAATACACGACNNTAGCAGGAGTATCATGATT"    | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test17.fasta.gz:
-	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch00.fa                                       | grep -v '>' | tr -d '\n' | gzip -1 > $@.tmp && mv $@.tmp $@
+	curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch00.fa | grep -v '>' | tr -d '\n' | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test18.fasta.gz: test19.fasta.gz
-	zcat test19.fasta.gz | tr -d '\n' | gzip -1 > $@.tmp && mv $@.tmp $@
+	zcat test19.fasta.gz | tr -d '\n' | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test19.fasta.gz:
 	rm -v test19.fasta.tmp test19.fasta test19.fasta.gz || true
@@ -102,7 +112,7 @@ test19.fasta.gz:
 		curl ftp://ftp.solgenomics.net/genomes/Solanum_lycopersicum/assembly/build_2.50/SL2.50ch$${i}.fa | grep -v '>' | tr -d '\n' >> test19.fasta.tmp; \
 		echo >> test19.fasta.tmp; \
 	done
-	mv test19.fasta.tmp test19.fasta && gzip -1 test19.fasta
+	mv test19.fasta.tmp test19.fasta && $(GZIP) -1 test19.fasta
 
 
 

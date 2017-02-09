@@ -56,7 +56,16 @@ private: // prevent copying the scoped lock.
 //http://en.cppreference.com/w/cpp/algorithm/for_each
 
 typedef unsigned long ulong;
+//set_alloc.hpp
+//std::set<int, std::less<int>, bestAlloc<int> > s;
+
+
+#ifdef _ALTERNATIVE_ALLOC_
+#include "set_alloc.hpp"
+typedef std::set< unsigned long , std::less<unsigned long>, bestAlloc<unsigned long> > setuLongLess;
+#else
 typedef std::set< unsigned long > setuLongLess;
+#endif
 
 /*
 template<class T> using max_set  = std::set<T, std::greater<T> >;

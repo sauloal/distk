@@ -62,6 +62,11 @@ void version () {
     std::cout << "COMPILE FLAG: _DO_NOT_USE_ZLIB_" << std::endl;
 #endif
 
+#ifdef _ALTERNATIVE_ALLOC_
+    std::cout << "COMPILE FLAG: _ALTERNATIVE_ALLOC_" << std::endl;
+#endif
+
+
 
 /*
  *7 7           2m52.768s
@@ -534,7 +539,7 @@ void          extract_kmers::parse_line(                string   &line    ) {
                         valid = true;
 
                         auto p_begin = line.begin() + (i - kmer_size + 1);
-                        
+
                         resF = 0;
                         resR = 0;
                         resM = 0;
@@ -573,7 +578,7 @@ void          extract_kmers::parse_line(                string   &line    ) {
 #endif
                         } //for ( unsigned int pos = 0; pos < kmer_size; pos++ ) {
                     } // else if ( valid ) {
-                    
+
                     resM = ( resF <= resR ) ? resF : resR;
 
                     ScopedLock lck(lock);
@@ -600,7 +605,7 @@ void          extract_kmers::save_kmer_db(        const string   &outfile ) {
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
 
         string  outfileT = outfile + ".tmp";
-        
+
         remove_if_exists(outfile );
         remove_if_exists(outfileT);
 
@@ -619,11 +624,11 @@ void          extract_kmers::save_kmer_db(        const string   &outfile ) {
 #endif
             //return;
         }
-        
+
         //std::copy(q.begin(), q.end(), std::ostreambuf_iterator<ulong>(outfhd));
         //outfhd.write(reinterpret_cast<const char*>(&q.begin()), q.size()*sizeof(ulong));
         ulong numRegs = 0;
-        
+
 #ifdef _NO_DIFF_ENCODING_
         for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
             outfhd.write(reinterpret_cast<const char*>(&(*it)), sizeof(ulong));
@@ -648,14 +653,14 @@ ulong         extract_kmers::get_db_file_size(    const string   &infile  ) {
     /*
      * TODO: read delta format
      */
-    
+
     if ( hasEnding(infile, ".gz") ) {
 #ifdef _DO_NOT_USE_ZLIB_
         std::ifstream infhd(infile.c_str());
 #else
         igzstream     infhd(infile.c_str());
 #endif
-    
+
         if (!infhd.good()) {
             perror((string("error reading input file: ") + infile).c_str());
 #ifdef __CHEERP__
@@ -665,11 +670,11 @@ ulong         extract_kmers::get_db_file_size(    const string   &infile  ) {
 #endif
             //return;
         }
-        
+
         return get_db_file_size(infhd);
     } else {
         std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
-    
+
         if (!infhd) {
             perror((string("error reading input file: ") + infile).c_str());
 #ifdef __CHEERP__
@@ -679,7 +684,7 @@ ulong         extract_kmers::get_db_file_size(    const string   &infile  ) {
 #endif
             //return;
         }
-        
+
         return get_db_file_size(infhd);
     }
 }
@@ -724,7 +729,7 @@ ulong         extract_kmers::get_db_num_registers(const string   &infile  ) {
     }
 
     numRegs = get_db_num_registers(infhd);
-    
+
     infhd.close();
 
 #endif
@@ -744,7 +749,7 @@ ulong         extract_kmers::get_db_num_registers(      T             &infhd   )
 #else
 
     ulong startPos = infhd.tellg();
-    
+
     infhd.read((char *)&numRegs,sizeof(numRegs));
 
     infhd.seekg(startPos, std::ios::beg);
@@ -761,7 +766,7 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
      */
 
     std::cout << "  READING BACK FROM: " << infile << std::endl;
-    
+
 #ifdef _DO_NOT_USE_ZLIB_
     std::ifstream infhd(infile.c_str());
 #else
@@ -778,11 +783,11 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
     std::cout << "   CLEARING" << std::endl;
 
     q.clear();
-    
+
     std::cout << "   ALLOCATING " << regs << " REGS" << std::endl;
 
     q.get_allocator().allocate(regs);
-    
+
     //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
     //infhd.read((char*)&(*q.cbegin()), fileSize);
 
@@ -810,7 +815,7 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
     std::cout << "   READ" << std::endl;
 
     std::cout << "    LENGHT: " << size() << std::endl;
-    
+
     std::cout << "   DONE" << std::endl;
 }
 
@@ -842,12 +847,12 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
     ulong        prev    = 0;
     unsigned int lenI    = 0;
     ulong        numRegs = size();
-    
+
     std::cout << "NUM REGISTERS: " << numRegs << std::endl;
-    
+
     outfhd.write(reinterpret_cast<const char*>( &numRegs ), sizeof(numRegs));
 
-    ulong regCount = 0;    
+    ulong regCount = 0;
     for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
         if ( it == q.begin() ) {
             prev = 0;
@@ -888,12 +893,12 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
     ulong        prev    = 0;
     unsigned int lenI    = 0;
     ulong        numRegs = 0;
-    
+
     infhd.read((char *)&numRegs,sizeof(numRegs));
     std::cout << "   READING " << numRegs << " registers" << std::endl;
-    
+
     ulong        regCount = 0;
-    
+
     while(infhd.read((char *)&lenI,sizeof(lenI))) {
         infhd.read((char *)&diff,       lenI );
         if (( regCount != 0 ) && (diff == 0 )) {
@@ -910,14 +915,14 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
         diff = 0;
         regCount++;
     }
-    
+
     std::cout << "READ " << regCount << " REGISTERS" << std::endl;
 
     if ( numRegs != regCount ) {
         printf ("expected %lu registers. got %lu\n", numRegs, regCount);
         assert(numRegs == regCount);
     }
-    
+
     if ( numRegs != size() ) {
         printf ("expected %lu registers. inserted %lu\n", numRegs, size());
         assert(numRegs == size());
@@ -986,9 +991,9 @@ void          extract_kmers::merge_kmers(         const string   &outfile, const
             std::cout << "  J " << j << " (" << file2 << ") [" << v2.size() << "] - " << pos1 << ":" << pos2 << " CALCULATING" << std::endl;
 
             size_t count = intersection_size( v1.get_kmer_db(), v2.get_kmer_db() );
-            
+
             std::cout << "   COUNT " << count << std::endl;
-            
+
             ScopedLock lck(lock);
 #pragma omp critical(matrixupdate)
             {
@@ -998,7 +1003,7 @@ void          extract_kmers::merge_kmers(         const string   &outfile, const
             lck.Unlock();
         }
     }
-    
+
     save_matrix(outfile, infiles, mat);
 }
 
@@ -1024,7 +1029,7 @@ void          extract_kmers::save_matrix(         const string   &outfile, const
         remove_if_exists(matrixT);
         remove_if_exists(index  );
         remove_if_exists(indexT );
-        
+
         //https://stackoverflow.com/questions/12372531/reading-and-writing-a-stdvector-into-a-file-correctly
         std::ofstream outfhd(matrixT, std::ios::out | std::ofstream::binary);
 
@@ -1037,7 +1042,7 @@ void          extract_kmers::save_matrix(         const string   &outfile, const
 #endif
             //return;
         }
-        
+
         //std::copy(q.begin(), q.end(), std::ostreambuf_iterator<ulong>(outfhd));
         //outfhd.write(reinterpret_cast<const char*>(&q.begin()), q.size()*sizeof(ulong));
         for (auto it=mat.begin(); it!=mat.end(); ++it) {
@@ -1045,10 +1050,10 @@ void          extract_kmers::save_matrix(         const string   &outfile, const
         }
         outfhd.close();
 
-        
-        
+
+
         std::ofstream outind(indexT, std::ios::out | std::ofstream::binary);
-        
+
         if (!outind) {
             perror((string("error saving index file: ") + index).c_str());
 #ifdef __CHEERP__
@@ -1066,7 +1071,7 @@ void          extract_kmers::save_matrix(         const string   &outfile, const
             auto n = (*it).c_str();
             std::cout << n << " " << strlen(n) << std::endl;
             if ( c > 0 ) {
-                outind.write(nl, 1);                
+                outind.write(nl, 1);
             }
             outind.write(reinterpret_cast<const char*>(n), strlen(n));
             c++;

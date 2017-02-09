@@ -148,10 +148,105 @@ user    24m23.984s
 sys     0m45.391s
 
 test6.07.kmer kmer           gz
-normal        65536          12320 (18.79%) 
+normal        65536          12320 (18.79%)
 diff          40968 (62.51%)   419 ( 0.63% - gz 3.35%)
 */
 
+/*
+saulo@SAULO-ASUS:~/dev/distk/test$ time ./run_test.py write  "9" 18 && time ./run_test.py read  "9" 18
+['MutexType', 'MutexType_swigregister', 'ScopedLock', 'ScopedLock_swigregister', 'StringVector', 'StringVector_swigregister', 'SwigPyIterator', 'SwigPyIterator_swigregister', 'ULongVector', 'ULongVector_swigregister', '__builtins__', '__doc__', '__file__', '__name__', '__package__', '_kmer_set', '_newclass', '_object', '_swig_getattr', '_swig_getattr_nondynamic', '_swig_property', '_swig_repr', '_swig_setattr', '_swig_setattr_nondynamic', 'extract_kmers', 'extract_kmers_swigregister', 'fact', 'version']
+version     : 52 e985991-dirty alternative_alloc
+build date  : __COMPILE_DATE__
+COMPILE FLAG: _ALTERNATIVE_ALLOC_
+9 18
+test18.fasta.gz test18.09.kmer
+ KMER SIZE: 9
+clean 65535
+TOTAL: 131072
+SAVING TO: test18.09.kmer REGISTERS: 131072 FILE SIZE: 1048576
+NUM REGISTERS: 131072
+SAVED REGISTERS: 131072
+SAVED
+FINISHED SAVING TEST 18 KMER LEN 9 IN 166.272 s
+
+real    2m46.362s
+user    2m44.422s
+sys     0m1.922s
+['MutexType', 'MutexType_swigregister', 'ScopedLock', 'ScopedLock_swigregister', 'StringVector', 'StringVector_swigregister', 'SwigPyIterator', 'SwigPyIterator_swigregister', 'ULongVector', 'ULongVector_swigregister', '__builtins__', '__doc__', '__file__', '__name__', '__package__', '_kmer_set', '_newclass', '_object', '_swig_getattr', '_swig_getattr_nondynamic', '_swig_property', '_swig_repr', '_swig_setattr', '_swig_setattr_nondynamic', 'extract_kmers', 'extract_kmers_swigregister', 'fact', 'version']
+version     : 52 e985991-dirty alternative_alloc
+build date  : __COMPILE_DATE__
+COMPILE FLAG: _ALTERNATIVE_ALLOC_
+9 18
+test18.fasta.gz test18.09.kmer
+ KMER SIZE: 9
+clean 65535
+  READING BACK FROM: test18.09.kmer
+    OPEN
+    SIZE: 4961 REGISTERS: 131072
+   CLEARING
+   READING
+   READING 131072 registers
+READ 131072 REGISTERS
+    CLOSE
+   READ
+    LENGHT: 131072
+   DONE
+RE:
+FINISHED READING TEST 18 KMER LEN 9 IN 0.041 s
+
+real    0m0.128s
+user    0m0.031s
+sys     0m0.078s
+
+
+
+
+
+saulo@SAULO-ASUS:~/dev/distk/test$ time ./run_test.py write  "9" 18 && time ./run_test.py read  "9" 18
+['MutexType', 'MutexType_swigregister', 'ScopedLock', 'ScopedLock_swigregister', 'StringVector', 'StringVector_swigregister', 'SwigPyIterator', 'SwigPyIterator_swigregister', 'ULongVector', 'ULongVector_swigregister', '__builtins__', '__doc__', '__file__', '__name__', '__package__', '_kmer_set', '_newclass', '_object', '_swig_getattr', '_swig_getattr_nondynamic', '_swig_property', '_swig_repr', '_swig_setattr', '_swig_setattr_nondynamic', 'extract_kmers', 'extract_kmers_swigregister', 'fact', 'version']
+version     : 52 e985991-dirty
+build date  : Thu 9 Feb 23:13:00 STD 2017
+9 18
+test18.fasta.gz test18.09.kmer
+ KMER SIZE: 9
+clean 65535
+TOTAL: 131072
+SAVING TO: test18.09.kmer REGISTERS: 131072 FILE SIZE: 1048576
+NUM REGISTERS: 131072
+SAVED REGISTERS: 131072
+SAVED
+FINISHED SAVING TEST 18 KMER LEN 9 IN 180.954 s
+
+real    3m1.074s
+user    2m59.344s
+sys     0m1.719s
+['MutexType', 'MutexType_swigregister', 'ScopedLock', 'ScopedLock_swigregister', 'StringVector', 'StringVector_swigregister', 'SwigPyIterator', 'SwigPyIterator_swigregister', 'ULongVector', 'ULongVector_swigregister', '__builtins__', '__doc__', '__file__', '__name__', '__package__', '_kmer_set', '_newclass', '_object', '_swig_getattr', '_swig_getattr_nondynamic', '_swig_property', '_swig_repr', '_swig_setattr', '_swig_setattr_nondynamic', 'extract_kmers', 'extract_kmers_swigregister', 'fact', 'version']
+version     : 52 e985991-dirty
+build date  : Thu 9 Feb 23:13:00 STD 2017
+9 18
+test18.fasta.gz test18.09.kmer
+ KMER SIZE: 9
+clean 65535
+  READING BACK FROM: test18.09.kmer
+    OPEN
+    SIZE: 4961 REGISTERS: 131072
+   CLEARING
+   ALLOCATING 131072 REGS
+   READING
+   READING 131072 registers
+READ 131072 REGISTERS
+    CLOSE
+   READ
+    LENGHT: 131072
+   DONE
+RE:
+FINISHED READING TEST 18 KMER LEN 9 IN 0.046 s
+
+real    0m0.134s
+user    0m0.063s
+sys     0m0.078s
+
+*/
 
 }
 
@@ -784,9 +879,11 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
 
     q.clear();
 
+#ifndef _ALTERNATIVE_ALLOC_
     std::cout << "   ALLOCATING " << regs << " REGS" << std::endl;
 
     q.get_allocator().allocate(regs);
+#endif
 
     //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
     //infhd.read((char*)&(*q.cbegin()), fileSize);

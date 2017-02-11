@@ -940,14 +940,32 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
      * read n chars
      * cast n chars to ulong
      */
-    ulong        diff    = 0;
-    ulong        prev    = 0;
-    unsigned int lenI    = 0;
-    ulong        numRegs = size();
+    ulong        diff           = 0;
+    ulong        prev           = 0;
+    unsigned int lenI           = 0;
+    ulong        numRegs        = size();
+    ulong        keyFramesEvery = 0;
 
-    std::cout << "NUM REGISTERS: " << numRegs << std::endl;
+    if ( numberKeyFrames > 0 ) {
+        if ( numRegs > 0 ) {
+            if ( numberKeyFrames > numRegs ) {
+                keyFramesEvery = (ulong)(numRegs / numberKeyFrames);
+            } else {
+                keyFramesEvery = 1;
+            }
+        }
+        if (keyFramesEvery == 0) {
+            keyFramesEvery = 1;
+        }
+    }
+    
+    std::cout << "NUM REGISTERS   : " << numRegs         << std::endl;
+    std::cout << "NUM KEYFRAMES   : " << numberKeyFrames << std::endl;
+    std::cout << "KEY FRAMES EVERY: " << keyFramesEvery  << std::endl;
 
-    outfhd.write(reinterpret_cast<const char*>( &numRegs ), sizeof(numRegs));
+    outfhd.write(reinterpret_cast<const char*>( &numRegs         ), sizeof(numRegs        ));
+    outfhd.write(reinterpret_cast<const char*>( &numberKeyFrames ), sizeof(numberKeyFrames));
+    outfhd.write(reinterpret_cast<const char*>( &keyFramesEvery  ), sizeof(keyFramesEvery ));
 
     ulong regCount = 0;
     for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
@@ -960,12 +978,23 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
             }
         }
 
-        diff = *it - prev;
-        lenI = diff == 0 ? 1 : lrint(ceil(log2(diff+1)/8.0));
-        lenI = lenI == 0 ? 1 : lenI;
+        if (
+             ( numberKeyFrames > 0 ) &&
+             ((regCount % keyFramesEvery) == 0)
+           ){
+            diff = *it;
+            lenI = sizeof(diff);
+        } else {
+            diff = *it - prev;
+            lenI = diff == 0 ? 1 : lrint(ceil(log2(diff+1)/8.0));
+            lenI = lenI == 0 ? 1 : lenI;
+        }
+        
+
 #ifdef _DEBUG_
         std::cout << "num " << regCount << " val " << *it << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
 #endif
+
         outfhd.write(reinterpret_cast<const char*>( &lenI ), sizeof(lenI));
         outfhd.write(reinterpret_cast<const char*>(&(diff)),        lenI );
         prev = *it;
@@ -985,14 +1014,38 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
     //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
     std::cout << "   READING" << std::endl;
 
-    ulong        val     = 0;
-    ulong        diff    = 0;
-    ulong        prev    = 0;
-    unsigned int lenI    = 0;
-    ulong        numRegs = 0;
+    ulong        val                 = 0;
+    ulong        diff                = 0;
+    ulong        prev                = 0;
+    unsigned int lenI                = 0;
+    ulong        numRegs             = 0;
+    ulong        keyFramesEvery      = 0;
+    ulong        keyFramesEveryCheck = 0;
+                 numberKeyFrames     = 0;
+    
+    infhd.read((char *)&numRegs        ,sizeof(numRegs        ));
+    infhd.read((char *)&numberKeyFrames,sizeof(numberKeyFrames));
+    infhd.read((char *)&keyFramesEvery ,sizeof(keyFramesEvery ));
 
-    infhd.read((char *)&numRegs,sizeof(numRegs));
-    std::cout << "   READING " << numRegs << " registers" << std::endl;
+
+    if ( numberKeyFrames > 0 ) {
+        if ( numRegs > 0 ) {
+            if ( numberKeyFrames > numRegs ) {
+                keyFramesEveryCheck = (ulong)(numRegs / numberKeyFrames);
+            } else {
+                keyFramesEveryCheck = 1;
+            }
+        }
+        if (keyFramesEveryCheck == 0) {
+            keyFramesEveryCheck = 1;
+        }
+    }
+    
+    assert(keyFramesEveryCheck == keyFramesEvery);
+
+    std::cout << "READING NUM REGISTERS   : " << numRegs         << std::endl;
+    std::cout << "READING NUM KEYFRAMES   : " << numberKeyFrames << std::endl;
+    std::cout << "READING KEY FRAMES EVERY: " << keyFramesEvery  << std::endl;
 
     ulong        regCount = 0;
 
@@ -1000,9 +1053,18 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
         infhd.read((char *)&diff,       lenI );
         if (( regCount != 0 ) && (diff == 0 )) {
             printf ("zero difference\n");
-            assert(false);
+            assert(diff != 0);
         }
-        val  = prev + diff;
+        
+        if (
+             ( numberKeyFrames > 0 ) &&
+             ((regCount % keyFramesEvery) == 0)
+           ){
+            val  = diff;
+        } else {
+            val  = prev + diff;
+        }
+        
 #ifdef _DEBUG_
         std::cout << "num " << regCount << " val " << val << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
 #endif
@@ -1103,6 +1165,10 @@ void          extract_kmers::merge_kmers(         const string   &outfile, const
 
     save_matrix(outfile, infiles, mat);
 }
+
+
+ulong         extract_kmers::get_number_key_frames()               { return numberKeyFrames; }
+void          extract_kmers::set_number_key_frames(const ulong kf) { numberKeyFrames = kf;   }
 
 ulongVec      extract_kmers::merge_kmers(         const string   &outfile, const strVec &infiles   ) {
     /*

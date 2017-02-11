@@ -488,6 +488,12 @@ class extract_kmers(_object):
     def size(self):
         return _kmer_set.extract_kmers_size(self)
 
+    def get_number_key_frames(self):
+        return _kmer_set.extract_kmers_get_number_key_frames(self)
+
+    def set_number_key_frames(self, kf):
+        return _kmer_set.extract_kmers_set_number_key_frames(self, kf)
+
     def print_all(self):
         return _kmer_set.extract_kmers_print_all(self)
 extract_kmers_swigregister = _kmer_set.extract_kmers_swigregister

@@ -95,6 +95,7 @@ class extract_kmers {
         ulong        pows[32] = {};
 
         ulong        lineNum;
+        ulong        numberKeyFrames;
         ulong        clean;
 
         setuLongLess q;
@@ -116,6 +117,8 @@ class extract_kmers {
         ulong         get_db_num_registers(const string    &infile  );
         ulongVec      get_kmer_db();
         ulong         size();
+        ulong         get_number_key_frames();
+        void          set_number_key_frames(const ulong kf);
         void          print_all();
     private:
         template<typename T>

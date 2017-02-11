@@ -10676,6 +10676,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_extract_kmers_get_number_key_frames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  ulong result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_number_key_frames",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_number_key_frames" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  result = (ulong)(arg1)->get_number_key_frames();
+  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_set_number_key_frames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  ulong arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:extract_kmers_set_number_key_frames",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_set_number_key_frames" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "extract_kmers_set_number_key_frames" "', argument " "2"" of type '" "ulong""'");
+  } 
+  arg2 = static_cast< ulong >(val2);
+  (arg1)->set_number_key_frames(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_extract_kmers_print_all(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
@@ -10818,6 +10870,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"extract_kmers_get_db_num_registers", _wrap_extract_kmers_get_db_num_registers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_get_kmer_db", _wrap_extract_kmers_get_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_size", _wrap_extract_kmers_size, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_get_number_key_frames", _wrap_extract_kmers_get_number_key_frames, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_set_number_key_frames", _wrap_extract_kmers_set_number_key_frames, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_print_all", _wrap_extract_kmers_print_all, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_swigregister", extract_kmers_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

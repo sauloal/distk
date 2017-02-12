@@ -1,0 +1,5 @@
+*.o
+*.a
+bgzip
+test_bgzf
+old/

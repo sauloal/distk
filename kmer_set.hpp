@@ -121,6 +121,7 @@ class extract_kmers {
         void          set_number_key_frames(const ulong kf);
         void          print_all();
     private:
+        ulong         get_num_keyframes_every( const ulong numRegs );
         template<typename T>
         void          read_one_liner(            const string   &infile, T  &infhd   );
         template<typename T>

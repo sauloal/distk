@@ -390,7 +390,7 @@ bool hasEnding (string const &fullString, string const &ending) {
 
 
 
-extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0) {
+extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), numberKeyFrames(100) {
     std::cout << " KMER SIZE: " << kmer_size << std::endl;
 
     for ( int i = 0; i < 256; i++ ) {
@@ -916,10 +916,32 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
     std::cout << "   DONE" << std::endl;
 }
 
+ulong         extract_kmers::get_num_keyframes_every( const ulong numRegs ) {
+    ulong keyFramesEvery = 0;
+    
+    if ( numberKeyFrames > 0 ) {
+        if ( numRegs > 0 ) {
+            if ( numRegs > numberKeyFrames ) {
+                keyFramesEvery = (ulong)(numRegs / numberKeyFrames);
+            } else {
+                keyFramesEvery = 0;
+            }
+        }
+        if (keyFramesEvery == 0) {
+            keyFramesEvery = 0;
+        }
+        if (keyFramesEvery == 1) {
+            keyFramesEvery = 0;
+        }
+    }
+    
+    return keyFramesEvery;
+}
+
 template<typename T>
 void          extract_kmers::diff_encoder(              T             &outfhd  ) {
     /*
-     * TODO: Implement roling difference encoding
+     * Implement roling difference encoding
      *       <int8>[<char>,n]
      *       '     '--> Diff from prev to current using the minimum number of chars
      *       '--------> Number of chars
@@ -939,33 +961,31 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
      * read 1 char
      * read n chars
      * cast n chars to ulong
+     *
+     * Keyframes are added so that no prior information is needed,
+     * this way allowing for parallelization. the position of the
+     * keyframes is deterministic but their physical location is not *yet*
+     *
+     * TODO: create deterministic position for keyframes. meybe by storing
+     * the values in the header.
      */
     ulong        diff           = 0;
     ulong        prev           = 0;
     unsigned int lenI           = 0;
     ulong        numRegs        = size();
-    ulong        keyFramesEvery = 0;
+    ulongVec     poses;
 
-    if ( numberKeyFrames > 0 ) {
-        if ( numRegs > 0 ) {
-            if ( numberKeyFrames > numRegs ) {
-                keyFramesEvery = (ulong)(numRegs / numberKeyFrames);
-            } else {
-                keyFramesEvery = 1;
-            }
-        }
-        if (keyFramesEvery == 0) {
-            keyFramesEvery = 1;
-        }
-    }
+    ulong keyFramesEvery = get_num_keyframes_every( numRegs );
     
     std::cout << "NUM REGISTERS   : " << numRegs         << std::endl;
     std::cout << "NUM KEYFRAMES   : " << numberKeyFrames << std::endl;
     std::cout << "KEY FRAMES EVERY: " << keyFramesEvery  << std::endl;
 
-    outfhd.write(reinterpret_cast<const char*>( &numRegs         ), sizeof(numRegs        ));
-    outfhd.write(reinterpret_cast<const char*>( &numberKeyFrames ), sizeof(numberKeyFrames));
-    outfhd.write(reinterpret_cast<const char*>( &keyFramesEvery  ), sizeof(keyFramesEvery ));
+    
+    for ( int i = 0; i < ((numberKeyFrames + 3)*sizeof(numRegs        )); i++) {
+        outfhd.write(reinterpret_cast<const char*>( &diff         ), sizeof(diff        ));    
+    }
+    
 
     ulong regCount = 0;
     for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
@@ -980,10 +1000,12 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
 
         if (
              ( numberKeyFrames > 0 ) &&
+             ( keyFramesEvery  > 0 ) &&
              ((regCount % keyFramesEvery) == 0)
            ){
             diff = *it;
             lenI = sizeof(diff);
+            poses.push_back(outfhd.tellg());
         } else {
             diff = *it - prev;
             lenI = diff == 0 ? 1 : lrint(ceil(log2(diff+1)/8.0));
@@ -1001,6 +1023,12 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
         regCount++;
     }
 
+    
+    outfhd.write(reinterpret_cast<const char*>( &numRegs         ), sizeof(numRegs        ));
+    outfhd.write(reinterpret_cast<const char*>( &numberKeyFrames ), sizeof(numberKeyFrames));
+    outfhd.write(reinterpret_cast<const char*>( &keyFramesEvery  ), sizeof(keyFramesEvery ));
+
+    
     std::cout << "SAVED REGISTERS: " << regCount << std::endl;
 
     if ( numRegs != regCount ) {
@@ -1023,23 +1051,11 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
     ulong        keyFramesEveryCheck = 0;
                  numberKeyFrames     = 0;
     
-    infhd.read((char *)&numRegs        ,sizeof(numRegs        ));
-    infhd.read((char *)&numberKeyFrames,sizeof(numberKeyFrames));
-    infhd.read((char *)&keyFramesEvery ,sizeof(keyFramesEvery ));
+    infhd.read((char *)&numRegs            , sizeof(numRegs            ));
+    infhd.read((char *)&numberKeyFrames    , sizeof(numberKeyFrames    ));
+    infhd.read((char *)&keyFramesEveryCheck, sizeof(keyFramesEveryCheck));
 
-
-    if ( numberKeyFrames > 0 ) {
-        if ( numRegs > 0 ) {
-            if ( numberKeyFrames > numRegs ) {
-                keyFramesEveryCheck = (ulong)(numRegs / numberKeyFrames);
-            } else {
-                keyFramesEveryCheck = 1;
-            }
-        }
-        if (keyFramesEveryCheck == 0) {
-            keyFramesEveryCheck = 1;
-        }
-    }
+    keyFramesEvery = get_num_keyframes_every( numRegs );
     
     assert(keyFramesEveryCheck == keyFramesEvery);
 
@@ -1058,6 +1074,7 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
         
         if (
              ( numberKeyFrames > 0 ) &&
+             ( keyFramesEvery  > 0 ) &&
              ((regCount % keyFramesEvery) == 0)
            ){
             val  = diff;

@@ -1,38 +1,45 @@
-#ifndef __H_KMET_SET__
-#define __H_KMET_SET__
+#ifndef __H_KMER_SET__
+#define __H_KMER_SET__
 
 #include <set>
 #include <valarray>     // std::valarray, std::slice
 #include <vector>
+#include <iostream>
+#include <fstream>
 #include <string>
+#include <stdio.h>
 //#include <sys/types.h>
 
-#ifndef _DO_NOT_USE_ZLIB_
-#include <gzstream.h>
-#endif
+#include "kmer_set_compression.hpp"
+
+
 
 //http://bisqwit.iki.fi/story/howto/openmp/
 #ifdef _OPENMP
-#include <omp.h>
-struct MutexType {
-    MutexType()   { omp_init_lock(   &lock); }
-    ~MutexType()  { omp_destroy_lock(&lock); }
-    void Lock()   { omp_set_lock(    &lock); }
-    void Unlock() { omp_unset_lock(  &lock); }
-
-    MutexType(const MutexType& ) { omp_init_lock(&lock); }
-    MutexType& operator= (const MutexType& ) { return *this; }
-public:
-        omp_lock_t lock;
-};
+    #include <omp.h>
+    struct MutexType {
+        MutexType()   { omp_init_lock(   &lock); }
+        ~MutexType()  { omp_destroy_lock(&lock); }
+        void Lock()   { omp_set_lock(    &lock); }
+        void Unlock() { omp_unset_lock(  &lock); }
+    
+        MutexType(const MutexType& ) { omp_init_lock(&lock); }
+        MutexType& operator= (const MutexType& ) { return *this; }
+    public:
+            omp_lock_t lock;
+    };
 #else
-/* A dummy mutex that doesn't actually exclude anything,
-* but as there is no parallelism either, no worries. */
-struct MutexType {
-    void Lock() {}
-    void Unlock() {}
-};
+    /* A dummy mutex that doesn't actually exclude anything,
+    * but as there is no parallelism either, no worries. */
+    struct MutexType {
+        void Lock() {}
+        void Unlock() {}
+    };
 #endif
+
+
+
+
 
 /* An exception-safe scoped lock-keeper. */
 struct ScopedLock {
@@ -61,10 +68,10 @@ typedef unsigned long ulong;
 
 
 #ifdef _ALTERNATIVE_ALLOC_
-#include "set_alloc.hpp"
-typedef std::set< unsigned long , std::less<unsigned long>, bestAlloc<unsigned long> > setuLongLess;
+    #include "set_alloc.hpp"
+    typedef std::set< unsigned long , std::less<unsigned long>, bestAlloc<unsigned long> > setuLongLess;
 #else
-typedef std::set< unsigned long > setuLongLess;
+    typedef std::set< unsigned long > setuLongLess;
 #endif
 
 /*
@@ -87,6 +94,8 @@ typedef std::valarray<int>                 boolValArr;
 typedef std::vector<string>                strVec;
 typedef std::vector<ulong>                 ulongVec;
 //typedef std::vector<double>                doubleVec;
+
+
 
 class extract_kmers {
     private:
@@ -124,8 +133,8 @@ class extract_kmers {
         ulong         get_num_keyframes_every( const ulong numRegs );
         template<typename T>
         void          read_one_liner(            const string   &infile, T  &infhd   );
-        template<typename T>
-        ulong         get_db_file_size(          T  &infhd   );
+        //template<typename T>
+        //ulong         get_db_file_size(          T  &infhd   );
         template<typename T>
         ulong         get_db_num_registers(      T  &infhd   );
         template<typename T>

@@ -376,14 +376,6 @@ size_t intersection_size(const T1& s1, const T2& s2)
     return c.count;
 }
 
-//https://stackoverflow.com/questions/874134/find-if-string-ends-with-another-string-in-c
-bool hasEnding (string const &fullString, string const &ending) {
-    if (fullString.length() >= ending.length()) {
-        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
-    } else {
-        return false;
-    }
-}
 
 
 
@@ -435,6 +427,11 @@ void          extract_kmers::print_all() {
 }
 
 void          extract_kmers::read_one_liner(      const string   &infile  ) {
+    filestream infhd(infile, 'r');
+    read_one_liner(infile, infhd);
+    infhd.close();
+
+/*    
 #ifdef _DO_NOT_USE_ZLIB_
         std::ifstream infhd(infile);
         read_one_liner(infile, infhd);
@@ -450,6 +447,7 @@ void          extract_kmers::read_one_liner(      const string   &infile  ) {
         infhd.close();
     }
 #endif
+*/
 }
 
 template<typename T>
@@ -476,7 +474,7 @@ void          extract_kmers::read_one_liner(      const string   &infile, T     
     } else {
         string line;
 
-        while (getline(infhd,line)) {
+        while (infhd.get_line(line)) {
             //std::cout << "Got line" << std::endl;
 #pragma omp task firstprivate(line)
             parse_line(line);
@@ -704,12 +702,8 @@ void          extract_kmers::save_kmer_db(        const string   &outfile ) {
         remove_if_exists(outfile );
         remove_if_exists(outfileT);
 
-#ifdef _DO_NOT_USE_ZLIB_
-        std::ofstream outfhd(outfileT.c_str());
-#else
-        ogzstream     outfhd(outfileT.c_str());
-#endif
-
+        filestream outfhd(outfileT, 'w', 'z');
+        
         if (!outfhd) {
             perror((string("error saving kmer file: ") + outfile).c_str());
 #ifdef __CHEERP__
@@ -745,56 +739,11 @@ void          extract_kmers::save_kmer_db(        const string   &outfile ) {
 }
 
 ulong         extract_kmers::get_db_file_size(    const string   &infile  ) {
-    /*
-     * TODO: read delta format
-     */
-
-    if ( hasEnding(infile, ".gz") ) {
-#ifdef _DO_NOT_USE_ZLIB_
-        std::ifstream infhd(infile.c_str());
-#else
-        igzstream     infhd(infile.c_str());
-#endif
-
-        if (!infhd.good()) {
-            perror((string("error reading input file: ") + infile).c_str());
-#ifdef __CHEERP__
-            assert(false);
-#else
-            throw std::runtime_error("error reading input file: " + infile);
-#endif
-            //return;
-        }
-
-        return get_db_file_size(infhd);
-    } else {
-        std::ifstream infhd(infile, std::ios::in | std::ifstream::binary);
-
-        if (!infhd) {
-            perror((string("error reading input file: ") + infile).c_str());
-#ifdef __CHEERP__
-            assert(false);
-#else
-            throw std::runtime_error("error reading input file: " + infile);
-#endif
-            //return;
-        }
-
-        return get_db_file_size(infhd);
-    }
-}
-
-template<typename T>
-ulong         extract_kmers::get_db_file_size(          T             &infhd   ) {
-    ulong startPos = infhd.tellg();
-
-    infhd.seekg(0, std::ios::end);
-
-    ulong fileSize = infhd.tellg();
-
-    infhd.seekg(startPos, std::ios::beg);
-
-    return fileSize;
+    //https://stackoverflow.com/questions/5840148/how-can-i-get-a-files-size-in-c
+    struct stat stat_buf;
+    int rc = stat(infile.c_str(), &stat_buf);
+    return rc == 0 ? stat_buf.st_size : -1;
+    
 }
 
 ulong         extract_kmers::get_db_num_registers(const string   &infile  ) {
@@ -807,11 +756,7 @@ ulong         extract_kmers::get_db_num_registers(const string   &infile  ) {
 
 #else
 
-#ifdef _DO_NOT_USE_ZLIB_
-    std::ifstream infhd(infile.c_str());
-#else
-    igzstream     infhd(infile.c_str());
-#endif
+    filestream infhd(infile, 'r', 'z');
 
     if (!infhd.good()) {
         perror((string("error reading input file: ") + infile).c_str());
@@ -843,11 +788,11 @@ ulong         extract_kmers::get_db_num_registers(      T             &infhd   )
 
 #else
 
-    ulong startPos = infhd.tellg();
+    ulong startPos = infhd.tell();
 
     infhd.read((char *)&numRegs,sizeof(numRegs));
 
-    infhd.seekg(startPos, std::ios::beg);
+    infhd.seek(startPos, std::ios::beg);
 
 #endif
 
@@ -862,12 +807,8 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
 
     std::cout << "  READING BACK FROM: " << infile << std::endl;
 
-#ifdef _DO_NOT_USE_ZLIB_
-    std::ifstream infhd(infile.c_str());
-#else
-    igzstream     infhd(infile.c_str());
-#endif
-
+    filestream infhd(infile, 'r', 'z');
+    
     std::cout << "    OPEN" << std::endl;
 
     ulong fileSize = get_db_file_size(infile);
@@ -1005,7 +946,7 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
            ){
             diff = *it;
             lenI = sizeof(diff);
-            poses.push_back(outfhd.tellg());
+            poses.push_back(outfhd.tell());
         } else {
             diff = *it - prev;
             lenI = diff == 0 ? 1 : lrint(ceil(log2(diff+1)/8.0));
@@ -1065,7 +1006,7 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
 
     ulong        regCount = 0;
 
-    while(infhd.read((char *)&lenI,sizeof(lenI))) {
+    while( infhd.read((char *)&lenI, sizeof(lenI)) ) {
         infhd.read((char *)&diff,       lenI );
         if (( regCount != 0 ) && (diff == 0 )) {
             printf ("zero difference\n");

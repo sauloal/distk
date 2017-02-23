@@ -42,7 +42,7 @@ LIBS+=cram/zfio.o
 all: bgzip test_bgzf
 
 %.o: %.c
-	gcc -g -O2 -I.  -c -o $@ $<
+	gcc -g -Ofast -I. -fPIC -c -o $@ $<
 
 version.h:
 	@echo '#define HTS_VERSION "1.3.2-220-g84a89da"' > version.h

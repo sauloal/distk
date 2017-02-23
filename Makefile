@@ -25,6 +25,11 @@ __PROG_VERSION__+=no_zlib
 CPP_VARS_F=-D_DO_NOT_USE_ZLIB_=1
 endif
 
+ifneq ($(_DO_NOT_USE_BGZF_),)
+__PROG_VERSION__+=no_bgzf
+CPP_VARS_F=-D_DO_NOT_USE_BGZF_=1
+endif
+
 ifneq ($(_NO_DIFF_ENCODING_),)
 __PROG_VERSION__+=no_diff_encoding
 CPP_VARS_F=-D_NO_DIFF_ENCODING_=1
@@ -42,7 +47,7 @@ endif
 
 
 CPP_VARS_F+=-D__PROG_VERSION__="$(__PROG_VERSION__)"
-CPP_INCL_F=$(CPP_INCL) -I/usr/include/python2.7 -Igzstream/gzstream
+CPP_INCL_F=$(CPP_INCL) -I/usr/include/python2.7 -Ibgzf -Igzstream/gzstream
 CPP_OPTS_F=$(CPP_OPTS) -fPIC -march=native -std=c++0x -lz
 LDFLAGS_F=$(LDFLAGS) -lz
 
@@ -59,9 +64,14 @@ else
 CPP_OPTS_F+=-Og -g -D_DEBUG_
 endif
 
-LIBS=$(BASE).o $(BASE)_wrap.o
+LIBS=$(BASE).o $(BASE)_wrap.o kmer_set_compression.o
 ifeq ($(_DO_NOT_USE_ZLIB_),)
+ifeq ($(_DO_NOT_USE_BGZF_),)
+#use h
+LIBS+=bgzf/libhts.a
+else
 LIBS+=gzstream.o
+endif
 endif
 
 
@@ -80,6 +90,7 @@ print:
 	@echo "LIBS                $(LIBS)"
 	@echo "_DEBUG_             $(_DEBUG_)"
 	@echo "_DO_NOT_USE_ZLIB_   $(_DO_NOT_USE_ZLIB_)"
+	@echo "_DO_NOT_USE_BGZF_   $(_DO_NOT_USE_BGZF_)"
 	@echo "_ALTERNATIVE_ALLOC_ $(_ALTERNATIVE_ALLOC_)"
 	@echo "THREADS             $(THREADS)"
 	@echo "CPP_OPTS_F          $(CPP_OPTS_F)"
@@ -100,6 +111,9 @@ $(BASE)_wrap.cpp: $(BASE).i $(BASE).cpp $(BASE).hpp
 
 %.o: %.cpp
 	$(CPP) $(CPP_OPTS_F) $(CPP_INCL_F) $(CPP_VARS_F) -c $< -o $@
+
+bgzf/libhts.a:
+	$(MAKE) -C bgzf libhts.a
 
 gzstream.o: gzstream/gzstream/gzstream.C
 	$(CPP) $(CPP_OPTS_F) $(CPP_INCL_F) $(CPP_VARS_F) -c $< -o $@

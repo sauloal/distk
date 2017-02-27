@@ -138,9 +138,9 @@ class extract_kmers {
         template<typename T>
         ulong         get_db_num_registers(      T  &infhd   );
         template<typename T>
-        void          diff_encoder(              T  &outfhd  );
+        void          encoder(                   T  &outfhd  );
         template<typename T>
-        void          diff_decoder(              T  &infhd   );
+        void          decoder(                   T  &infhd   );
 };
 
 #endif //__H_KMET_SET__

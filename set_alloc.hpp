@@ -4,14 +4,17 @@
 #include <vector>
 #include <cassert>
 #include <cstdlib>
+#include <limits>
 
 //http://forums.codeguru.com/showthread.php?406108-A-faster-std-set
 
 /*
 One of the slowest parts of std::set is... allocating and deallocating of memory.
-When you use standard allocator it calls new and delete everytime you add/remove element, and that makes it really slow.
+When you use standard allocator it calls new and delete everytime you add/remove
+element, and that makes it really slow.
 
-I've written pool allocator, similar to boost::fast_pool_allocator but it frees memory when set/map object is cleared or destroyed.
+I've written pool allocator, similar to boost::fast_pool_allocator but it frees
+memory when set/map object is cleared or destroyed.
 
 Using is very simple:
 
@@ -28,12 +31,12 @@ class bestAlloc
 public:
 	typedef T     value_type;
 
-	typedef       value_type * pointer;
-	typedef const value_type * const_pointer;
-	typedef       value_type & reference;
-	typedef const value_type & const_reference;
-	typedef       std::size_t size_type;
-	typedef       std::ptrdiff_t difference_type;
+	typedef       value_type     * pointer;
+	typedef const value_type     * const_pointer;
+	typedef       value_type     & reference;
+	typedef const value_type     & const_reference;
+	typedef       std::size_t      size_type;
+	typedef       std::ptrdiff_t   difference_type;
 
 	template <typename U>
 	struct rebind

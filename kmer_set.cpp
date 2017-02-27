@@ -58,10 +58,6 @@ void version () {
     std::cout << "COMPILE FLAG: _NO_DIFF_ENCODING_" << std::endl;
 #endif
 
-#ifdef _DO_NOT_USE_ZLIB_
-    std::cout << "COMPILE FLAG: _DO_NOT_USE_ZLIB_" << std::endl;
-#endif
-
 #ifdef _ALTERNATIVE_ALLOC_
     std::cout << "COMPILE FLAG: _ALTERNATIVE_ALLOC_" << std::endl;
 #endif
@@ -430,24 +426,6 @@ void          extract_kmers::read_one_liner(      const string   &infile  ) {
     filestream infhd(infile, 'r');
     read_one_liner(infile, infhd);
     infhd.close();
-
-/*    
-#ifdef _DO_NOT_USE_ZLIB_
-        std::ifstream infhd(infile);
-        read_one_liner(infile, infhd);
-        infhd.close();
-#else
-    if ( hasEnding(infile, ".gz") ) {
-        igzstream infhd(infile.c_str());
-        read_one_liner(infile, infhd);
-        infhd.close();
-    } else {
-        std::ifstream infhd(infile);
-        read_one_liner(infile, infhd);
-        infhd.close();
-    }
-#endif
-*/
 }
 
 template<typename T>
@@ -478,8 +456,8 @@ void          extract_kmers::read_one_liner(      const string   &infile, T     
             //std::cout << "Got line" << std::endl;
 #pragma omp task firstprivate(line)
             parse_line(line);
-        }//while (getline(infhd,line)) {
 #pragma omp taskwait
+        }//while (getline(infhd,line)) {
 
         std::cout << "TOTAL: " <<  size() << std::endl;
 
@@ -718,14 +696,8 @@ void          extract_kmers::save_kmer_db(        const string   &outfile ) {
         //outfhd.write(reinterpret_cast<const char*>(&q.begin()), q.size()*sizeof(ulong));
         ulong numRegs = 0;
 
-#ifdef _NO_DIFF_ENCODING_
-        for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
-            outfhd.write(reinterpret_cast<const char*>(&(*it)), sizeof(ulong));
-            numRegs += 1;
-        }
-#else
-        diff_encoder(outfhd);
-#endif
+        encoder(outfhd);
+
         outfhd.close();
 
         rename_and_check( outfileT, outfile );
@@ -820,32 +792,16 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
 
     q.clear();
 
-#ifndef _ALTERNATIVE_ALLOC_
+//#ifndef _ALTERNATIVE_ALLOC_
     std::cout << "   ALLOCATING " << regs << " REGS" << std::endl;
 
     q.get_allocator().allocate(regs);
-#endif
+//#endif
 
     //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
     //infhd.read((char*)&(*q.cbegin()), fileSize);
 
-#ifdef _NO_DIFF_ENCODING_
-    ulong numRegs = 0;
-    ulong buffer;
-
-    while(infhd.read((char *)&buffer,sizeof(buffer)))
-    {
-        q.insert(buffer);
-        numRegs++;
-    }
-
-    if ( numRegs != size() ) {
-        printf ("expected %d registers. got %d\n", numRegs, size());
-        assert(numRegs == size());
-    }
-#else
-    diff_decoder(infhd);
-#endif
+    decoder(infhd);
 
     std::cout << "    CLOSE" << std::endl;
     infhd.close();
@@ -880,7 +836,7 @@ ulong         extract_kmers::get_num_keyframes_every( const ulong numRegs ) {
 }
 
 template<typename T>
-void          extract_kmers::diff_encoder(              T             &outfhd  ) {
+void          extract_kmers::encoder(              T             &outfhd  ) {
     /*
      * Implement roling difference encoding
      *       <int8>[<char>,n]
@@ -910,6 +866,12 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
      * TODO: create deterministic position for keyframes. meybe by storing
      * the values in the header.
      */
+#ifdef _NO_DIFF_ENCODING_
+        for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
+            outfhd.write(reinterpret_cast<const char*>(&(*it)), sizeof(ulong));
+            numRegs += 1;
+        }
+#else
     ulong        diff           = 0;
     ulong        prev           = 0;
     unsigned int lenI           = 0;
@@ -976,10 +938,26 @@ void          extract_kmers::diff_encoder(              T             &outfhd  )
         printf ("expected %lu registers. got %lu\n", numRegs, regCount);
         assert(numRegs == regCount);
     }
+#endif //#ifdef _NO_DIFF_ENCODING_
 }
 
 template<typename T>
-void          extract_kmers::diff_decoder(              T             &infhd   ) {
+void          extract_kmers::decoder(              T             &infhd   ) {
+#ifdef _NO_DIFF_ENCODING_
+    ulong numRegs = 0;
+    ulong buffer;
+
+    while(infhd.read((char *)&buffer,sizeof(buffer)))
+    {
+        q.insert(buffer);
+        numRegs++;
+    }
+
+    if ( numRegs != size() ) {
+        printf ("expected %d registers. got %d\n", numRegs, size());
+        assert(numRegs == size());
+    }
+#else // #ifdef _NO_DIFF_ENCODING_    
     //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
     std::cout << "   READING" << std::endl;
 
@@ -1008,6 +986,7 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
 
     while( infhd.read((char *)&lenI, sizeof(lenI)) ) {
         infhd.read((char *)&diff,       lenI );
+
         if (( regCount != 0 ) && (diff == 0 )) {
             printf ("zero difference\n");
             assert(diff != 0);
@@ -1044,6 +1023,7 @@ void          extract_kmers::diff_decoder(              T             &infhd   )
         printf ("expected %lu registers. inserted %lu\n", numRegs, size());
         assert(numRegs == size());
     }
+#endif //#ifdef _NO_DIFF_ENCODING_
 }
 
 ulongVec      extract_kmers::get_kmer_db() {

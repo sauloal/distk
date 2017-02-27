@@ -52,6 +52,10 @@ public:
         return insert(t);
     }
 
+    bool erase(const_iterator t) {
+        elements.erase(t);
+    }
+
     bool erase(T t) {
         if (elements.empty()) {
             return false;
@@ -86,7 +90,7 @@ public:
         }
         return it;
     }
-
+    
     const_iterator begin() const {
         return elements.begin();
     }

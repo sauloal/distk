@@ -10,3 +10,9 @@ rand1.data
 set
 cheerp/
 ordered_set
+_kmer_set.so
+set_queue_vec
+set_queue_vec_alta
+set_set_alta
+set_set_dflt
+set_svec

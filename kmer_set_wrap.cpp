@@ -3020,19 +3020,18 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[8]
 #define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[9]
 #define SWIGTYPE_p_std__invalid_argument swig_types[10]
-#define SWIGTYPE_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t swig_types[11]
-#define SWIGTYPE_p_std__string swig_types[12]
-#define SWIGTYPE_p_std__valarrayT_char_t swig_types[13]
-#define SWIGTYPE_p_std__valarrayT_int_t swig_types[14]
-#define SWIGTYPE_p_std__valarrayT_unsigned_int_t swig_types[15]
-#define SWIGTYPE_p_std__valarrayT_unsigned_long_t swig_types[16]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[17]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[18]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[19]
-#define SWIGTYPE_p_unsigned_long swig_types[20]
-#define SWIGTYPE_p_value_type swig_types[21]
-static swig_type_info *swig_types[23];
-static swig_module_info swig_module = {swig_types, 22, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__string swig_types[11]
+#define SWIGTYPE_p_std__valarrayT_char_t swig_types[12]
+#define SWIGTYPE_p_std__valarrayT_int_t swig_types[13]
+#define SWIGTYPE_p_std__valarrayT_unsigned_int_t swig_types[14]
+#define SWIGTYPE_p_std__valarrayT_unsigned_long_t swig_types[15]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[16]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[17]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[18]
+#define SWIGTYPE_p_unsigned_long swig_types[19]
+#define SWIGTYPE_p_value_type swig_types[20]
+static swig_type_info *swig_types[22];
+static swig_module_info swig_module = {swig_types, 21, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -10891,7 +10890,6 @@ static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_unsigned_long_t = {"_p_std__allocatorT_unsigned_long_t", "std::vector< unsigned long >::allocator_type *|std::allocator< unsigned long > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t = {"_p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t", "std::set< unsigned long,std::less< unsigned long >,std::allocator< unsigned long > > *|setuLongLess *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *|string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_char_t = {"_p_std__valarrayT_char_t", "std::valarray< char > *|charValArr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__valarrayT_int_t = {"_p_std__valarrayT_int_t", "boolValArr *|std::valarray< int > *", 0, 0, (void*)0, 0};
@@ -10915,7 +10913,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__allocatorT_std__string_t,
   &_swigt__p_std__allocatorT_unsigned_long_t,
   &_swigt__p_std__invalid_argument,
-  &_swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t,
   &_swigt__p_std__string,
   &_swigt__p_std__valarrayT_char_t,
   &_swigt__p_std__valarrayT_int_t,
@@ -10939,7 +10936,6 @@ static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0}
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_unsigned_long_t[] = {  {&_swigt__p_std__allocatorT_unsigned_long_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t[] = {  {&_swigt__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__valarrayT_char_t[] = {  {&_swigt__p_std__valarrayT_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__valarrayT_int_t[] = {  {&_swigt__p_std__valarrayT_int_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -10963,7 +10959,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__allocatorT_std__string_t,
   _swigc__p_std__allocatorT_unsigned_long_t,
   _swigc__p_std__invalid_argument,
-  _swigc__p_std__setT_unsigned_long_std__lessT_unsigned_long_t_std__allocatorT_unsigned_long_t_t,
   _swigc__p_std__string,
   _swigc__p_std__valarrayT_char_t,
   _swigc__p_std__valarrayT_int_t,

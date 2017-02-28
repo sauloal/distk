@@ -67,18 +67,8 @@ typedef unsigned long ulong;
 //std::set<int, std::less<int>, bestAlloc<int> > s;
 
 
-#ifdef _ALTERNATIVE_ALLOC_
-    #include "set_alloc.hpp"
-    typedef std::set< unsigned long , std::less<unsigned long>, bestAlloc<unsigned long> > setuLongLess;
-#else
-    typedef std::set< unsigned long > setuLongLess;
-#endif
+#include "set_alloc.hpp"
 
-/*
-template<class T> using max_set  = std::set<T, std::greater<T> >;
-template<class T> using min_set  = std::set<T, std::less<T> >;
-typedef std::set<ulong, std::less<ulong> > setuLongLess;
-*/
 
 //using namespace std;
 

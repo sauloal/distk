@@ -471,13 +471,13 @@ namespace sti
             typedef typename Allocator::template rebind<BaseBNode>::other::pointer base_bnode_ptr;
             typedef typename Allocator::template rebind<Key>::other KeyAllocator;
 
-            typedef KeyWrapper<Key, gist_traits, KeyAllocator, key_policy> KeyWrapper;
-            typedef KeyWithGist<Key, gist_traits, key_policy > KeyWithGist;
+            typedef KeyWrapper<Key, gist_traits, KeyAllocator, key_policy> KeyWrapperL;
+            typedef KeyWithGist<Key, gist_traits, key_policy > KeyWithGistL;
 
 
             struct InnerNode : boost::noncopyable
             {
-                typedef KeyWrapper KeyHolder;
+                typedef KeyWrapperL KeyHolder;
                 InnerNode() {}
                 explicit InnerNode(const KeyHolder& k) : _key(k), down(0) {}
                 explicit InnerNode(const Key& k) : _key(k), down(0) {}
@@ -487,14 +487,14 @@ namespace sti
                 base_bnode_ptr down;
 
                 void set_key(const Key& k)          { _key = k; }
-                void set_key(const KeyWithGist& k)  { _key = k; }
+                void set_key(const KeyWithGistL& k)  { _key = k; }
                 void set_key(const KeyHolder& k)    { _key = k; }
                 const KeyHolder& key()  const       { return _key; }
             };
 
-            struct LeafNode : public LeafNodeImpl<Allocator, Key, value_type, KeyWrapper, key_extractor, value_policy>
+            struct LeafNode : public LeafNodeImpl<Allocator, Key, value_type, KeyWrapperL, key_extractor, value_policy>
             {
-                typedef LeafNodeImpl<Allocator, Key, value_type, KeyWrapper, key_extractor, value_policy> base;
+                typedef LeafNodeImpl<Allocator, Key, value_type, KeyWrapperL, key_extractor, value_policy> base;
                 typedef typename base::KeyHolder KeyHolder;
                 LeafNode(const Allocator& a, const value_type& v) : base(a, v) {}
             };
@@ -738,7 +738,7 @@ namespace sti
 
             DummyNode          _dummy;
 
-            const KeyWrapper& last(inner_node_pointer p) const
+            const KeyWrapperL& last(inner_node_pointer p) const
             {
                 ASSERT(p->count > 0);
                 return p->get_node(p->count - 1)->key();
@@ -760,7 +760,7 @@ namespace sti
                 p->count --;
             }
 
-            void add_node(InnerBNode* p, int i, const KeyWithGist& v)
+            void add_node(InnerBNode* p, int i, const KeyWithGistL& v)
             {
                 typedef typename Allocator::template rebind<InnerNode>::other Alloc;
                 typename Alloc::pointer n = p->get_node(i);
@@ -838,7 +838,7 @@ namespace sti
                     int child_size = p->get_node(i)->down->size();
                     if (child_size > 0)
                     {
-                        const KeyWrapper& k = p->get_node(i)->key();
+                        const KeyWrapperL& k = p->get_node(i)->key();
                         if (p->get_node(i)->down->is_leaf())
                         {
                             leaf_pointer r = static_cast<leaf_pointer>(p->get_node(i)->down);
@@ -912,7 +912,7 @@ namespace sti
                 return dummy_node()->prev();
             }
 
-            const KeyWrapper& max_key() const
+            const KeyWrapperL& max_key() const
             {
                 return (*_head)[0].key();
             }
@@ -1015,10 +1015,10 @@ namespace sti
             }
 
             static bool less(const Key& l, const Key& r)                 { return compare_key(l, r, comparator()); }
-            static bool less(const KeyWrapper& l, const KeyWrapper& r)   { return compare_key(l, r, comparator()); }
-            static bool less(const KeyWithGist& l, const KeyWithGist& r) { return compare_key(l, r, comparator()); }
-            static bool less(const KeyWithGist& l, const KeyWrapper& r)  { return compare_key(l, r, comparator()); }
-            static bool less(const KeyWrapper& l, const KeyWithGist& r)  { return compare_key(l, r, comparator()); }
+            static bool less(const KeyWrapperL& l, const KeyWrapperL& r)   { return compare_key(l, r, comparator()); }
+            static bool less(const KeyWithGistL& l, const KeyWithGistL& r) { return compare_key(l, r, comparator()); }
+            static bool less(const KeyWithGistL& l, const KeyWrapperL& r)  { return compare_key(l, r, comparator()); }
+            static bool less(const KeyWrapperL& l, const KeyWithGistL& r)  { return compare_key(l, r, comparator()); }
 
         private:
             leaf_pointer new_leaf()
@@ -1055,7 +1055,7 @@ namespace sti
                 al.deallocate(p, 1);
             }
 
-            void init(const KeyWithGist& k)
+            void init(const KeyWithGistL& k)
             {
                 leaf_pointer leaf = new_leaf();
                 _head = new_inner_node();
@@ -1180,7 +1180,7 @@ namespace sti
 
         public:
 
-            std::pair<leaf_pointer, int> find_leaf(const KeyWithGist& k) const
+            std::pair<leaf_pointer, int> find_leaf(const KeyWithGistL& k) const
             {               
                 if (empty() || !less(max_key(), k))
                 {
@@ -1212,7 +1212,7 @@ namespace sti
                 return std::make_pair((leaf_pointer)0,0);
             }
 
-            const_iterator find_helper(const KeyWithGist& k) const
+            const_iterator find_helper(const KeyWithGistL& k) const
             {
                 std::pair<leaf_pointer, int> pos = find_leaf(k);
                 if (pos.first)
@@ -1225,7 +1225,7 @@ namespace sti
                 return end();
             }
 
-            const_iterator lower_bound_helper(const KeyWithGist& k) const
+            const_iterator lower_bound_helper(const KeyWithGistL& k) const
             {
                 std::pair<leaf_pointer, int> pos = find_leaf(k);
                 if (pos.first)
@@ -1236,7 +1236,7 @@ namespace sti
                     return end();
             }
 
-            const_iterator upper_bound_helper(const KeyWithGist& k) const
+            const_iterator upper_bound_helper(const KeyWithGistL& k) const
             {
                 std::pair<leaf_pointer, int> pos = find_leaf(k);
                 if (pos.first)
@@ -1302,11 +1302,6 @@ namespace sti
             }
 
         public:
-            typedef iter<value_type> iterator;
-            typedef iter<const value_type> const_iterator;
-            typedef typename boost::reverse_iterator<iterator> reverse_iterator;
-            typedef typename boost::reverse_iterator<const_iterator> const_reverse_iterator;
-
             stree(Allocator al = Allocator())
                 : Allocator(al)
                 , _head(0)
@@ -1362,7 +1357,7 @@ namespace sti
 
             std::pair<iterator, bool> insert(const value_type& v)
             {
-                KeyWithGist search_key(key_extractor()(v));
+                KeyWithGistL search_key(key_extractor()(v));
                 if (!_head)
                     init(search_key);
 
@@ -1450,7 +1445,7 @@ namespace sti
             iterator insert(iterator _Where, const value_type& _Val)
             {
                 VALIDATE(_Where);
-                KeyWithGist search_key(key_extractor()(_Val));
+                KeyWithGistL search_key(key_extractor()(_Val));
                 if (!_head)
                     init(search_key);
 
@@ -1460,7 +1455,7 @@ namespace sti
                 {
                     if (!_Where._bnode->full())
                     {
-                        KeyWithGist cur(key_extractor()(*_Where));
+                        KeyWithGistL cur(key_extractor()(*_Where));
 
                         // The hint should point into the element that will _precede_ the new element
                         bool b1 = less(cur, search_key);
@@ -1501,7 +1496,7 @@ namespace sti
                 int pos = it._idx;
 
                 Key key = extract_key((*n)[pos].key());
-                KeyWithGist k(key);
+                KeyWithGistL k(key);
                 VALIDATE(n);
 
                 erase_item(n, pos);
@@ -1603,7 +1598,7 @@ namespace sti
 
             size_type erase(const Key& k)
             {
-                KeyWithGist key(k);
+                KeyWithGistL key(k);
                 if (less(max_key(), key))
                     return 0;
 
@@ -1705,19 +1700,19 @@ namespace sti
 
             iterator find(const Key& k)
             {
-                KeyWithGist key(k);
+                KeyWithGistL key(k);
                 return iterator(find_helper(key));
             }
 
             const_iterator lower_bound(const Key& k) const
             {
-                KeyWithGist key(k);
+                KeyWithGistL key(k);
                 return iterator(lower_bound_helper(key));
             }
 
             iterator lower_bound(const Key& k)
             {
-                KeyWithGist key(k);
+                KeyWithGistL key(k);
                 return iterator(lower_bound_helper(key));
             }
 

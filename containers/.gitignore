@@ -1,0 +1,9 @@
+*.swp
+set
+ordered_set
+set_queue_vec
+set_queue_vec_alta
+set_set_alta
+set_set_dflt
+set_svec
+speed-set-int

@@ -23,6 +23,8 @@ std::set<int, std::less<int>, bestAlloc<int> > s;
 I hope you will find it useful
 */
 
+
+
 #define PTR(x) *((T**)(&(x)))
 
 template <typename T>
@@ -265,6 +267,20 @@ public:
 		free_(ptr, 1);
 	}
 }; //class bestAlloc
+
+
+#ifndef _ALTERNATIVE_ALLOC_
+    typedef std::set< unsigned long , std::less<unsigned long>, bestAlloc<unsigned long> > setuLongLess;
+#else
+    typedef std::set< unsigned long > setuLongLess;
+#endif
+
+/*
+template<class T> using max_set  = std::set<T, std::greater<T> >;
+template<class T> using min_set  = std::set<T, std::less<T> >;
+typedef std::set<ulong, std::less<ulong> > setuLongLess;
+*/
+
 
 #undef PTR
 #endif

@@ -378,7 +378,19 @@ size_t intersection_size(const T1& s1, const T2& s2)
 
 
 
-extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), numberKeyFrames(100) {
+
+
+
+
+
+
+
+
+
+
+
+
+extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), numberKeyFrames(100), clean(0), validCount(0) {
     std::cout << " KMER SIZE: " << kmer_size << std::endl;
 
     for ( int i = 0; i < 256; i++ ) {
@@ -403,6 +415,14 @@ extract_kmers::extract_kmers(const int ks): kmer_size(ks), lineNum(0), numberKey
     clean = ((ulong)(pow(2, ((kmer_size-1)*2)))-1);
 
     std::cout << "clean " << clean << std::endl;
+    
+    progressRead = progressBar("reading");
+    progressRead.setProgress( false );
+    
+    progressKmer = progressBar("adding ", 0, get_max_size()/2);
+    //progressKmer.setProgress( false );
+    progressKmer.setTwoLines( false );
+    progressKmer.setShowSecs( false );
 }
 
 
@@ -410,13 +430,20 @@ extract_kmers::~extract_kmers(){
     //q.clear();
 }
 
+ulong         extract_kmers::get_max_size() {
+    return pow(4, kmer_size);
+}
+
+void          extract_kmers::reserve() {
+    q.reserve(get_max_size() / 4);
+}
 
 ulong         extract_kmers::size() {
     return q.size();
 }
 
 void          extract_kmers::print_all() {
-    for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
+    for (auto it=q.begin(); it!=q.end(); ++it) {
         std::cout << ' ' << *it;
         std::cout << '\n';
     }
@@ -450,6 +477,8 @@ void          extract_kmers::read_one_liner(      const string   &infile, T     
         //return;
 
     } else {
+        reserve();
+
         string line;
 
         while (infhd.get_line(line)) {
@@ -471,6 +500,7 @@ void          extract_kmers::read_fasta(          const string   &infile  ) {
     /*
      * TODO: IMPLEMENT + GZ VERSION
      */
+    reserve();
     std::ifstream infhd(infile);
     infhd.close();
 }
@@ -479,12 +509,13 @@ void          extract_kmers::read_fastq(          const string   &infile  ) {
     /*
      * TODO: IMPLEMENT + GZ VERSION
      */
+    reserve();
     std::ifstream infhd(infile);
     infhd.close();
 }
 
 void          extract_kmers::parse_line(                string   &line    ) {
-    ulong       ll = line.length();
+    ulong ll         = line.length();
 
 #ifdef _DEBUG_
     if ( ll <= 100 ) {
@@ -492,23 +523,23 @@ void          extract_kmers::parse_line(                string   &line    ) {
     }
 #endif
 
-    ulong resF = 0;
-    ulong resR = 0;
-    ulong resM = 0;
+    ulong resF       = 0;
+    ulong resR       = 0;
+    ulong resM       = 0;
 
-    ulong kcF  = 0;
-    ulong pvF  = 0;
-    ulong cvF  = 0;
+    ulong kcF        = 0;
+    ulong pvF        = 0;
+    ulong cvF        = 0;
 
-    ulong kcR  = 0;
-    ulong pvR  = 0;
-    ulong cvR  = 0;
+    ulong kcR        = 0;
+    ulong pvR        = 0;
+    ulong cvR        = 0;
+
+    ulong tainted    = 0;
+    bool  valid      = false;
 
     char  c;
     int   vF;
-
-    ulong tainted = 0;
-    bool  valid   = false;
 
     if ( ll >= kmer_size ) {
         /*
@@ -651,12 +682,25 @@ void          extract_kmers::parse_line(                string   &line    ) {
                     } // else if ( valid ) {
 
                     resM = ( resF <= resR ) ? resF : resR;
-
+          
                     ScopedLock lck(lock);
+                    //std::cout << " INSERTING" << std::endl;
 #pragma omp critical(dbupdate)
                     q.insert(resM);
                     lck.Unlock();
+                    //std::cout << " INSERTED" << std::endl;
 
+                    
+                    ++validCount;
+                    if (get_max_size() > 100) {
+                        if ( ( validCount % 100000 ) == 0 ) {
+                            //std::cout << "  ADDED: " << validCount << " FROM WHICH " << q.size() << " WERE UNIQUE FROM THE MAXIMUM HYPOTETICAL " << get_max_size() << std::endl;
+                            progressRead.print( validCount );
+                            progressKmer.print( q.size()   );
+                            std::cout << std::endl;
+                        }
+                    }
+                    
 #ifdef _DEBUG_
                     std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
 #endif
@@ -793,9 +837,9 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
     q.clear();
 
 //#ifndef _ALTERNATIVE_ALLOC_
-    std::cout << "   ALLOCATING " << regs << " REGS" << std::endl;
+    //std::cout << "   ALLOCATING " << regs << " REGS" << std::endl;
 
-    q.get_allocator().allocate(regs);
+    //q.get_allocator().allocate(regs);
 //#endif
 
     //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
@@ -804,6 +848,7 @@ void          extract_kmers::read_kmer_db(        const string   &infile  ) {
     decoder(infhd);
 
     std::cout << "    CLOSE" << std::endl;
+
     infhd.close();
 
     std::cout << "   READ" << std::endl;
@@ -867,31 +912,41 @@ void          extract_kmers::encoder(              T             &outfhd  ) {
      * the values in the header.
      */
 #ifdef _NO_DIFF_ENCODING_
-        for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
-            outfhd.write(reinterpret_cast<const char*>(&(*it)), sizeof(ulong));
-            numRegs += 1;
-        }
+    for (auto it=q.begin(); it!=q.end(); ++it) {
+        outfhd.write(reinterpret_cast<const char*>(&(*it)), sizeof(ulong));
+        numRegs += 1;
+    }
 #else
+    std::cout << "ENCODING" << std::endl;
+
     ulong        diff           = 0;
     ulong        prev           = 0;
     unsigned int lenI           = 0;
     ulong        numRegs        = size();
     ulongVec     poses;
 
-    ulong keyFramesEvery = get_num_keyframes_every( numRegs );
+    ulong        keyFramesEvery = get_num_keyframes_every( numRegs );
     
     std::cout << "NUM REGISTERS   : " << numRegs         << std::endl;
     std::cout << "NUM KEYFRAMES   : " << numberKeyFrames << std::endl;
     std::cout << "KEY FRAMES EVERY: " << keyFramesEvery  << std::endl;
 
-    
-    for ( int i = 0; i < ((numberKeyFrames + 3)*sizeof(numRegs        )); i++) {
-        outfhd.write(reinterpret_cast<const char*>( &diff         ), sizeof(diff        ));    
-    }
-    
+    outfhd.write(reinterpret_cast<const char*>( &numRegs         ), sizeof(numRegs        ));
+    outfhd.write(reinterpret_cast<const char*>( &numberKeyFrames ), sizeof(numberKeyFrames));
+    outfhd.write(reinterpret_cast<const char*>( &keyFramesEvery  ), sizeof(keyFramesEvery ));
 
+    //for ( int i = 0; i < ((numberKeyFrames + 3)*sizeof(numRegs        )); i++) {
+    //    outfhd.write(reinterpret_cast<const char*>( &diff         ), sizeof(diff        ));    
+    //}
+
+
+    //for (auto it=q.begin(); it!=q.end(); ++it) {
+    //    printf (" v %lu\n", *it);
+    //}
+
+    
     ulong regCount = 0;
-    for (std::set<ulong>::iterator it=q.begin(); it!=q.end(); ++it) {
+    for (auto it=q.begin(); it!=q.end(); ++it) {
         if ( it == q.begin() ) {
             prev = 0;
         } else {
@@ -902,8 +957,8 @@ void          extract_kmers::encoder(              T             &outfhd  ) {
         }
 
         if (
-             ( numberKeyFrames > 0 ) &&
-             ( keyFramesEvery  > 0 ) &&
+             ( numberKeyFrames > 0            ) &&
+             ( keyFramesEvery  > 0            ) &&
              ((regCount % keyFramesEvery) == 0)
            ){
             diff = *it;
@@ -925,14 +980,8 @@ void          extract_kmers::encoder(              T             &outfhd  ) {
         prev = *it;
         regCount++;
     }
-
     
-    outfhd.write(reinterpret_cast<const char*>( &numRegs         ), sizeof(numRegs        ));
-    outfhd.write(reinterpret_cast<const char*>( &numberKeyFrames ), sizeof(numberKeyFrames));
-    outfhd.write(reinterpret_cast<const char*>( &keyFramesEvery  ), sizeof(keyFramesEvery ));
-
-    
-    std::cout << "SAVED REGISTERS: " << regCount << std::endl;
+    std::cout << "SAVED REGISTERS : " << regCount << std::endl;
 
     if ( numRegs != regCount ) {
         printf ("expected %lu registers. got %lu\n", numRegs, regCount);
@@ -954,7 +1003,7 @@ void          extract_kmers::decoder(              T             &infhd   ) {
     }
 
     if ( numRegs != size() ) {
-        printf ("expected %d registers. got %d\n", numRegs, size());
+        printf ("expected %lu registers. got %lu\n", numRegs, size());
         assert(numRegs == size());
     }
 #else // #ifdef _NO_DIFF_ENCODING_    
@@ -982,13 +1031,16 @@ void          extract_kmers::decoder(              T             &infhd   ) {
     std::cout << "READING NUM KEYFRAMES   : " << numberKeyFrames << std::endl;
     std::cout << "READING KEY FRAMES EVERY: " << keyFramesEvery  << std::endl;
 
+    std::cout << " resizing" << std::endl;
+    q.resize(numRegs);
+    std::cout << " loading" << std::endl;
+    
     ulong        regCount = 0;
-
     while( infhd.read((char *)&lenI, sizeof(lenI)) ) {
         infhd.read((char *)&diff,       lenI );
 
         if (( regCount != 0 ) && (diff == 0 )) {
-            printf ("zero difference\n");
+            printf ("zero difference. reg #%lu diff %lu\n", regCount, diff);
             assert(diff != 0);
         }
         
@@ -1006,6 +1058,7 @@ void          extract_kmers::decoder(              T             &infhd   ) {
         std::cout << "num " << regCount << " val " << val << " prev " << prev << " diff " << diff << " lenI " << lenI << std::endl;
 #endif
         q.insert(val);
+        //q[regCount] = val;
         prev = val;
         lenI = 0;
         diff = 0;
@@ -1030,7 +1083,8 @@ ulongVec      extract_kmers::get_kmer_db() {
     /*
      * TODO: return q
      */
-    return ulongVec(q.begin(), q.end());
+    //return ulongVec(q.begin(), q.end());
+    return q.get_container();
 }
 
 void          extract_kmers::merge_kmers(         const string   &outfile, const strVec &infiles, ulongVec &mat ) {

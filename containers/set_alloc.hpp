@@ -269,11 +269,43 @@ public:
 }; //class bestAlloc
 
 
-#ifndef _ALTERNATIVE_ALLOC_
-    typedef std::set< unsigned long , std::less<unsigned long>, bestAlloc<unsigned long> > setuLongLess;
-#else
-    typedef std::set< unsigned long > setuLongLess;
-#endif
+//typedef std::set< unsigned long , std::less<unsigned long>, bestAlloc<unsigned long> > orderedSetAlloc;
+//typedef std::set< unsigned long > orderedSet;
+
+
+
+template<typename T>
+class orderedSetAllocCls : public std::set< T , std::less<T>, bestAlloc<T> > {
+    public:
+        void reserve(size_t reserve_size) {
+            //this->c.reserve(reserve_size);
+			//this->get_allocator().allocate(reserve_size);
+        }
+		void resize(unsigned long t){}
+		std::vector<T> get_container() {
+			return std::vector<T>(this->begin(), this->end());
+		}
+};
+
+template<typename T>
+class orderedSetCls : public std::set< T , std::less<T> > {
+    public:
+        void reserve(size_t reserve_size) {
+            //this->c.reserve(reserve_size);
+			this->get_allocator().allocate(reserve_size);
+        }
+		void resize(unsigned long t){}
+		std::vector<T> get_container() {
+			return std::vector<T>(this->begin(), this->end());
+		}
+};
+
+typedef orderedSetAllocCls<unsigned long> orderedSetAlloc;
+typedef orderedSetCls     <unsigned long> orderedSet;
+
+//typedef orderedSetAlloc setuLongLess;
+typedef orderedSet      setuLongLess;
+
 
 /*
 template<class T> using max_set  = std::set<T, std::greater<T> >;

@@ -38,7 +38,7 @@ endif
 
 CPP_VARS_F+=-D__PROG_VERSION__="$(__PROG_VERSION__)"
 CPP_INCL_F=$(CPP_INCL) -I/usr/include/python2.7 -Ibgzf -Igzstream/gzstream -Icontainers
-CPP_OPTS_F=$(CPP_OPTS) -fPIC -march=native -std=c++0x -lz
+CPP_OPTS_F=$(CPP_OPTS) -fPIC -march=native -std=c++1y -lz
 LDFLAGS_F=$(LDFLAGS) -lz
 
 ifneq ($(THREADS),)

@@ -7,6 +7,7 @@
 * https://www.codeproject.com/KB/cpp/stree/stree_src.zip
 *
 * g++ speed-set-int.cpp -std=c++14 -I. -Ofast -o speed-set-int
+* g++ speed-set-int.cpp -std=c++1y -I. -Ofast -o speed-set-int
 */
 
 /*
@@ -141,7 +142,7 @@ Erase    : 3.6E7+-4.4E5  1.2E8+-5.0E5        1.3E7+-1.1E5          6.4E7+-1.3E6 
 #include "set_alloc.hpp"
 
 const size_t N = 5000000;
-const size_t R = 7;
+const size_t R = 5;
 
 typedef uint64_t measurement_int;
 
@@ -177,7 +178,7 @@ class MyPQueueVec : public std::priority_queue<T, std::vector<T>, std::less<T> >
 };
 
 template<typename T>
-class MyPQueueSVec : public std::priority_queue<T, sorted_vector<T>, std::less<T> > {
+class MyPQueueSVec: public std::priority_queue<T, sorted_vector<T>, std::less<T> > {
     public:
         void reserve(size_t reserve_size) {
             this->c.reserve(reserve_size);
@@ -186,9 +187,12 @@ class MyPQueueSVec : public std::priority_queue<T, sorted_vector<T>, std::less<T
             this.push(v);
         }
 };
+
 template<class T> using prq_list = MyPQueueLst<T>;
 template<class T> using prq_vec  = MyPQueueVec<T>;
 //template<class T> using prq_svec = MyPQueueSVec<T>;
+
+
 
 template<typename T>
 class MySortedVector: public std::vector<T> {
@@ -207,6 +211,27 @@ class MySortedVector: public std::vector<T> {
             
         }
 };
+
+
+
+template<typename T>
+class MySortedVectorAlt: public std::vector<T, bestAlloc<T> > {
+    public:
+        void insert(T v) {
+            this->push_back(v);
+        }
+        void sort() {
+            set_alta<T> s( this->begin(), this->end() );
+            this->assign( s.begin(), s.end() );
+        }
+        auto find(T v) {
+            return this->begin();
+        }
+        void erase(T v) {
+            
+        }
+};
+
 
 
 void PrintStats(std::vector<double> timings) {
@@ -252,12 +277,16 @@ void PrintStats(std::vector<double> timings) {
 }
 
 
+
 template<typename Cont>
 void runTest() {
     std::vector< std::vector<double> > timings(4);
 
     for (size_t r=0 ; r<R ; ++r) {
         Cont Set;
+
+        Set.reserve(N/4);
+
         ticks start, end;
         double timed = 0.0;
 
@@ -271,6 +300,10 @@ void runTest() {
         timed = elapsed(end, start);
         timings[0].push_back(timed);
 
+        if ( r == 0 ) {
+            std::cout << "Size: " << Set.size() << std::endl;
+        }
+        
         //LOOKUP
         res = 0;
         start = getticks();
@@ -336,10 +369,15 @@ void runTestVec() {
     std::vector< std::vector<double> > timings(4);
 
     for (size_t r=0 ; r<R ; ++r) {
+        //std::cout << "Creating" << std::endl;
         Cont Set;
+
+        Set.reserve(N/4);
+
         ticks start, end;
         double timed = 0.0;
 
+        //std::cout << "Inserting" << std::endl;
         //INSERT
         size_t res = 0;
         start = getticks();
@@ -351,6 +389,13 @@ void runTestVec() {
         timed = elapsed(end, start);
         timings[0].push_back(timed);
 
+
+        
+        if ( r == 0 ) {
+            std::cout << "Size: " << Set.size() << std::endl;
+        }
+
+        
         //LOOKUP
         res = 0;
         start = getticks();
@@ -430,6 +475,10 @@ void runTestQueue() {
         timed = elapsed(end, start);
         timings[0].push_back(timed);
 
+        if ( r == 0 ) {
+            std::cout << "Size: " << Set.size() << std::endl;
+        }
+        
         //LOOKUP
         /*
         res = 0;
@@ -507,14 +556,20 @@ void runTestQueue() {
 }
 
 
+
 int main() {
     std::cout << "size " << N << " repetitions " << R << std::endl;
 
     srand(902200987);
     
+    std::cout << "resizing" << std::endl;
+    numbers.resize(N);
+    
+    std::cout << "adding " << numbers.size() << " capacity " << numbers.capacity() << std::endl;
     for (size_t i=0 ; i<N ; ++i) {
-        numbers.push_back(rand() & 0x00003FFF);
+        numbers[i] = rand() & 0x00003FFF;
     }
+    std::cout << "testing" << std::endl;
 
     /*
     std::cout << "std::set" << std::endl;
@@ -526,9 +581,12 @@ int main() {
     std::cout << "boost::unordered_set" << std::endl;
     runTest< boost::unordered_set<measurement_int> >();
 
+    */
+    
     std::cout << "sorted_vector" << std::endl;
     runTest< sorted_vector<measurement_int> >();
-
+    
+    /*
     std::cout << "sorted_deque" << std::endl;
     runTest< sorted_deque<measurement_int> >();
 
@@ -536,26 +594,30 @@ int main() {
     runTest< sti::sset<measurement_int> >();
 
 
+    */
 
+    /*
     std::cout << "set_dflt" << std::endl;
     runTest< set_dflt<measurement_int> >();
 
     std::cout << "set_alta" << std::endl;
     runTest< set_alta<measurement_int> >();
     */
-    
 
     //std::cout << "prq_list" << std::endl;
     //runTestQueue< prq_list<measurement_int> >();
 
+    /*
     std::cout << "prq_vec" << std::endl;
     runTestQueue< prq_vec<measurement_int> >();
-
+    */
+    
     //std::cout << "prq_svec" << std::endl;
     //runTestQueue< prq_svec<measurement_int> >();
     
     std::cout << "MySortedVector" << std::endl;
     runTestVec< MySortedVector<measurement_int> >();
-
     
+    //std::cout << "MySortedVectorAlt" << std::endl;
+    //runTestVec< MySortedVectorAlt<measurement_int> >();
 }

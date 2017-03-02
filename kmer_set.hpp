@@ -10,7 +10,32 @@
 #include <stdio.h>
 //#include <sys/types.h>
 
+#include "progressbar.hpp"
+
 #include "kmer_set_compression.hpp"
+
+/*
+#include "sorted_vector.hpp"
+*/
+
+#include "set_alloc.hpp"
+
+//http://en.cppreference.com/w/cpp/numeric/valarray/apply
+//http://en.cppreference.com/w/cpp/algorithm/for_each
+
+typedef unsigned long ulong;
+typedef std::string                        string;
+typedef std::valarray<char>                charValArr;
+typedef std::valarray<ulong>               uLongValArr;
+typedef std::valarray<unsigned int>        uIntValArr;
+typedef std::valarray<int>                 boolValArr;
+
+typedef std::vector<string>                strVec;
+typedef std::vector<ulong>                 ulongVec;
+//typedef std::vector<double>                doubleVec;
+
+
+//using namespace std;
 
 
 
@@ -59,22 +84,7 @@ private: // prevent copying the scoped lock.
 
 
 
-//http://en.cppreference.com/w/cpp/numeric/valarray/apply
-//http://en.cppreference.com/w/cpp/algorithm/for_each
-
 typedef unsigned long ulong;
-//set_alloc.hpp
-//std::set<int, std::less<int>, bestAlloc<int> > s;
-
-
-#include "set_alloc.hpp"
-
-
-//using namespace std;
-
-int  fact (int n);
-void version ();
-
 typedef std::string                        string;
 typedef std::valarray<char>                charValArr;
 typedef std::valarray<ulong>               uLongValArr;
@@ -87,6 +97,13 @@ typedef std::vector<ulong>                 ulongVec;
 
 
 
+
+int  fact (int n);
+void version ();
+
+
+
+
 class extract_kmers {
     private:
         int          kmer_size;
@@ -96,10 +113,18 @@ class extract_kmers {
         ulong        lineNum;
         ulong        numberKeyFrames;
         ulong        clean;
+        ulong        validCount;
+
 
         setuLongLess q;
         MutexType    lock;
 
+        void         reserve();
+        ulong        get_max_size();
+        
+        progressBar  progressRead;
+        progressBar  progressKmer;
+        
     public:
         extract_kmers(    const int ks);
         ~extract_kmers();

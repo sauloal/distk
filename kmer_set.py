@@ -443,14 +443,18 @@ class extract_kmers(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, extract_kmers, name)
     __repr__ = _swig_repr
 
-    def __init__(self, ks):
-        this = _kmer_set.new_extract_kmers(ks)
+    def __init__(self, *args):
+        this = _kmer_set.new_extract_kmers(*args)
         try:
             self.this.append(this)
         except Exception:
             self.this = this
-    __swig_destroy__ = _kmer_set.delete_extract_kmers
-    __del__ = lambda self: None
+
+    def get_number_key_frames(self):
+        return _kmer_set.extract_kmers_get_number_key_frames(self)
+
+    def set_number_key_frames(self, kf):
+        return _kmer_set.extract_kmers_set_number_key_frames(self, kf)
 
     def read_one_liner(self, infile):
         return _kmer_set.extract_kmers_read_one_liner(self, infile)
@@ -470,12 +474,6 @@ class extract_kmers(_object):
     def read_kmer_db(self, infile):
         return _kmer_set.extract_kmers_read_kmer_db(self, infile)
 
-    def merge_kmers(self, *args):
-        return _kmer_set.extract_kmers_merge_kmers(self, *args)
-
-    def save_matrix(self, outfile, infiles, mat):
-        return _kmer_set.extract_kmers_save_matrix(self, outfile, infiles, mat)
-
     def get_db_file_size(self, infile):
         return _kmer_set.extract_kmers_get_db_file_size(self, infile)
 
@@ -488,14 +486,10 @@ class extract_kmers(_object):
     def size(self):
         return _kmer_set.extract_kmers_size(self)
 
-    def get_number_key_frames(self):
-        return _kmer_set.extract_kmers_get_number_key_frames(self)
-
-    def set_number_key_frames(self, kf):
-        return _kmer_set.extract_kmers_set_number_key_frames(self, kf)
-
     def print_all(self):
         return _kmer_set.extract_kmers_print_all(self)
+    __swig_destroy__ = _kmer_set.delete_extract_kmers
+    __del__ = lambda self: None
 extract_kmers_swigregister = _kmer_set.extract_kmers_swigregister
 extract_kmers_swigregister(extract_kmers)
 

@@ -3020,18 +3020,15 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[8]
 #define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[9]
 #define SWIGTYPE_p_std__invalid_argument swig_types[10]
-#define SWIGTYPE_p_std__string swig_types[11]
-#define SWIGTYPE_p_std__valarrayT_char_t swig_types[12]
-#define SWIGTYPE_p_std__valarrayT_int_t swig_types[13]
-#define SWIGTYPE_p_std__valarrayT_unsigned_int_t swig_types[14]
-#define SWIGTYPE_p_std__valarrayT_unsigned_long_t swig_types[15]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[16]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[17]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[18]
-#define SWIGTYPE_p_unsigned_long swig_types[19]
-#define SWIGTYPE_p_value_type swig_types[20]
-static swig_type_info *swig_types[22];
-static swig_module_info swig_module = {swig_types, 21, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[11]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[12]
+#define SWIGTYPE_p_string swig_types[13]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[14]
+#define SWIGTYPE_p_ulong swig_types[15]
+#define SWIGTYPE_p_ulongVec swig_types[16]
+#define SWIGTYPE_p_value_type swig_types[17]
+static swig_type_info *swig_types[19];
+static swig_module_info swig_module = {swig_types, 18, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -10045,7 +10042,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_extract_kmers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_extract_kmers__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_extract_kmers")) SWIG_fail;
+  result = (extract_kmers *)new extract_kmers();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_extract_kmers, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_extract_kmers__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int val1 ;
@@ -10067,20 +10077,94 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_extract_kmers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_extract_kmers(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[2] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_extract_kmers__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_extract_kmers__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_extract_kmers'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    extract_kmers::extract_kmers()\n"
+    "    extract_kmers::extract_kmers(int const)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_get_number_key_frames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  ulong result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_extract_kmers",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, SWIG_POINTER_DISOWN |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_number_key_frames",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_extract_kmers" "', argument " "1"" of type '" "extract_kmers *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_number_key_frames" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  delete arg1;
+  result = (arg1)->get_number_key_frames();
+  resultobj = SWIG_NewPointerObj((new ulong(static_cast< const ulong& >(result))), SWIGTYPE_p_ulong, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_set_number_key_frames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  ulong arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:extract_kmers_set_number_key_frames",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_set_number_key_frames" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_ulong,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_set_number_key_frames" "', argument " "2"" of type '" "ulong const""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_set_number_key_frames" "', argument " "2"" of type '" "ulong const""'");
+    } else {
+      ulong * temp = reinterpret_cast< ulong * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  (arg1)->set_number_key_frames(arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -10094,7 +10178,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_one_liner(PyObject *SWIGUNUSEDPARM
   string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -10104,23 +10189,18 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_one_liner(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_read_one_liner" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_one_liner" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_one_liner" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_one_liner" "', argument " "2"" of type '" "string const &""'"); 
   }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_one_liner" "', argument " "2"" of type '" "string const &""'"); 
+  }
+  arg2 = reinterpret_cast< string * >(argp2);
   (arg1)->read_one_liner((string const &)*arg2);
   resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -10131,7 +10211,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_fasta(PyObject *SWIGUNUSEDPARM(sel
   string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -10141,23 +10222,18 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_fasta(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_read_fasta" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_fasta" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_fasta" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_fasta" "', argument " "2"" of type '" "string const &""'"); 
   }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_fasta" "', argument " "2"" of type '" "string const &""'"); 
+  }
+  arg2 = reinterpret_cast< string * >(argp2);
   (arg1)->read_fasta((string const &)*arg2);
   resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -10168,7 +10244,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_fastq(PyObject *SWIGUNUSEDPARM(sel
   string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -10178,23 +10255,18 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_fastq(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_read_fastq" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_fastq" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_fastq" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_fastq" "', argument " "2"" of type '" "string const &""'"); 
   }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_fastq" "', argument " "2"" of type '" "string const &""'"); 
+  }
+  arg2 = reinterpret_cast< string * >(argp2);
   (arg1)->read_fastq((string const &)*arg2);
   resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -10216,7 +10288,7 @@ SWIGINTERN PyObject *_wrap_extract_kmers_parse_line(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_parse_line" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_string,  0 );
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_parse_line" "', argument " "2"" of type '" "string &""'"); 
   }
@@ -10238,7 +10310,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_save_kmer_db(PyObject *SWIGUNUSEDPARM(s
   string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -10248,23 +10321,18 @@ SWIGINTERN PyObject *_wrap_extract_kmers_save_kmer_db(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_save_kmer_db" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_save_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_save_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
   }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
+  }
+  arg2 = reinterpret_cast< string * >(argp2);
   (arg1)->save_kmer_db((string const &)*arg2);
   resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -10275,7 +10343,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db(PyObject *SWIGUNUSEDPARM(s
   string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -10285,272 +10354,18 @@ SWIGINTERN PyObject *_wrap_extract_kmers_read_kmer_db(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_read_kmer_db" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
   }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_read_kmer_db" "', argument " "2"" of type '" "string const &""'"); 
+  }
+  arg2 = reinterpret_cast< string * >(argp2);
   (arg1)->read_kmer_db((string const &)*arg2);
   resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  string *arg2 = 0 ;
-  strVec *arg3 = 0 ;
-  ulongVec *arg4 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  int res3 = SWIG_OLDOBJ ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:extract_kmers_merge_kmers",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_merge_kmers" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  {
-    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
-    res3 = swig::asptr(obj2, &ptr);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "extract_kmers_merge_kmers" "', argument " "3"" of type '" "strVec const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "3"" of type '" "strVec const &""'"); 
-    }
-    arg3 = ptr;
-  }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t,  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "extract_kmers_merge_kmers" "', argument " "4"" of type '" "ulongVec &""'"); 
-  }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "4"" of type '" "ulongVec &""'"); 
-  }
-  arg4 = reinterpret_cast< ulongVec * >(argp4);
-  (arg1)->merge_kmers((string const &)*arg2,(strVec const &)*arg3,*arg4);
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  string *arg2 = 0 ;
-  strVec *arg3 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  int res3 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  ulongVec result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:extract_kmers_merge_kmers",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_merge_kmers" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  {
-    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
-    res3 = swig::asptr(obj2, &ptr);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "extract_kmers_merge_kmers" "', argument " "3"" of type '" "strVec const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_merge_kmers" "', argument " "3"" of type '" "strVec const &""'"); 
-    }
-    arg3 = ptr;
-  }
-  result = (arg1)->merge_kmers((string const &)*arg2,(strVec const &)*arg3);
-  resultobj = swig::from(static_cast< std::vector< unsigned long,std::allocator< unsigned long > > >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_extract_kmers_merge_kmers(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[5] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_extract_kmers, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = swig::asptr(argv[2], (std::vector< std::string,std::allocator< std::string > >**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          return _wrap_extract_kmers_merge_kmers__SWIG_1(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_extract_kmers, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = swig::asptr(argv[2], (std::vector< std::string,std::allocator< std::string > >**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          void *vptr = 0;
-          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t, 0);
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            return _wrap_extract_kmers_merge_kmers__SWIG_0(self, args);
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'extract_kmers_merge_kmers'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    extract_kmers::merge_kmers(string const &,strVec const &,ulongVec &)\n"
-    "    extract_kmers::merge_kmers(string const &,strVec const &)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_extract_kmers_save_matrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  string *arg2 = 0 ;
-  strVec *arg3 = 0 ;
-  ulongVec *arg4 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  int res3 = SWIG_OLDOBJ ;
-  int res4 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:extract_kmers_save_matrix",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_save_matrix" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_save_matrix" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_matrix" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  {
-    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
-    res3 = swig::asptr(obj2, &ptr);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "extract_kmers_save_matrix" "', argument " "3"" of type '" "strVec const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_matrix" "', argument " "3"" of type '" "strVec const &""'"); 
-    }
-    arg3 = ptr;
-  }
-  {
-    std::vector< unsigned long,std::allocator< unsigned long > > *ptr = (std::vector< unsigned long,std::allocator< unsigned long > > *)0;
-    res4 = swig::asptr(obj3, &ptr);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "extract_kmers_save_matrix" "', argument " "4"" of type '" "ulongVec const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_save_matrix" "', argument " "4"" of type '" "ulongVec const &""'"); 
-    }
-    arg4 = ptr;
-  }
-  (arg1)->save_matrix((string const &)*arg2,(strVec const &)*arg3,(ulongVec const &)*arg4);
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res4)) delete arg4;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res4)) delete arg4;
   return NULL;
 }
 
@@ -10561,7 +10376,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_get_db_file_size(PyObject *SWIGUNUSEDPA
   string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   ulong result;
@@ -10572,23 +10388,18 @@ SWIGINTERN PyObject *_wrap_extract_kmers_get_db_file_size(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_db_file_size" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_get_db_file_size" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_get_db_file_size" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_get_db_file_size" "', argument " "2"" of type '" "string const &""'"); 
   }
-  result = (ulong)(arg1)->get_db_file_size((string const &)*arg2);
-  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_get_db_file_size" "', argument " "2"" of type '" "string const &""'"); 
+  }
+  arg2 = reinterpret_cast< string * >(argp2);
+  result = (arg1)->get_db_file_size((string const &)*arg2);
+  resultobj = SWIG_NewPointerObj((new ulong(static_cast< const ulong& >(result))), SWIGTYPE_p_ulong, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -10599,7 +10410,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_get_db_num_registers(PyObject *SWIGUNUS
   string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   ulong result;
@@ -10610,23 +10422,18 @@ SWIGINTERN PyObject *_wrap_extract_kmers_get_db_num_registers(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_db_num_registers" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_get_db_num_registers" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_get_db_num_registers" "', argument " "2"" of type '" "string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_get_db_num_registers" "', argument " "2"" of type '" "string const &""'"); 
   }
-  result = (ulong)(arg1)->get_db_num_registers((string const &)*arg2);
-  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_get_db_num_registers" "', argument " "2"" of type '" "string const &""'"); 
+  }
+  arg2 = reinterpret_cast< string * >(argp2);
+  result = (arg1)->get_db_num_registers((string const &)*arg2);
+  resultobj = SWIG_NewPointerObj((new ulong(static_cast< const ulong& >(result))), SWIGTYPE_p_ulong, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -10646,7 +10453,7 @@ SWIGINTERN PyObject *_wrap_extract_kmers_get_kmer_db(PyObject *SWIGUNUSEDPARM(se
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
   result = (arg1)->get_kmer_db();
-  resultobj = swig::from(static_cast< std::vector< unsigned long,std::allocator< unsigned long > > >(result));
+  resultobj = SWIG_NewPointerObj((new ulongVec(static_cast< const ulongVec& >(result))), SWIGTYPE_p_ulongVec, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -10667,60 +10474,8 @@ SWIGINTERN PyObject *_wrap_extract_kmers_size(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_size" "', argument " "1"" of type '" "extract_kmers *""'"); 
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  result = (ulong)(arg1)->size();
-  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_extract_kmers_get_number_key_frames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  ulong result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_number_key_frames",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_number_key_frames" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  result = (ulong)(arg1)->get_number_key_frames();
-  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_extract_kmers_set_number_key_frames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  ulong arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:extract_kmers_set_number_key_frames",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_set_number_key_frames" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "extract_kmers_set_number_key_frames" "', argument " "2"" of type '" "ulong""'");
-  } 
-  arg2 = static_cast< ulong >(val2);
-  (arg1)->set_number_key_frames(arg2);
-  resultobj = SWIG_Py_Void();
+  result = (arg1)->size();
+  resultobj = SWIG_NewPointerObj((new ulong(static_cast< const ulong& >(result))), SWIGTYPE_p_ulong, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -10741,6 +10496,27 @@ SWIGINTERN PyObject *_wrap_extract_kmers_print_all(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
   (arg1)->print_all();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_extract_kmers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_extract_kmers",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_extract_kmers" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  delete arg1;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -10856,22 +10632,20 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"fact", _wrap_fact, METH_VARARGS, NULL},
 	 { (char *)"version", _wrap_version, METH_VARARGS, NULL},
 	 { (char *)"new_extract_kmers", _wrap_new_extract_kmers, METH_VARARGS, NULL},
-	 { (char *)"delete_extract_kmers", _wrap_delete_extract_kmers, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_get_number_key_frames", _wrap_extract_kmers_get_number_key_frames, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_set_number_key_frames", _wrap_extract_kmers_set_number_key_frames, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_one_liner", _wrap_extract_kmers_read_one_liner, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_fasta", _wrap_extract_kmers_read_fasta, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_fastq", _wrap_extract_kmers_read_fastq, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_parse_line", _wrap_extract_kmers_parse_line, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_save_kmer_db", _wrap_extract_kmers_save_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_kmer_db", _wrap_extract_kmers_read_kmer_db, METH_VARARGS, NULL},
-	 { (char *)"extract_kmers_merge_kmers", _wrap_extract_kmers_merge_kmers, METH_VARARGS, NULL},
-	 { (char *)"extract_kmers_save_matrix", _wrap_extract_kmers_save_matrix, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_get_db_file_size", _wrap_extract_kmers_get_db_file_size, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_get_db_num_registers", _wrap_extract_kmers_get_db_num_registers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_get_kmer_db", _wrap_extract_kmers_get_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_size", _wrap_extract_kmers_size, METH_VARARGS, NULL},
-	 { (char *)"extract_kmers_get_number_key_frames", _wrap_extract_kmers_get_number_key_frames, METH_VARARGS, NULL},
-	 { (char *)"extract_kmers_set_number_key_frames", _wrap_extract_kmers_set_number_key_frames, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_print_all", _wrap_extract_kmers_print_all, METH_VARARGS, NULL},
+	 { (char *)"delete_extract_kmers", _wrap_delete_extract_kmers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_swigregister", extract_kmers_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
@@ -10890,15 +10664,12 @@ static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_unsigned_long_t = {"_p_std__allocatorT_unsigned_long_t", "std::vector< unsigned long >::allocator_type *|std::allocator< unsigned long > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *|string *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__valarrayT_char_t = {"_p_std__valarrayT_char_t", "std::valarray< char > *|charValArr *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__valarrayT_int_t = {"_p_std__valarrayT_int_t", "boolValArr *|std::valarray< int > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__valarrayT_unsigned_int_t = {"_p_std__valarrayT_unsigned_int_t", "uIntValArr *|std::valarray< unsigned int > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__valarrayT_unsigned_long_t = {"_p_std__valarrayT_unsigned_long_t", "std::valarray< unsigned long > *|uLongValArr *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t = {"_p_std__vectorT_std__string_std__allocatorT_std__string_t_t", "std::vector< std::string,std::allocator< std::string > > *|strVec *|std::vector< std::string > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t = {"_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t", "ulongVec *|std::vector< unsigned long > *|std::vector< unsigned long,std::allocator< unsigned long > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t = {"_p_std__vectorT_std__string_std__allocatorT_std__string_t_t", "std::vector< std::string,std::allocator< std::string > > *|std::vector< std::string > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t = {"_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t", "std::vector< unsigned long > *|std::vector< unsigned long,std::allocator< unsigned long > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_string = {"_p_string", "string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "ulong *|unsigned long *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ulong = {"_p_ulong", "ulong *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ulongVec = {"_p_ulongVec", "ulongVec *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -10913,15 +10684,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__allocatorT_std__string_t,
   &_swigt__p_std__allocatorT_unsigned_long_t,
   &_swigt__p_std__invalid_argument,
-  &_swigt__p_std__string,
-  &_swigt__p_std__valarrayT_char_t,
-  &_swigt__p_std__valarrayT_int_t,
-  &_swigt__p_std__valarrayT_unsigned_int_t,
-  &_swigt__p_std__valarrayT_unsigned_long_t,
   &_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   &_swigt__p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t,
+  &_swigt__p_string,
   &_swigt__p_swig__SwigPyIterator,
-  &_swigt__p_unsigned_long,
+  &_swigt__p_ulong,
+  &_swigt__p_ulongVec,
   &_swigt__p_value_type,
 };
 
@@ -10936,15 +10704,12 @@ static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0}
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_unsigned_long_t[] = {  {&_swigt__p_std__allocatorT_unsigned_long_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__valarrayT_char_t[] = {  {&_swigt__p_std__valarrayT_char_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__valarrayT_int_t[] = {  {&_swigt__p_std__valarrayT_int_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__valarrayT_unsigned_int_t[] = {  {&_swigt__p_std__valarrayT_unsigned_int_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__valarrayT_unsigned_long_t[] = {  {&_swigt__p_std__valarrayT_unsigned_long_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t[] = {  {&_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t[] = {  {&_swigt__p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_string[] = {  {&_swigt__p_string, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ulong[] = {  {&_swigt__p_ulong, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ulongVec[] = {  {&_swigt__p_ulongVec, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -10959,15 +10724,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__allocatorT_std__string_t,
   _swigc__p_std__allocatorT_unsigned_long_t,
   _swigc__p_std__invalid_argument,
-  _swigc__p_std__string,
-  _swigc__p_std__valarrayT_char_t,
-  _swigc__p_std__valarrayT_int_t,
-  _swigc__p_std__valarrayT_unsigned_int_t,
-  _swigc__p_std__valarrayT_unsigned_long_t,
   _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   _swigc__p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t,
+  _swigc__p_string,
   _swigc__p_swig__SwigPyIterator,
-  _swigc__p_unsigned_long,
+  _swigc__p_ulong,
+  _swigc__p_ulongVec,
   _swigc__p_value_type,
 };
 

@@ -54,8 +54,11 @@ else
 CPP_OPTS_F+=-Og -g -D_DEBUG_
 endif
 
-LIBS=$(BASE).o $(BASE)_wrap.o
+LIBS=$(BASE).o
+LIBS+=$(BASE)_wrap.o
 LIBS+=kmer_set_compression.o
+LIBS+=fileholder.o
+LIBS+=merger.o
 LIBS+=tools.o
 LIBS+=gzstream.o
 

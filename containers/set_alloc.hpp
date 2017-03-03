@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <limits>
+#include <set>
 
 //http://forums.codeguru.com/showthread.php?406108-A-faster-std-set
 

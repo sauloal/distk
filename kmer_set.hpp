@@ -1,14 +1,7 @@
 #ifndef __H_KMER_SET__
 #define __H_KMER_SET__
 
-#include <set>
-#include <valarray>     // std::valarray, std::slice
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <stdio.h>
-//#include <sys/types.h>
+#include "defs.hpp"
 
 #include "progressbar.hpp"
 
@@ -23,17 +16,9 @@
 //http://en.cppreference.com/w/cpp/numeric/valarray/apply
 //http://en.cppreference.com/w/cpp/algorithm/for_each
 
-typedef unsigned long ulong;
-typedef std::string                        string;
-typedef std::valarray<char>                charValArr;
-typedef std::valarray<ulong>               uLongValArr;
-typedef std::valarray<unsigned int>        uIntValArr;
-typedef std::valarray<int>                 boolValArr;
+#include "header.hpp"
 
-typedef std::vector<string>                strVec;
-typedef std::vector<ulong>                 ulongVec;
-//typedef std::vector<double>                doubleVec;
-
+#include "fileholder.hpp"
 
 //using namespace std;
 
@@ -82,42 +67,36 @@ private: // prevent copying the scoped lock.
 
 
 
-
-
-typedef unsigned long ulong;
-typedef std::string                        string;
-typedef std::valarray<char>                charValArr;
-typedef std::valarray<ulong>               uLongValArr;
-typedef std::valarray<unsigned int>        uIntValArr;
-typedef std::valarray<int>                 boolValArr;
-
-typedef std::vector<string>                strVec;
-typedef std::vector<ulong>                 ulongVec;
-//typedef std::vector<double>                doubleVec;
-
-
-
-
 int  fact (int n);
 void version ();
 
 
 
 
+
+
+
+
+
+
+
+
+
 class extract_kmers {
     private:
-        int          kmer_size;
         int          dictF[256];
+
         ulong        pows[32] = {};
-
-        ulong        lineNum;
-        ulong        numberKeyFrames;
         ulong        clean;
-        ulong        validCount;
 
-
+        headerInfo   header;
+        
         setuLongLess q;
         MutexType    lock;
+
+        void         init1();
+        void         init2(const int ks);
+        void         init3();
 
         void         reserve();
         ulong        get_max_size();
@@ -126,36 +105,34 @@ class extract_kmers {
         progressBar  progressKmer;
         
     public:
-        extract_kmers(    const int ks);
-        ~extract_kmers();
-        void          read_one_liner(      const string    &infile  );
-        void          read_fasta(          const string    &infile  );
-        void          read_fastq(          const string    &infile  );
-        void          parse_line(                string    &line    );
-        void          save_kmer_db(        const string    &outfile );
-        void          read_kmer_db(        const string    &infile  );
-        void          merge_kmers(         const string    &outfile, const strVec &infiles, ulongVec &mat );
-        ulongVec      merge_kmers(         const string    &outfile, const strVec &infiles                );
-        void          save_matrix(         const string    &outfile, const strVec &infiles, const ulongVec &mat );
-        ulong         get_db_file_size(    const string    &infile  );
-        ulong         get_db_num_registers(const string    &infile  );
+        extract_kmers();
+        extract_kmers(    const int ks         );
+        //~extract_kmers();
+        ulong         get_number_key_frames();
+        void          set_number_key_frames(const ulong      kf      );
+        void          read_one_liner(       const string    &infile  );
+        void          read_fasta(           const string    &infile  );
+        void          read_fastq(           const string    &infile  );
+        void          parse_line(                 string    &line    );
+        void          save_kmer_db(         const string    &outfile );
+        void          read_kmer_db(         const string    &infile  );
+        ulong         get_db_file_size(     const string    &infile  );
+        ulong         get_db_num_registers( const string    &infile  );
         ulongVec      get_kmer_db();
         ulong         size();
-        ulong         get_number_key_frames();
-        void          set_number_key_frames(const ulong kf);
         void          print_all();
     private:
-        ulong         get_num_keyframes_every( const ulong numRegs );
         template<typename T>
-        void          read_one_liner(            const string   &infile, T  &infhd   );
+        void          read_one_liner(       const string   &infile, T  &infhd   );
         //template<typename T>
         //ulong         get_db_file_size(          T  &infhd   );
         template<typename T>
-        ulong         get_db_num_registers(      T  &infhd   );
+        ulong         get_db_num_registers(       T        &infhd   );
         template<typename T>
-        void          encoder(                   T  &outfhd  );
+        void          encoder(                    T        &outfhd  );
         template<typename T>
-        void          decoder(                   T  &infhd   );
+        void          decoder(                    T        &infhd   );
 };
+
 
 #endif //__H_KMET_SET__

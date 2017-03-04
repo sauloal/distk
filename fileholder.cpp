@@ -2,6 +2,8 @@
 
 #include "tools.hpp"
 
+#include "kmer_set.hpp"
+
 template<typename S, typename T, typename U>
 fileHolder<S,T,U>::fileHolder(
                 headerInfo & headerl,
@@ -16,26 +18,32 @@ fileHolder<S,T,U>::fileHolder(
             lenI(      0       ),
             eof(       false   ) {}
 
+
 template<typename S, typename T, typename U>
 ulong        fileHolder<S,T,U>::get_reg_count() {
     return reg_count;
 }
+
 
 template<typename S, typename T, typename U>
 bool         fileHolder<S,T,U>::good() {
     return ! eof;
 }
 
+
 template<typename S, typename T, typename U>
 S          & fileHolder<S,T,U>::curr() {
     return prev;
 }
 
+
 template<typename S, typename T, typename U>
-S          & fileHolder<S,T,U>::next() {
+fileHolder<S,T,U>::nextResult<S> & fileHolder<S,T,U>::next() {
     if ( ! eof ) {
         if ( ! fhd.read((char *)&lenI, sizeof(lenI)) ) {
-            eof = true;
+            eof  = true;
+            res  = {false, 0};
+            return res;
         } else {
             diff = 0;
             fhd.read((char *)&diff,       lenI );
@@ -64,7 +72,8 @@ S          & fileHolder<S,T,U>::next() {
             diff = 0;
             ++reg_count;
     
-            return prev;
+            res = {true, prev};
+            return res;
         }
     } else {
         throw std::runtime_error("called next on a eof file");
@@ -80,7 +89,7 @@ void         fileHolder<S,T,U>::load_header() {
 template<typename S, typename T, typename U>
 ulong        fileHolder<S,T,U>::get_num_keyframes_every() {
     //header.key_frames_every = 0;
-    ulong key_frames_every;
+    ulong key_frames_every = 0;
     
     if ( header.number_key_frames > 0 ) {
         if ( header.num_uniq_kmers > 0 ) {
@@ -128,19 +137,20 @@ void         fileHolder<S,T,U>::decodeHeader() {
     
     fhd.read((char *)&header          , sizeof(header));
 
-    ulong  key_frames_every_check = get_num_keyframes_every();
-    
-    assert(key_frames_every_check == header.key_frames_every);
-    
     std::cout << "   READING KMER SIZE       : " << header.kmer_size         << std::endl;
     std::cout << "   READING LINE NUM        : " << header.number_lines      << std::endl;
     std::cout << "   READING VALID COUNT     : " << header.num_valid_kmers   << std::endl;
     std::cout << "   READING NUM REGISTERS   : " << header.num_uniq_kmers    << std::endl;
     std::cout << "   READING NUM KEYFRAMES   : " << header.number_key_frames << std::endl;
     std::cout << "   READING KEY FRAMES EVERY: " << header.key_frames_every  << std::endl;
+
+    ulong  key_frames_every_check = get_num_keyframes_every();
+    
+    if ( key_frames_every_check != header.key_frames_every ) {
+        printf ("key_frames_every_check %lu key_frames_every %lu differ\n", key_frames_every_check, header.key_frames_every);
+        assert(key_frames_every_check == header.key_frames_every);
+    }
 }
-
-
 
 
 template<typename S, typename T, typename U>
@@ -186,15 +196,21 @@ void          fileHolder<S,T,U>::encodeHeader() {
 
 
 template<typename S, typename T, typename U>
-void          fileHolder<S,T,U>::read( U q ) {
+void          fileHolder<S,T,U>::read( U & q ) {
     load_header();
     
-    std::cout << "    resizing" << std::endl;
-    q.resize(header.num_uniq_kmers);
+    std::cout << "    reserving " << header.num_uniq_kmers << std::endl;
+    q.reserve(header.num_uniq_kmers);
     std::cout << "    loading" << std::endl;
     
+    nextResult<S> result;
     while ( good() ) {
-        q.insert( next() );
+        result = next();
+        
+        if ( result.valid ) {
+            q.insert( result.val );
+        }
+        //std::cout << "added " << curr() << std::endl;
 
         //q.insert(val);
         //q[reg_count] = val;
@@ -202,7 +218,7 @@ void          fileHolder<S,T,U>::read( U q ) {
 }
 
 template<typename S, typename T, typename U>
-void          fileHolder<S,T,U>::write( U q ) {
+void          fileHolder<S,T,U>::write( U & q ) {
     header.num_uniq_kmers = q.size();
     
     encodeHeader();
@@ -249,3 +265,6 @@ void          fileHolder<S,T,U>::write( U q ) {
         assert(header.num_uniq_kmers == reg_count);
     }
 }
+
+
+template class fileHolder<ulong, filestream, setuLongLess>;

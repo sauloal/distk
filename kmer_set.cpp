@@ -90,7 +90,7 @@ void extract_kmers::init3() {
     }
 
     //cleans first two bits
-    clean = ((ulong)(pow(2, ((header.kmer_size-1)*2)))-1);
+    clean        = ((ulong)(pow(2, ((header.kmer_size-1)*2)))-1);
 
     std::cout << "clean " << clean << std::endl;
     
@@ -128,9 +128,9 @@ void          extract_kmers::print_all() {
     }
 }
 
-void          extract_kmers::read_one_liner(          const string   & infile  ) {
+void          extract_kmers::read_one_liner(          const string    &infile  ) {
     filestream infhd(infile, 'r');
-    read_one_liner(infile, infhd);
+    read_one_liner( infile, infhd );
     infhd.close();
 }
 
@@ -441,61 +441,6 @@ ulong         extract_kmers::get_db_file_size(        const string   & infile  )
     
 }
 
-/*
-ulong         extract_kmers::get_db_num_registers(    const string   & infile  ) {
-    header.num_uniq_kmers = 0;
-
-#ifdef _NO_DIFF_ENCODING_
-
-    ulong fileSize = get_db_file_size(infile);
-    header.num_uniq_kmers        = fileSize / sizeof(ulong);
-
-#else
-
-    filestream infhd(infile, 'r', 'z');
-
-    if (!infhd.good()) {
-        perror((string("error reading input file: ") + infile).c_str());
-#ifdef __CHEERP__
-        assert(false);
-#else
-        throw std::runtime_error("error reading input file: " + infile);
-#endif
-        //return;
-    }
-
-    header.num_uniq_kmers = get_db_num_registers(infhd);
-
-    infhd.close();
-
-#endif
-
-    return header.num_uniq_kmers;
-}
-
-template<typename T>
-ulong         extract_kmers::get_db_num_registers(          T        & infhd   ) {
-    header.num_uniq_kmers  = 0;
-
-#ifdef _NO_DIFF_ENCODING_
-
-    ulong fileSize = get_db_file_size(infhd);
-    header.num_uniq_kmers        = fileSize / sizeof(ulong);
-
-#else
-
-    ulong startPos = infhd.tell();
-
-    infhd.read((char *)&header.num_uniq_kmers,sizeof(header.num_uniq_kmers));
-
-    infhd.seek(startPos, std::ios::beg);
-
-#endif
-
-    return header.num_uniq_kmers;
-}
-*/
-
 void          extract_kmers::read_kmer_db(            const string   & infile  ) {
     /*
      * TODO: load into q
@@ -506,35 +451,27 @@ void          extract_kmers::read_kmer_db(            const string   & infile  )
 
     filestream infhd(infile, 'r', 'z');
     
-    std::cout << "    OPEN" << std::endl;
+    std::cout << "   OPEN" << std::endl;
 
     ulong fileSize = get_db_file_size(infile);
-    ulong regs     = get_db_num_registers(infile);
 
-    std::cout << "    SIZE: " << fileSize << " REGISTERS: " << regs << std::endl;
+    std::cout << "    SIZE: " << fileSize << std::endl;
 
     std::cout << "   CLEARING" << std::endl;
 
     q.clear();
 
-//#ifndef _ALTERNATIVE_ALLOC_
-    //std::cout << "   ALLOCATING " << regs << " REGS" << std::endl;
-
-    //q.get_allocator().allocate(regs);
-//#endif
-
-    //std::copy(iter, std::istreambuf_iterator<char>{}, std::back_inserter(newVector));
-    //infhd.read((char*)&(*q.cbegin()), fileSize);
+    std::cout << "   READING" << std::endl;
 
     decoder(infhd);
 
-    std::cout << "    CLOSE" << std::endl;
+    std::cout << "   CLOSING" << std::endl;
 
     infhd.close();
 
     std::cout << "   READ" << std::endl;
 
-    std::cout << "    LENGHT: " << size() << std::endl;
+    std::cout << "    NUM REGISTERS: " << size() << std::endl;
 
     std::cout << "   DONE" << std::endl;
 }
@@ -603,9 +540,6 @@ void          extract_kmers::decoder(                       T        & infhd   )
     }
 #else // #ifdef _NO_DIFF_ENCODING_    
     //https://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
-    std::cout << "   READING" << std::endl;
-
-
     fileHolder<ulong, T, setuLongLess> lh(header, infhd);
 
     lh.read(q);
@@ -660,6 +594,62 @@ void          extract_kmers::set_number_key_frames(   const ulong kf           )
 
 
 
+
+/*
+ulong         extract_kmers::get_db_num_registers(    const string   & infile  ) {
+    header.num_uniq_kmers = 0;
+
+#ifdef _NO_DIFF_ENCODING_
+
+    ulong fileSize = get_db_file_size(infile);
+    header.num_uniq_kmers        = fileSize / sizeof(ulong);
+
+#else
+
+    filestream infhd(infile, 'r', 'z');
+
+    if (!infhd.good()) {
+        perror((string("error reading input file: ") + infile).c_str());
+#ifdef __CHEERP__
+        assert(false);
+#else
+        throw std::runtime_error("error reading input file: " + infile);
+#endif
+        //return;
+    }
+
+    header.num_uniq_kmers = get_db_num_registers(infhd);
+
+    infhd.close();
+
+#endif
+
+    return header.num_uniq_kmers;
+}
+
+/*
+template<typename T>
+ulong         extract_kmers::get_db_num_registers(          T        & infhd   ) {
+    header.num_uniq_kmers  = 0;
+
+#ifdef _NO_DIFF_ENCODING_
+
+    ulong fileSize = get_db_file_size(infhd);
+    header.num_uniq_kmers        = fileSize / sizeof(ulong);
+
+#else
+
+    ulong startPos = infhd.tell();
+
+    infhd.read((char *)&header.num_uniq_kmers,sizeof(header.num_uniq_kmers));
+
+    infhd.seek(startPos, std::ios::beg);
+
+#endif
+
+    return header.num_uniq_kmers;
+}
+*/
 
 
 

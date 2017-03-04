@@ -12,9 +12,19 @@
 //%}
 
 //%template(vectord)      std::vector< double >;
-%template(StringVector) std::vector< std::string  >;
-%template(ULongVector)  std::vector< unsigned long >;
 //%template(ULongSet   )  std::set< unsigned long >;
+
+%inline %{
+  struct foo {};
+  foo bar() { return foo(); }
+  std::vector<foo> bar2() { 
+    return std::vector<foo>(); 
+  } 
+%}
+
+%template(strVec  )  std::vector< std::string   >;
+%template(ulongVec)  std::vector< unsigned long >;
+
 
 %{
 #include "kmer_set.hpp"

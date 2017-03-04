@@ -22,6 +22,8 @@
 
 //using namespace std;
 
+typedef unsigned long ulong;
+typedef std::vector<ulong>                 ulongVec;
 
 
 //http://bisqwit.iki.fi/story/howto/openmp/
@@ -36,7 +38,7 @@
         MutexType(const MutexType& ) { omp_init_lock(&lock); }
         MutexType& operator= (const MutexType& ) { return *this; }
     public:
-            omp_lock_t lock;
+        omp_lock_t lock;
     };
 #else
     /* A dummy mutex that doesn't actually exclude anything,
@@ -72,14 +74,7 @@ void version ();
 
 
 
-
-
-
-
-
-
-
-
+typedef std::string                        string;
 
 
 class extract_kmers {
@@ -117,7 +112,7 @@ class extract_kmers {
         void          save_kmer_db(         const string    &outfile );
         void          read_kmer_db(         const string    &infile  );
         ulong         get_db_file_size(     const string    &infile  );
-        ulong         get_db_num_registers( const string    &infile  );
+        //ulong         get_db_num_registers( const string    &infile  );
         ulongVec      get_kmer_db();
         ulong         size();
         void          print_all();
@@ -126,8 +121,8 @@ class extract_kmers {
         void          read_one_liner(       const string   &infile, T  &infhd   );
         //template<typename T>
         //ulong         get_db_file_size(          T  &infhd   );
-        template<typename T>
-        ulong         get_db_num_registers(       T        &infhd   );
+        //template<typename T>
+        //ulong         get_db_num_registers(       T        &infhd   );
         template<typename T>
         void          encoder(                    T        &outfhd  );
         template<typename T>

@@ -84,12 +84,12 @@ std::vector<T> reversed(std::vector<T> v) {
 
 
 //https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
-inline bool file_exists (const string& name) {
+bool file_exists (const string& name) {
   struct stat buffer;   
   return (stat (name.c_str(), &buffer) == 0); 
 }
 
-inline void remove_if_exists( const string& name ) {
+void remove_if_exists( const string& name ) {
     if ( file_exists( name ) ) {
         if ( remove( name.c_str() ) != 0 ) {
             perror((string("error deleting file: ") + name).c_str());
@@ -102,7 +102,7 @@ inline void remove_if_exists( const string& name ) {
     }
 }
 
-inline void rename_and_check( const string& src, const string& dst ) {
+void rename_and_check( const string& src, const string& dst ) {
     int r = rename(src.c_str(), dst.c_str() );
     if ( r != 0 ) {
         perror((string("error renaming file: ") + src + " to: " + dst).c_str());

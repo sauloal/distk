@@ -154,231 +154,257 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _kmer_set.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-class StringVector(_object):
+class foo(_object):
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StringVector, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, foo, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StringVector, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, foo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _kmer_set.new_foo()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _kmer_set.delete_foo
+    __del__ = lambda self: None
+foo_swigregister = _kmer_set.foo_swigregister
+foo_swigregister(foo)
+
+
+def bar():
+    return _kmer_set.bar()
+bar = _kmer_set.bar
+
+def bar2():
+    return _kmer_set.bar2()
+bar2 = _kmer_set.bar2
+class strVec(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, strVec, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, strVec, name)
     __repr__ = _swig_repr
 
     def iterator(self):
-        return _kmer_set.StringVector_iterator(self)
+        return _kmer_set.strVec_iterator(self)
     def __iter__(self):
         return self.iterator()
 
     def __nonzero__(self):
-        return _kmer_set.StringVector___nonzero__(self)
+        return _kmer_set.strVec___nonzero__(self)
 
     def __bool__(self):
-        return _kmer_set.StringVector___bool__(self)
+        return _kmer_set.strVec___bool__(self)
 
     def __len__(self):
-        return _kmer_set.StringVector___len__(self)
+        return _kmer_set.strVec___len__(self)
 
     def __getslice__(self, i, j):
-        return _kmer_set.StringVector___getslice__(self, i, j)
+        return _kmer_set.strVec___getslice__(self, i, j)
 
     def __setslice__(self, *args):
-        return _kmer_set.StringVector___setslice__(self, *args)
+        return _kmer_set.strVec___setslice__(self, *args)
 
     def __delslice__(self, i, j):
-        return _kmer_set.StringVector___delslice__(self, i, j)
+        return _kmer_set.strVec___delslice__(self, i, j)
 
     def __delitem__(self, *args):
-        return _kmer_set.StringVector___delitem__(self, *args)
+        return _kmer_set.strVec___delitem__(self, *args)
 
     def __getitem__(self, *args):
-        return _kmer_set.StringVector___getitem__(self, *args)
+        return _kmer_set.strVec___getitem__(self, *args)
 
     def __setitem__(self, *args):
-        return _kmer_set.StringVector___setitem__(self, *args)
+        return _kmer_set.strVec___setitem__(self, *args)
 
     def pop(self):
-        return _kmer_set.StringVector_pop(self)
+        return _kmer_set.strVec_pop(self)
 
     def append(self, x):
-        return _kmer_set.StringVector_append(self, x)
+        return _kmer_set.strVec_append(self, x)
 
     def empty(self):
-        return _kmer_set.StringVector_empty(self)
+        return _kmer_set.strVec_empty(self)
 
     def size(self):
-        return _kmer_set.StringVector_size(self)
+        return _kmer_set.strVec_size(self)
 
     def swap(self, v):
-        return _kmer_set.StringVector_swap(self, v)
+        return _kmer_set.strVec_swap(self, v)
 
     def begin(self):
-        return _kmer_set.StringVector_begin(self)
+        return _kmer_set.strVec_begin(self)
 
     def end(self):
-        return _kmer_set.StringVector_end(self)
+        return _kmer_set.strVec_end(self)
 
     def rbegin(self):
-        return _kmer_set.StringVector_rbegin(self)
+        return _kmer_set.strVec_rbegin(self)
 
     def rend(self):
-        return _kmer_set.StringVector_rend(self)
+        return _kmer_set.strVec_rend(self)
 
     def clear(self):
-        return _kmer_set.StringVector_clear(self)
+        return _kmer_set.strVec_clear(self)
 
     def get_allocator(self):
-        return _kmer_set.StringVector_get_allocator(self)
+        return _kmer_set.strVec_get_allocator(self)
 
     def pop_back(self):
-        return _kmer_set.StringVector_pop_back(self)
+        return _kmer_set.strVec_pop_back(self)
 
     def erase(self, *args):
-        return _kmer_set.StringVector_erase(self, *args)
+        return _kmer_set.strVec_erase(self, *args)
 
     def __init__(self, *args):
-        this = _kmer_set.new_StringVector(*args)
+        this = _kmer_set.new_strVec(*args)
         try:
             self.this.append(this)
         except Exception:
             self.this = this
 
     def push_back(self, x):
-        return _kmer_set.StringVector_push_back(self, x)
+        return _kmer_set.strVec_push_back(self, x)
 
     def front(self):
-        return _kmer_set.StringVector_front(self)
+        return _kmer_set.strVec_front(self)
 
     def back(self):
-        return _kmer_set.StringVector_back(self)
+        return _kmer_set.strVec_back(self)
 
     def assign(self, n, x):
-        return _kmer_set.StringVector_assign(self, n, x)
+        return _kmer_set.strVec_assign(self, n, x)
 
     def resize(self, *args):
-        return _kmer_set.StringVector_resize(self, *args)
+        return _kmer_set.strVec_resize(self, *args)
 
     def insert(self, *args):
-        return _kmer_set.StringVector_insert(self, *args)
+        return _kmer_set.strVec_insert(self, *args)
 
     def reserve(self, n):
-        return _kmer_set.StringVector_reserve(self, n)
+        return _kmer_set.strVec_reserve(self, n)
 
     def capacity(self):
-        return _kmer_set.StringVector_capacity(self)
-    __swig_destroy__ = _kmer_set.delete_StringVector
+        return _kmer_set.strVec_capacity(self)
+    __swig_destroy__ = _kmer_set.delete_strVec
     __del__ = lambda self: None
-StringVector_swigregister = _kmer_set.StringVector_swigregister
-StringVector_swigregister(StringVector)
+strVec_swigregister = _kmer_set.strVec_swigregister
+strVec_swigregister(strVec)
 
-class ULongVector(_object):
+class ulongVec(_object):
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ULongVector, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ulongVec, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ULongVector, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ulongVec, name)
     __repr__ = _swig_repr
 
     def iterator(self):
-        return _kmer_set.ULongVector_iterator(self)
+        return _kmer_set.ulongVec_iterator(self)
     def __iter__(self):
         return self.iterator()
 
     def __nonzero__(self):
-        return _kmer_set.ULongVector___nonzero__(self)
+        return _kmer_set.ulongVec___nonzero__(self)
 
     def __bool__(self):
-        return _kmer_set.ULongVector___bool__(self)
+        return _kmer_set.ulongVec___bool__(self)
 
     def __len__(self):
-        return _kmer_set.ULongVector___len__(self)
+        return _kmer_set.ulongVec___len__(self)
 
     def __getslice__(self, i, j):
-        return _kmer_set.ULongVector___getslice__(self, i, j)
+        return _kmer_set.ulongVec___getslice__(self, i, j)
 
     def __setslice__(self, *args):
-        return _kmer_set.ULongVector___setslice__(self, *args)
+        return _kmer_set.ulongVec___setslice__(self, *args)
 
     def __delslice__(self, i, j):
-        return _kmer_set.ULongVector___delslice__(self, i, j)
+        return _kmer_set.ulongVec___delslice__(self, i, j)
 
     def __delitem__(self, *args):
-        return _kmer_set.ULongVector___delitem__(self, *args)
+        return _kmer_set.ulongVec___delitem__(self, *args)
 
     def __getitem__(self, *args):
-        return _kmer_set.ULongVector___getitem__(self, *args)
+        return _kmer_set.ulongVec___getitem__(self, *args)
 
     def __setitem__(self, *args):
-        return _kmer_set.ULongVector___setitem__(self, *args)
+        return _kmer_set.ulongVec___setitem__(self, *args)
 
     def pop(self):
-        return _kmer_set.ULongVector_pop(self)
+        return _kmer_set.ulongVec_pop(self)
 
     def append(self, x):
-        return _kmer_set.ULongVector_append(self, x)
+        return _kmer_set.ulongVec_append(self, x)
 
     def empty(self):
-        return _kmer_set.ULongVector_empty(self)
+        return _kmer_set.ulongVec_empty(self)
 
     def size(self):
-        return _kmer_set.ULongVector_size(self)
+        return _kmer_set.ulongVec_size(self)
 
     def swap(self, v):
-        return _kmer_set.ULongVector_swap(self, v)
+        return _kmer_set.ulongVec_swap(self, v)
 
     def begin(self):
-        return _kmer_set.ULongVector_begin(self)
+        return _kmer_set.ulongVec_begin(self)
 
     def end(self):
-        return _kmer_set.ULongVector_end(self)
+        return _kmer_set.ulongVec_end(self)
 
     def rbegin(self):
-        return _kmer_set.ULongVector_rbegin(self)
+        return _kmer_set.ulongVec_rbegin(self)
 
     def rend(self):
-        return _kmer_set.ULongVector_rend(self)
+        return _kmer_set.ulongVec_rend(self)
 
     def clear(self):
-        return _kmer_set.ULongVector_clear(self)
+        return _kmer_set.ulongVec_clear(self)
 
     def get_allocator(self):
-        return _kmer_set.ULongVector_get_allocator(self)
+        return _kmer_set.ulongVec_get_allocator(self)
 
     def pop_back(self):
-        return _kmer_set.ULongVector_pop_back(self)
+        return _kmer_set.ulongVec_pop_back(self)
 
     def erase(self, *args):
-        return _kmer_set.ULongVector_erase(self, *args)
+        return _kmer_set.ulongVec_erase(self, *args)
 
     def __init__(self, *args):
-        this = _kmer_set.new_ULongVector(*args)
+        this = _kmer_set.new_ulongVec(*args)
         try:
             self.this.append(this)
         except Exception:
             self.this = this
 
     def push_back(self, x):
-        return _kmer_set.ULongVector_push_back(self, x)
+        return _kmer_set.ulongVec_push_back(self, x)
 
     def front(self):
-        return _kmer_set.ULongVector_front(self)
+        return _kmer_set.ulongVec_front(self)
 
     def back(self):
-        return _kmer_set.ULongVector_back(self)
+        return _kmer_set.ulongVec_back(self)
 
     def assign(self, n, x):
-        return _kmer_set.ULongVector_assign(self, n, x)
+        return _kmer_set.ulongVec_assign(self, n, x)
 
     def resize(self, *args):
-        return _kmer_set.ULongVector_resize(self, *args)
+        return _kmer_set.ulongVec_resize(self, *args)
 
     def insert(self, *args):
-        return _kmer_set.ULongVector_insert(self, *args)
+        return _kmer_set.ulongVec_insert(self, *args)
 
     def reserve(self, n):
-        return _kmer_set.ULongVector_reserve(self, n)
+        return _kmer_set.ulongVec_reserve(self, n)
 
     def capacity(self):
-        return _kmer_set.ULongVector_capacity(self)
-    __swig_destroy__ = _kmer_set.delete_ULongVector
+        return _kmer_set.ulongVec_capacity(self)
+    __swig_destroy__ = _kmer_set.delete_ulongVec
     __del__ = lambda self: None
-ULongVector_swigregister = _kmer_set.ULongVector_swigregister
-ULongVector_swigregister(ULongVector)
+ulongVec_swigregister = _kmer_set.ulongVec_swigregister
+ulongVec_swigregister(ulongVec)
 
 class MutexType(_object):
     __swig_setmethods__ = {}
@@ -476,9 +502,6 @@ class extract_kmers(_object):
 
     def get_db_file_size(self, infile):
         return _kmer_set.extract_kmers_get_db_file_size(self, infile)
-
-    def get_db_num_registers(self, infile):
-        return _kmer_set.extract_kmers_get_db_num_registers(self, infile)
 
     def get_kmer_db(self):
         return _kmer_set.extract_kmers_get_kmer_db(self)

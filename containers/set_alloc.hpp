@@ -274,7 +274,7 @@ public:
 //typedef std::set< unsigned long > orderedSet;
 
 
-
+/*
 template<typename T>
 class orderedSetAllocCls : public std::set< T , std::less<T>, bestAlloc<T> > {
     public:
@@ -287,6 +287,7 @@ class orderedSetAllocCls : public std::set< T , std::less<T>, bestAlloc<T> > {
 			return std::vector<T>(this->begin(), this->end());
 		}
 };
+*/
 
 template<typename T>
 class orderedSetCls : public std::set< T , std::less<T> > {
@@ -295,13 +296,15 @@ class orderedSetCls : public std::set< T , std::less<T> > {
             //this->c.reserve(reserve_size);
 			this->get_allocator().allocate(reserve_size);
         }
-		void resize(unsigned long t){}
+		void resize(size_t t){
+			reserve(t);
+		}
 		std::vector<T> get_container() {
 			return std::vector<T>(this->begin(), this->end());
 		}
 };
 
-typedef orderedSetAllocCls<unsigned long> orderedSetAlloc;
+//typedef orderedSetAllocCls<unsigned long> orderedSetAlloc;
 typedef orderedSetCls     <unsigned long> orderedSet;
 
 //typedef orderedSetAlloc setuLongLess;

@@ -34,6 +34,7 @@ def main():
 	
 				time1 = time.time()
 				ek = kmer_set.extract_kmers(kmer_len)
+				print dir(ek)
 				ek.read_one_liner(fa)
 				ek.save_kmer_db(km)
 				time2 = time.time()

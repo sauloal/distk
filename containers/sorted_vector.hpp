@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <set>
 #include <stdint.h> // C99 or C++0x or C++ TR1 will have this header. ToDo: Change to <cstdint> when C++0x broader support gets under way.
 
 //#include "set_alloc.hpp"
@@ -23,17 +24,101 @@ private:
     typedef typename std::vector<T>       Cont;
     typedef typename Cont::iterator       iterator;
     Cont                                  elements;
+    //Cont                                  buffer;
+    size_t   last_sort;
+    size_t   buffer_size;
+    size_t   buffer_pos;
+    iterator it;
 
+    void sort_full () {
+        if ( last_sort != elements.size() ) {
+            std::sort(elements.begin(), elements.end());
+            it = std::unique(elements.begin(), elements.end());
+            elements.resize( std::distance(elements.begin(),it) );
+            last_sort = elements.size();
+        }
+    }
+    
+    void sort_half () {
+        /*
+        v.reserve(v.size() + distance(v_prime.begin(),v_prime.end()));
+        v.insert(v.end(),v_prime.begin(),v_prime.end());
+        */
+        if ( last_sort != elements.size() ) {
+            std::sort(                           elements.begin()+last_sort, elements.end());
+            std::inplace_merge(elements.begin(), elements.begin()+last_sort, elements.end());
+            it = std::unique(  elements.begin(), elements.end());
+            elements.resize( std::distance(elements.begin(),it) );
+            last_sort = elements.size();
+        }
+    }
+    
 public:
     typedef typename Cont::const_iterator const_iterator;
     typedef typename Cont::size_type      size_type;
     typedef T                             value_type;
     typedef T                             key_type;
 
+    sorted_vector(): last_sort(0), buffer_size(1000000), buffer_pos(0) {
+        //buffer.resize( buffer_size );
+    }
+    
     inline
     bool insert(const T & t) {
         //std::cout << "insert " << t;
+        //buffer[buffer_pos++] = t;
+        //std::sort (elements.begin(), elements.end());
         
+        buffer_pos++;
+        elements.push_back(t);
+
+        //if ((elements.size()>0) && ( elements.size() % buffer_size == 0 )) {
+        if ( buffer_pos == buffer_size ) {
+            buffer_pos = 0;
+            
+            /*
+            std::merge()
+
+            std::sort(buffer.begin(), buffer.end());
+            
+            std::merge(v1.begin(), v1.end(), v2.begin(), v2.end(), std::back_inserter(dst))
+            */
+            
+            /*
+            std::sort(  elements.begin(), elements.begin());
+            it = std::unique(elements.begin(), elements.end());
+            elements.resize( std::distance(elements.begin(),it) );
+            */
+            
+            if ( last_sort == 0 ) {
+                sort_full();
+            } else {
+                sort_half();
+            }
+            
+            /*
+            std::partial_sort(elements.begin(), elements.begin()+(elements.size()/2), elements.end());
+            it = std::unique(elements.begin(), elements.end());
+            elements.resize( std::distance(elements.begin(),it) );
+            */
+            
+            /*
+            std::sort(  elements.begin(), elements.begin());
+            it = std::unique(elements.begin(), elements.end());
+            last_sort=elements.size();
+            */
+            
+            /*
+            std::set<T> input(elements.begin(), elements.end());
+            elements.clear();
+            std::copy(input.begin(), input.end(), std::back_inserter(elements));
+            */
+        }
+        return true;
+    }
+    /*
+    inline
+    bool insert(const T & t) {
         if (elements.empty()) {
             elements.push_back(t);
             //std::cout << " empty" << std::endl;
@@ -79,6 +164,7 @@ public:
             } //if (b <= t) {
         } //if (elements.empty()) {
     }
+    */
 
     inline
     bool push_back(const T & t) {
@@ -135,42 +221,50 @@ public:
     }
     
     inline
-    const_iterator begin() const {
+    const_iterator begin() {
+        sort_half();
         return elements.begin();
     }
 
     inline
-    const_iterator end() const {
+    const_iterator end() {
+        sort_half();
         return elements.end();
     }
 
     inline
-    T & front() const {
+    T & front() {
+        sort_half();
         return elements.front();
     }
 
     inline
-    T & back() const {
+    T & back() {
+        sort_half();
         return elements.back();
     }
 
     inline
     iterator lower_bound(const T & t) {
+        sort_half();
         return std::lower_bound(elements.begin(), elements.end(), t);
     }
 
     inline
     const_iterator lower_bound(const T & t) const {
+        sort_half();
         return std::lower_bound(elements.begin(), elements.end(), t);
     }
 
     inline
-    const_iterator upper_bound(const T & t) const {
+    const_iterator upper_bound(const T & t) {
+        sort_half();
         return std::upper_bound(elements.begin(), elements.end(), t);
     }
 
     inline
-    size_type size() const {
+    size_type size() {
+        sort_half();
         return elements.size();
     }
 
@@ -198,11 +292,13 @@ public:
     
     inline
     auto get_allocator() {
+        sort_half();
         return elements.get_allocator();
     }
     
     inline
     auto& get_container() {
+        sort_half();
         return elements;
     }
     

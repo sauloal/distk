@@ -274,6 +274,9 @@ public:
 //typedef std::set< unsigned long > orderedSet;
 
 
+
+
+
 /*
 template<typename T>
 class orderedSetAllocCls : public std::set< T , std::less<T>, bestAlloc<T> > {
@@ -287,7 +290,14 @@ class orderedSetAllocCls : public std::set< T , std::less<T>, bestAlloc<T> > {
 			return std::vector<T>(this->begin(), this->end());
 		}
 };
+
+typedef orderedSetAllocCls<unsigned long> orderedSetAlloc;
+
+typedef orderedSetAlloc setuLongLess;
 */
+
+
+
 
 template<typename T>
 class orderedSetCls : public std::set< T , std::less<T> > {
@@ -304,11 +314,10 @@ class orderedSetCls : public std::set< T , std::less<T> > {
 		}
 };
 
-//typedef orderedSetAllocCls<unsigned long> orderedSetAlloc;
 typedef orderedSetCls     <unsigned long> orderedSet;
 
-//typedef orderedSetAlloc setuLongLess;
 typedef orderedSet      setuLongLess;
+
 
 
 /*

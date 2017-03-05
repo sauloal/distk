@@ -7,11 +7,12 @@
 
 #include "kmer_set_compression.hpp"
 
-/*
-#include "sorted_vector.hpp"
-*/
 
+#include "sorted_vector.hpp"
+
+/*
 #include "set_alloc.hpp"
+*/
 
 //http://en.cppreference.com/w/cpp/numeric/valarray/apply
 //http://en.cppreference.com/w/cpp/algorithm/for_each
@@ -76,6 +77,12 @@ void version ();
 
 typedef std::string                        string;
 
+struct clone_res {
+    bool   res;
+    string reason;
+};
+
+class extract_kmers;
 
 class extract_kmers {
     private:
@@ -113,9 +120,14 @@ class extract_kmers {
         void          read_kmer_db(         const string    &infile  );
         ulong         get_db_file_size(     const string    &infile  );
         //ulong         get_db_num_registers( const string    &infile  );
-        ulongVec      get_kmer_db();
         ulong         size();
         void          print_all();
+        clone_res     is_equal( extract_kmers &ek2, bool clone );
+        clone_res     is_clone( extract_kmers &ek2 );
+        headerInfo    get_header();
+        setuLongLess &get_kmer_db();
+        ulongVec     &get_kmer_db_as_vector();
+
     private:
         template<typename T>
         void          read_one_liner(       const string   &infile, T  &infhd   );

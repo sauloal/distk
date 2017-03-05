@@ -3013,23 +3013,26 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_ScopedLock swig_types[1]
 #define SWIGTYPE_p_allocator_type swig_types[2]
 #define SWIGTYPE_p_char swig_types[3]
-#define SWIGTYPE_p_difference_type swig_types[4]
-#define SWIGTYPE_p_extract_kmers swig_types[5]
-#define SWIGTYPE_p_foo swig_types[6]
-#define SWIGTYPE_p_p_PyObject swig_types[7]
-#define SWIGTYPE_p_size_type swig_types[8]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[9]
-#define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[10]
-#define SWIGTYPE_p_std__invalid_argument swig_types[11]
-#define SWIGTYPE_p_std__string swig_types[12]
-#define SWIGTYPE_p_std__vectorT_foo_std__allocatorT_foo_t_t swig_types[13]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[14]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[15]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[16]
-#define SWIGTYPE_p_unsigned_long swig_types[17]
-#define SWIGTYPE_p_value_type swig_types[18]
-static swig_type_info *swig_types[20];
-static swig_module_info swig_module = {swig_types, 19, 0, 0, 0, 0};
+#define SWIGTYPE_p_clone_res swig_types[4]
+#define SWIGTYPE_p_difference_type swig_types[5]
+#define SWIGTYPE_p_extract_kmers swig_types[6]
+#define SWIGTYPE_p_foo swig_types[7]
+#define SWIGTYPE_p_headerInfo swig_types[8]
+#define SWIGTYPE_p_p_PyObject swig_types[9]
+#define SWIGTYPE_p_setuLongLess swig_types[10]
+#define SWIGTYPE_p_size_type swig_types[11]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[12]
+#define SWIGTYPE_p_std__allocatorT_unsigned_long_t swig_types[13]
+#define SWIGTYPE_p_std__invalid_argument swig_types[14]
+#define SWIGTYPE_p_std__string swig_types[15]
+#define SWIGTYPE_p_std__vectorT_foo_std__allocatorT_foo_t_t swig_types[16]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[17]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t swig_types[18]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[19]
+#define SWIGTYPE_p_unsigned_long swig_types[20]
+#define SWIGTYPE_p_value_type swig_types[21]
+static swig_type_info *swig_types[23];
+static swig_module_info swig_module = {swig_types, 22, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -5117,6 +5120,20 @@ SWIGINTERNINLINE PyObject*
   SWIG_From_int  (int value)
 {
   return PyInt_FromLong((long) value);
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  int r;
+  if (!PyBool_Check(obj))
+    return SWIG_ERROR;
+  r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
 }
 
 #ifdef __cplusplus
@@ -10117,6 +10134,158 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_clone_res_res_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  clone_res *arg1 = (clone_res *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:clone_res_res_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_clone_res, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "clone_res_res_set" "', argument " "1"" of type '" "clone_res *""'"); 
+  }
+  arg1 = reinterpret_cast< clone_res * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "clone_res_res_set" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  if (arg1) (arg1)->res = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_clone_res_res_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  clone_res *arg1 = (clone_res *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:clone_res_res_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_clone_res, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "clone_res_res_get" "', argument " "1"" of type '" "clone_res *""'"); 
+  }
+  arg1 = reinterpret_cast< clone_res * >(argp1);
+  result = (bool) ((arg1)->res);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_clone_res_reason_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  clone_res *arg1 = (clone_res *) 0 ;
+  string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:clone_res_reason_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_clone_res, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "clone_res_reason_set" "', argument " "1"" of type '" "clone_res *""'"); 
+  }
+  arg1 = reinterpret_cast< clone_res * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "clone_res_reason_set" "', argument " "2"" of type '" "string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "clone_res_reason_set" "', argument " "2"" of type '" "string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  if (arg1) (arg1)->reason = *arg2;
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_clone_res_reason_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  clone_res *arg1 = (clone_res *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:clone_res_reason_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_clone_res, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "clone_res_reason_get" "', argument " "1"" of type '" "clone_res *""'"); 
+  }
+  arg1 = reinterpret_cast< clone_res * >(argp1);
+  result = (string *) & ((arg1)->reason);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_clone_res(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  clone_res *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_clone_res")) SWIG_fail;
+  result = (clone_res *)new clone_res();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_clone_res, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_clone_res(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  clone_res *arg1 = (clone_res *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_clone_res",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_clone_res, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_clone_res" "', argument " "1"" of type '" "clone_res *""'"); 
+  }
+  arg1 = reinterpret_cast< clone_res * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *clone_res_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_clone_res, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_extract_kmers__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *result = 0 ;
@@ -10495,28 +10664,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_extract_kmers_get_kmer_db(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  extract_kmers *arg1 = (extract_kmers *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  ulongVec result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_kmer_db",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_kmer_db" "', argument " "1"" of type '" "extract_kmers *""'"); 
-  }
-  arg1 = reinterpret_cast< extract_kmers * >(argp1);
-  result = (arg1)->get_kmer_db();
-  resultobj = swig::from(static_cast< std::vector< unsigned long,std::allocator< unsigned long > > >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_extract_kmers_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   extract_kmers *arg1 = (extract_kmers *) 0 ;
@@ -10554,6 +10701,149 @@ SWIGINTERN PyObject *_wrap_extract_kmers_print_all(PyObject *SWIGUNUSEDPARM(self
   arg1 = reinterpret_cast< extract_kmers * >(argp1);
   (arg1)->print_all();
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_is_equal(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  extract_kmers *arg2 = 0 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  clone_res result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:extract_kmers_is_equal",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_is_equal" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_extract_kmers,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_is_equal" "', argument " "2"" of type '" "extract_kmers &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_is_equal" "', argument " "2"" of type '" "extract_kmers &""'"); 
+  }
+  arg2 = reinterpret_cast< extract_kmers * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "extract_kmers_is_equal" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  result = (arg1)->is_equal(*arg2,arg3);
+  resultobj = SWIG_NewPointerObj((new clone_res(static_cast< const clone_res& >(result))), SWIGTYPE_p_clone_res, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_is_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  extract_kmers *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  clone_res result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:extract_kmers_is_clone",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_is_clone" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_extract_kmers,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "extract_kmers_is_clone" "', argument " "2"" of type '" "extract_kmers &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "extract_kmers_is_clone" "', argument " "2"" of type '" "extract_kmers &""'"); 
+  }
+  arg2 = reinterpret_cast< extract_kmers * >(argp2);
+  result = (arg1)->is_clone(*arg2);
+  resultobj = SWIG_NewPointerObj((new clone_res(static_cast< const clone_res& >(result))), SWIGTYPE_p_clone_res, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_get_header(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  headerInfo result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_header",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_header" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  result = (arg1)->get_header();
+  resultobj = SWIG_NewPointerObj((new headerInfo(static_cast< const headerInfo& >(result))), SWIGTYPE_p_headerInfo, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_get_kmer_db(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  setuLongLess *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_kmer_db",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_kmer_db" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  result = (setuLongLess *) &(arg1)->get_kmer_db();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_setuLongLess, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_extract_kmers_get_kmer_db_as_vector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  extract_kmers *arg1 = (extract_kmers *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  ulongVec *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:extract_kmers_get_kmer_db_as_vector",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_extract_kmers, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_kmers_get_kmer_db_as_vector" "', argument " "1"" of type '" "extract_kmers *""'"); 
+  }
+  arg1 = reinterpret_cast< extract_kmers * >(argp1);
+  result = (ulongVec *) &(arg1)->get_kmer_db_as_vector();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_unsigned_long_std__allocatorT_unsigned_long_t_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -10693,6 +10983,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedLock_swigregister", ScopedLock_swigregister, METH_VARARGS, NULL},
 	 { (char *)"fact", _wrap_fact, METH_VARARGS, NULL},
 	 { (char *)"version", _wrap_version, METH_VARARGS, NULL},
+	 { (char *)"clone_res_res_set", _wrap_clone_res_res_set, METH_VARARGS, NULL},
+	 { (char *)"clone_res_res_get", _wrap_clone_res_res_get, METH_VARARGS, NULL},
+	 { (char *)"clone_res_reason_set", _wrap_clone_res_reason_set, METH_VARARGS, NULL},
+	 { (char *)"clone_res_reason_get", _wrap_clone_res_reason_get, METH_VARARGS, NULL},
+	 { (char *)"new_clone_res", _wrap_new_clone_res, METH_VARARGS, NULL},
+	 { (char *)"delete_clone_res", _wrap_delete_clone_res, METH_VARARGS, NULL},
+	 { (char *)"clone_res_swigregister", clone_res_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_extract_kmers", _wrap_new_extract_kmers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_get_number_key_frames", _wrap_extract_kmers_get_number_key_frames, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_set_number_key_frames", _wrap_extract_kmers_set_number_key_frames, METH_VARARGS, NULL},
@@ -10703,9 +11000,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"extract_kmers_save_kmer_db", _wrap_extract_kmers_save_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_read_kmer_db", _wrap_extract_kmers_read_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_get_db_file_size", _wrap_extract_kmers_get_db_file_size, METH_VARARGS, NULL},
-	 { (char *)"extract_kmers_get_kmer_db", _wrap_extract_kmers_get_kmer_db, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_size", _wrap_extract_kmers_size, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_print_all", _wrap_extract_kmers_print_all, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_is_equal", _wrap_extract_kmers_is_equal, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_is_clone", _wrap_extract_kmers_is_clone, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_get_header", _wrap_extract_kmers_get_header, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_get_kmer_db", _wrap_extract_kmers_get_kmer_db, METH_VARARGS, NULL},
+	 { (char *)"extract_kmers_get_kmer_db_as_vector", _wrap_extract_kmers_get_kmer_db_as_vector, METH_VARARGS, NULL},
 	 { (char *)"delete_extract_kmers", _wrap_delete_extract_kmers, METH_VARARGS, NULL},
 	 { (char *)"extract_kmers_swigregister", extract_kmers_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
@@ -10718,10 +11019,13 @@ static swig_type_info _swigt__p_MutexType = {"_p_MutexType", "MutexType *", 0, 0
 static swig_type_info _swigt__p_ScopedLock = {"_p_ScopedLock", "ScopedLock *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_clone_res = {"_p_clone_res", "clone_res *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_extract_kmers = {"_p_extract_kmers", "extract_kmers *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_foo = {"_p_foo", "foo *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_headerInfo = {"_p_headerInfo", "headerInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_setuLongLess = {"_p_setuLongLess", "setuLongLess *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_unsigned_long_t = {"_p_std__allocatorT_unsigned_long_t", "std::vector< unsigned long >::allocator_type *|std::allocator< unsigned long > *", 0, 0, (void*)0, 0};
@@ -10739,10 +11043,13 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_ScopedLock,
   &_swigt__p_allocator_type,
   &_swigt__p_char,
+  &_swigt__p_clone_res,
   &_swigt__p_difference_type,
   &_swigt__p_extract_kmers,
   &_swigt__p_foo,
+  &_swigt__p_headerInfo,
   &_swigt__p_p_PyObject,
+  &_swigt__p_setuLongLess,
   &_swigt__p_size_type,
   &_swigt__p_std__allocatorT_std__string_t,
   &_swigt__p_std__allocatorT_unsigned_long_t,
@@ -10760,10 +11067,13 @@ static swig_cast_info _swigc__p_MutexType[] = {  {&_swigt__p_MutexType, 0, 0, 0}
 static swig_cast_info _swigc__p_ScopedLock[] = {  {&_swigt__p_ScopedLock, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_clone_res[] = {  {&_swigt__p_clone_res, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_extract_kmers[] = {  {&_swigt__p_extract_kmers, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_foo[] = {  {&_swigt__p_foo, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_headerInfo[] = {  {&_swigt__p_headerInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_setuLongLess[] = {  {&_swigt__p_setuLongLess, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_unsigned_long_t[] = {  {&_swigt__p_std__allocatorT_unsigned_long_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -10781,10 +11091,13 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_ScopedLock,
   _swigc__p_allocator_type,
   _swigc__p_char,
+  _swigc__p_clone_res,
   _swigc__p_difference_type,
   _swigc__p_extract_kmers,
   _swigc__p_foo,
+  _swigc__p_headerInfo,
   _swigc__p_p_PyObject,
+  _swigc__p_setuLongLess,
   _swigc__p_size_type,
   _swigc__p_std__allocatorT_std__string_t,
   _swigc__p_std__allocatorT_unsigned_long_t,

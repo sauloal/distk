@@ -114,7 +114,15 @@ ulong         extract_kmers::get_max_size() {
 }
 
 void          extract_kmers::reserve() {
-    q.reserve(get_max_size() / 4);
+    ulong ms   = get_max_size();
+    ulong fraq = ( ms   / 4             );
+    ulong leng = ( fraq * sizeof(ulong) );
+    if ( leng > pow(2,32) ) { //4Gb
+        fraq = pow(2,32) / sizeof(ulong);
+        leng = ( fraq * sizeof(ulong) );
+    }
+    std::cout << " RESERVING :: MAX SIZE " << ms << " reserving " << fraq << " amounting to " << leng << " bytes" << std::endl;
+    q.reserve( fraq );
 }
 
 ulong         extract_kmers::size() {
@@ -372,7 +380,7 @@ void          extract_kmers::parse_line(                    string   & line    )
                     
                     ++header.num_valid_kmers;
                     if (get_max_size() > 100) {
-                        if ( ( header.num_valid_kmers % 100000 ) == 0 ) {
+                        if ( ( header.num_valid_kmers % 1000000 ) == 0 ) {
                             //std::cout << "  ADDED: " << header.num_valid_kmers << " FROM WHICH " << q.size() << " WERE UNIQUE FROM THE MAXIMUM HYPOTETICAL " << get_max_size() << std::endl;
                             progressRead.print( header.num_valid_kmers );
                             progressKmer.print( q.size()   );
@@ -578,18 +586,73 @@ void          extract_kmers::decoder(                       T        & infhd   )
 #endif //#ifdef _NO_DIFF_ENCODING_
 }
 
-ulongVec      extract_kmers::get_kmer_db() {
+ulong         extract_kmers::get_number_key_frames()                             { return header.number_key_frames; }
+
+void          extract_kmers::set_number_key_frames(   const ulong kf           ) { header.number_key_frames = kf;   }
+
+clone_res     extract_kmers::is_equal( extract_kmers &ek2, bool clone=false ) {
+/*
+struct clone_res {
+    bool   res;
+    string reason;
+};
+*/
+
+    headerInfo header2 = ek2.get_header();
+    //clone_res  cr      = {true, 'OK'};
+    
+    if ( header.kmer_size         == header2.kmer_size         ) { return {false, "Kmer size differ"}; }
+    if ( header.num_uniq_kmers    == header2.num_uniq_kmers    ) { return {false, "Number of unique kmers differ"}; }
+
+    if ( clone ) {
+    if ( header.number_lines      == header2.number_lines      ) { return {false, "Number of lines differ"}; }
+    if ( header.number_key_frames == header2.number_key_frames ) { return {false, "Number of key frames differ"}; }
+    if ( header.key_frames_every  == header2.key_frames_every  ) { return {false, "Frequency of kmers differ"}; }
+    if ( header.num_valid_kmers   == header2.num_valid_kmers   ) { return {false, "Number of valid kmers differ"}; }
+    }
+
+    setuLongLess q2 = ek2.get_kmer_db();
+    
+    if ( q.size() != q2.size() ) { return {false, "Sizes of databases differ"}; }
+    
+    //if ( q != q2 ) { return {false, "Content of databases differ"}; }
+
+    for ( size_t n=0; n < q.size(); ++n ) {
+            if( q[n] != q2[n] ) {
+                return {false, "Content of databases differ"};
+        }
+    }
+    
+    return {true, "OK"};
+}
+
+clone_res     extract_kmers::is_clone( extract_kmers &ek2 ) {
+    return is_equal( ek2 , true );
+}
+
+headerInfo    extract_kmers::get_header() {
+    /*
+    int          kmer_size;
+    ulong        number_lines;
+    ulong        number_key_frames;
+    ulong        key_frames_every;
+    ulong        num_valid_kmers;
+    ulong        num_uniq_kmers;
+     */
+    return header;
+}
+
+setuLongLess &extract_kmers::get_kmer_db() {
+    return q;
+}
+
+ulongVec     &extract_kmers::get_kmer_db_as_vector() {
     /*
      * TODO: return q
      */
     //return ulongVec(q.begin(), q.end());
     return q.get_container();
 }
-
-ulong         extract_kmers::get_number_key_frames()                             { return header.number_key_frames; }
-
-void          extract_kmers::set_number_key_frames(   const ulong kf           ) { header.number_key_frames = kf;   }
-
 
 
 

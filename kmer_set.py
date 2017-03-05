@@ -462,6 +462,32 @@ fact = _kmer_set.fact
 def version():
     return _kmer_set.version()
 version = _kmer_set.version
+class clone_res(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, clone_res, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, clone_res, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["res"] = _kmer_set.clone_res_res_set
+    __swig_getmethods__["res"] = _kmer_set.clone_res_res_get
+    if _newclass:
+        res = _swig_property(_kmer_set.clone_res_res_get, _kmer_set.clone_res_res_set)
+    __swig_setmethods__["reason"] = _kmer_set.clone_res_reason_set
+    __swig_getmethods__["reason"] = _kmer_set.clone_res_reason_get
+    if _newclass:
+        reason = _swig_property(_kmer_set.clone_res_reason_get, _kmer_set.clone_res_reason_set)
+
+    def __init__(self):
+        this = _kmer_set.new_clone_res()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _kmer_set.delete_clone_res
+    __del__ = lambda self: None
+clone_res_swigregister = _kmer_set.clone_res_swigregister
+clone_res_swigregister(clone_res)
+
 class extract_kmers(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, extract_kmers, name, value)
@@ -503,14 +529,26 @@ class extract_kmers(_object):
     def get_db_file_size(self, infile):
         return _kmer_set.extract_kmers_get_db_file_size(self, infile)
 
-    def get_kmer_db(self):
-        return _kmer_set.extract_kmers_get_kmer_db(self)
-
     def size(self):
         return _kmer_set.extract_kmers_size(self)
 
     def print_all(self):
         return _kmer_set.extract_kmers_print_all(self)
+
+    def is_equal(self, ek2, clone):
+        return _kmer_set.extract_kmers_is_equal(self, ek2, clone)
+
+    def is_clone(self, ek2):
+        return _kmer_set.extract_kmers_is_clone(self, ek2)
+
+    def get_header(self):
+        return _kmer_set.extract_kmers_get_header(self)
+
+    def get_kmer_db(self):
+        return _kmer_set.extract_kmers_get_kmer_db(self)
+
+    def get_kmer_db_as_vector(self):
+        return _kmer_set.extract_kmers_get_kmer_db_as_vector(self)
     __swig_destroy__ = _kmer_set.delete_extract_kmers
     __del__ = lambda self: None
 extract_kmers_swigregister = _kmer_set.extract_kmers_swigregister

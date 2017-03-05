@@ -301,6 +301,9 @@ typedef orderedSetAlloc setuLongLess;
 
 template<typename T>
 class orderedSetCls : public std::set< T , std::less<T> > {
+	private:
+		std::vector<T> cp;
+		
     public:
         void reserve(size_t reserve_size) {
             //this->c.reserve(reserve_size);
@@ -309,8 +312,9 @@ class orderedSetCls : public std::set< T , std::less<T> > {
 		void resize(size_t t){
 			reserve(t);
 		}
-		std::vector<T> get_container() {
-			return std::vector<T>(this->begin(), this->end());
+		std::vector<T> &get_container() {
+			cp = std::vector<T>(this->begin(), this->end());
+			return cp;
 		}
 };
 

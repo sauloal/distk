@@ -48,6 +48,11 @@ void version () {
 
 
 
+
+
+
+
+
 extract_kmers::extract_kmers(): clean(0) {
     init1();
 }
@@ -90,9 +95,14 @@ void extract_kmers::init3() {
     }
 
     //cleans first two bits
-    clean        = ((ulong)(pow(2, ((header.kmer_size-1)*2)))-1);
+    //                                size 21
+    ulong vs    = (header.kmer_size-1); // 20
+    ulong bs    = (vs*2);               // 40
+    ulong ps    = (ulong)pow(2, bs);    // 2^40
+          clean = (ps-1);               // 1-(2^40)
 
-    std::cout << "clean " << clean << std::endl;
+    printf( "vs %12lu bs %12lu ps %12lu clean %12lu", vs, bs, ps, clean );
+    std::cout << std::endl;
     
     progressRead = progressBar("reading");
     progressRead.setProgress( false );
@@ -136,7 +146,7 @@ void          extract_kmers::print_all() {
     }
 }
 
-void          extract_kmers::read_one_liner(          const string    &infile  ) {
+void          extract_kmers::read_one_liner(          const string   &infile  ) {
     filestream infhd(infile, 'r');
     read_one_liner( infile, infhd );
     infhd.close();
@@ -314,17 +324,17 @@ void          extract_kmers::parse_line(                    string   & line    )
                         resR = ( resR >> 2 );
 
 #ifdef _DEBUG_
-                        std::cout << " VALID :: S :: resF: " << resF << " resR: " << resR << std::endl;
+                        std::cout << " VALID :: S :: resF: " << resF << " resR: " << resR << " vF: " << vF << std::endl;
 #endif //_DEBUG_
 
-                        resF += (    vF                       );
+                        resF += (    vF                              );
                         resR += ( (3-vF) << ((header.kmer_size-1)*2) );
 
 #ifdef _DEBUG_
                         std::cout << " VALID :: R :: resF: " << resF << " resR: " << resR << std::endl;
 #endif //_DEBUG_
 
-                    } else {
+                    } else { //if ( valid ) {
                         valid = true;
 
                         auto p_begin = line.begin() + (i - header.kmer_size + 1);
@@ -341,7 +351,7 @@ void          extract_kmers::parse_line(                    string   & line    )
                         pvR  = 0;
                         cvR  = 0;
 
-                        for ( unsigned long pos = 0; pos < header.kmer_size; pos++ ) {
+                        for ( unsigned long pos = 0; pos < header.kmer_size; ++pos ) {
                             auto a_pos = p_begin + pos;
 
                             kcF   = *a_pos;
@@ -371,12 +381,15 @@ void          extract_kmers::parse_line(                    string   & line    )
                     resM = ( resF <= resR ) ? resF : resR;
           
                     //std::cout << " INSERTING" << std::endl;
-                    ScopedLock lck(lock);
-#pragma omp critical(dbupdate)
+                    //ScopedLock lck(lock);
+//#pragma omp critical(dbupdate)
                     q.insert(resM);
-                    lck.Unlock();
+                     //lck.Unlock();
                     //std::cout << " INSERTED" << std::endl;
 
+#ifdef _DEBUG_
+                    std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
+#endif
                     
                     ++header.num_valid_kmers;
                     if (get_max_size() > 100) {
@@ -387,10 +400,6 @@ void          extract_kmers::parse_line(                    string   & line    )
                             std::cout << std::endl;
                         }
                     }
-                    
-#ifdef _DEBUG_
-                    std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
-#endif
                 }// if ( valF == 0 ) {
             }//if ( i >= header.kmer_size ) {
         }//for (ulong i = 0; i < ll; i++) {
@@ -586,9 +595,13 @@ void          extract_kmers::decoder(                       T        & infhd   )
 #endif //#ifdef _NO_DIFF_ENCODING_
 }
 
-ulong         extract_kmers::get_number_key_frames()                             { return header.number_key_frames; }
+ulong         extract_kmers::get_number_key_frames()                             {
+    return header.number_key_frames;
+}
 
-void          extract_kmers::set_number_key_frames(   const ulong kf           ) { header.number_key_frames = kf;   }
+void          extract_kmers::set_number_key_frames(   const ulong kf           ) {
+    header.number_key_frames = kf;
+}
 
 clone_res     extract_kmers::is_equal( extract_kmers &ek2, bool clone=false ) {
 /*
@@ -613,17 +626,25 @@ struct clone_res {
 
     setuLongLess q2 = ek2.get_kmer_db();
     
-    if ( q.size() != q2.size() ) { return {false, "Sizes of databases differ"}; }
+    if ( q.size()                 != q2.size()                 ) { return {false, "Sizes of databases differ"}; }
     
     //if ( q != q2 ) { return {false, "Content of databases differ"}; }
 
+    /*
     for ( size_t n=0; n < q.size(); ++n ) {
             if( q[n] != q2[n] ) {
                 return {false, "Content of databases differ"};
         }
     }
-    
     return {true, "OK"};
+    */
+    
+    if ( q == q2 ) {
+        return {true, "OK"};        
+    } else {
+        return {false, "Content of databases differ"};
+    }
+    
 }
 
 clone_res     extract_kmers::is_clone( extract_kmers &ek2 ) {

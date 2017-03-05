@@ -10,9 +10,7 @@
 
 #include "sorted_vector.hpp"
 
-/*
-#include "set_alloc.hpp"
-*/
+//#include "set_alloc.hpp"
 
 //http://en.cppreference.com/w/cpp/numeric/valarray/apply
 //http://en.cppreference.com/w/cpp/algorithm/for_each

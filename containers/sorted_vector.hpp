@@ -19,7 +19,17 @@
 
 
 template<typename T>
+class sorted_vector;
+
+
+template<typename T>
 class sorted_vector {
+private:
+    typedef typename std::vector<T>       Cont;
+    typedef typename Cont::iterator       iterator;
+    Cont                                  elements;
+    //Cont                                  buffer;
+
 public:
     typedef typename Cont::const_iterator const_iterator;
     typedef typename Cont::size_type      size_type;
@@ -27,15 +37,11 @@ public:
     typedef T                             key_type;
 
 private:
-    typedef typename std::vector<T>       Cont;
-    typedef typename Cont::iterator       iterator;
-    Cont                                  elements;
-    //Cont                                  buffer;
     size_t   last_sort;
     size_t   buffer_size;
     size_t   buffer_pos;
     iterator it;
-
+/*
     void sort_full () {
         if ( last_sort != elements.size() ) {
             std::cout << "sort_full :: last_sort: " << last_sort << " elements size: " << elements.size() << std::endl;
@@ -48,10 +54,8 @@ private:
     }
     
     void sort_half () {
-        /*
-        v.reserve(v.size() + distance(v_prime.begin(),v_prime.end()));
-        v.insert(v.end(),v_prime.begin(),v_prime.end());
-        */
+        //v.reserve(v.size() + distance(v_prime.begin(),v_prime.end()));
+        //v.insert(v.end(),v_prime.begin(),v_prime.end());
         if ( last_sort != elements.size() ) {
             std::cout << "sort_half :: last_sort: " << last_sort << " elements size: " << elements.size() << std::endl;
             std::sort(                           elements.begin()+last_sort, elements.end());
@@ -62,7 +66,51 @@ private:
             std::cout << " new size: " << last_sort << std::endl;
         }
     }
+*/
+
+    inline
+    void sort_full () {
+        if ( last_sort != elements.size() ) {
+            printf("sort_full :: last_sort: %12lu elements size: %12lu", last_sort, elements.size());
+            
+            std::sort(elements.begin(), elements.end());
+            
+            it        = std::unique(elements.begin(), elements.end());
+            elements.resize( std::distance(elements.begin(),it) );
+            
+            last_sort = elements.size();
+            
+            printf(" new size: %12lu", last_sort);
+            std::cout << std::endl;
+        }
+    }
     
+    inline
+    void sort_half() {
+        if ( last_sort != elements.size() ) {
+            printf("sort_half :: last_sort: %12lu elements size: %12lu", last_sort, elements.size());
+            
+            //print("before half sort");
+            
+            std::sort(                           elements.begin()+last_sort, elements.end());
+            
+            //print("before inplace merge");
+            
+            std::inplace_merge(elements.begin(), elements.begin()+last_sort, elements.end());
+            it        = std::unique(  elements.begin(), elements.end());
+            //print("mid unique");
+            
+            elements.resize( std::distance(elements.begin(),it) );
+            //print("after unique");
+            
+            last_sort = elements.size();
+            
+            printf(" new size: %12lu", last_sort);
+            std::cout << std::endl;
+        }
+    }
+
+
 public:
 
     sorted_vector(): last_sort(0), buffer_size(1000000), buffer_pos(0) {
@@ -286,9 +334,9 @@ public:
     
     inline
     void reserve(const size_t & t) {
-        std::cout << " reserving memory for " << t << " kmers" << std::endl;
+        printf( " reserving memory for %12lu kmers", t );
         elements.reserve(t);
-        std::cout << " reserved memory for  " << t << " kmers" << std::endl;
+        std::cout << " reserved" << std::endl;
     }
     
     inline
@@ -311,6 +359,20 @@ public:
     inline
     T& operator[](const size_t p){
         return elements[p];
+    }
+
+    inline
+    bool operator==(sorted_vector<T> &c2) {
+        if ( size() != c2.size() ) {
+            return false;
+        } else {
+            for ( size_t n=0; n < size(); ++n ) {
+                if( elements[n] != c2[n] ) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 };
 

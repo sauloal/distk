@@ -4,3 +4,5 @@
 *.matrix
 *.index
 *.gz
+*.jf
+jellyfish*

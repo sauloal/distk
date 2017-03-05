@@ -601,14 +601,14 @@ struct clone_res {
     headerInfo header2 = ek2.get_header();
     //clone_res  cr      = {true, 'OK'};
     
-    if ( header.kmer_size         == header2.kmer_size         ) { return {false, "Kmer size differ"}; }
-    if ( header.num_uniq_kmers    == header2.num_uniq_kmers    ) { return {false, "Number of unique kmers differ"}; }
+    if ( header.kmer_size         != header2.kmer_size         ) { return {false, "Kmer size differ"}; }
+    if ( header.num_uniq_kmers    != header2.num_uniq_kmers    ) { return {false, "Number of unique kmers differ"}; }
 
     if ( clone ) {
-    if ( header.number_lines      == header2.number_lines      ) { return {false, "Number of lines differ"}; }
-    if ( header.number_key_frames == header2.number_key_frames ) { return {false, "Number of key frames differ"}; }
-    if ( header.key_frames_every  == header2.key_frames_every  ) { return {false, "Frequency of kmers differ"}; }
-    if ( header.num_valid_kmers   == header2.num_valid_kmers   ) { return {false, "Number of valid kmers differ"}; }
+    if ( header.number_lines      != header2.number_lines      ) { return {false, "Number of lines differ"}; }
+    if ( header.number_key_frames != header2.number_key_frames ) { return {false, "Number of key frames differ"}; }
+    if ( header.key_frames_every  != header2.key_frames_every  ) { return {false, "Frequency of kmers differ"}; }
+    if ( header.num_valid_kmers   != header2.num_valid_kmers   ) { return {false, "Number of valid kmers differ"}; }
     }
 
     setuLongLess q2 = ek2.get_kmer_db();

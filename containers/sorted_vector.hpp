@@ -20,6 +20,12 @@
 
 template<typename T>
 class sorted_vector {
+public:
+    typedef typename Cont::const_iterator const_iterator;
+    typedef typename Cont::size_type      size_type;
+    typedef T                             value_type;
+    typedef T                             key_type;
+
 private:
     typedef typename std::vector<T>       Cont;
     typedef typename Cont::iterator       iterator;
@@ -32,10 +38,12 @@ private:
 
     void sort_full () {
         if ( last_sort != elements.size() ) {
+            std::cout << "sort_full :: last_sort: " << last_sort << " elements size: " << elements.size() << std::endl;
             std::sort(elements.begin(), elements.end());
-            it = std::unique(elements.begin(), elements.end());
+            it        = std::unique(elements.begin(), elements.end());
             elements.resize( std::distance(elements.begin(),it) );
             last_sort = elements.size();
+            std::cout << " new size: " << last_sort << std::endl;
         }
     }
     
@@ -45,19 +53,17 @@ private:
         v.insert(v.end(),v_prime.begin(),v_prime.end());
         */
         if ( last_sort != elements.size() ) {
+            std::cout << "sort_half :: last_sort: " << last_sort << " elements size: " << elements.size() << std::endl;
             std::sort(                           elements.begin()+last_sort, elements.end());
             std::inplace_merge(elements.begin(), elements.begin()+last_sort, elements.end());
-            it = std::unique(  elements.begin(), elements.end());
+            it        = std::unique(  elements.begin(), elements.end());
             elements.resize( std::distance(elements.begin(),it) );
             last_sort = elements.size();
+            std::cout << " new size: " << last_sort << std::endl;
         }
     }
     
 public:
-    typedef typename Cont::const_iterator const_iterator;
-    typedef typename Cont::size_type      size_type;
-    typedef T                             value_type;
-    typedef T                             key_type;
 
     sorted_vector(): last_sort(0), buffer_size(1000000), buffer_pos(0) {
         //buffer.resize( buffer_size );
@@ -69,8 +75,8 @@ public:
         //buffer[buffer_pos++] = t;
         //std::sort (elements.begin(), elements.end());
         
-        buffer_pos++;
         elements.push_back(t);
+        buffer_pos++;
 
         //if ((elements.size()>0) && ( elements.size() % buffer_size == 0 )) {
         if ( buffer_pos == buffer_size ) {

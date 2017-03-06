@@ -1,6 +1,10 @@
 #ifndef __H_KMER_SET__
 #define __H_KMER_SET__
 
+#ifndef COMMIT_EVERY
+#define COMMIT_EVERY 10000000
+#endif
+
 #include "defs.hpp"
 
 #include "progressbar.hpp"
@@ -99,7 +103,7 @@ class extract_kmers {
         void         init3();
 
         void         reserve();
-        ulong        get_max_size();
+        ulong        get_max_size() const;
         
         progressBar  progressRead;
         progressBar  progressKmer;
@@ -108,12 +112,12 @@ class extract_kmers {
         extract_kmers();
         extract_kmers(    const int ks         );
         //~extract_kmers();
-        ulong         get_number_key_frames();
+        ulong         get_number_key_frames() const;
         void          set_number_key_frames(const ulong      kf      );
         void          read_one_liner(       const string    &infile  );
         void          read_fasta(           const string    &infile  );
         void          read_fastq(           const string    &infile  );
-        void          parse_line(                 string    &line    );
+        void          parse_line(                 string    &line    , ulong seqId );
         void          save_kmer_db(         const string    &outfile );
         void          read_kmer_db(         const string    &infile  );
         ulong         get_db_file_size(     const string    &infile  );

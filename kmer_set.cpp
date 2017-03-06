@@ -119,7 +119,8 @@ extract_kmers::~extract_kmers() {
 }
 */
 
-ulong         extract_kmers::get_max_size() {
+inline
+ulong         extract_kmers::get_max_size() const {
     return pow(4, header.kmer_size);
 }
 
@@ -178,12 +179,26 @@ void          extract_kmers::read_one_liner(          const string   & infile, T
 
         string line;
 
+        ulong seqId = 0;
+        
+#pragma omp parallel
+{
+        #pragma omp single
+        {
         while (infhd.get_line(line)) {
-            //std::cout << "Got line" << std::endl;
-#pragma omp task firstprivate(line)
-            parse_line(line);
-#pragma omp taskwait
+            ++seqId;
+//#pragma omp task num_threads(4) firstprivate(seqId, line)
+//#pragma omp parallel num_threads(4) firstprivate(seqId, line)
+//#pragma omp parallel firstprivate(seqId, line)
+            #pragma omp task firstprivate(seqId, line)
+            {
+                std::cout << "Got line " << seqId << std::endl;
+                parse_line(line, seqId);
+            }//#pragma omp task firstprivate(seqId, line)
         }//while (getline(infhd,line)) {
+        }//#pragma omp single
+}//#pragma omp parallel
+#pragma omp taskwait
 
         std::cout << "TOTAL: " <<  size() << std::endl;
 
@@ -211,7 +226,7 @@ void          extract_kmers::read_fastq(              const string   & infile  )
     infhd.close();
 }
 
-void          extract_kmers::parse_line(                    string   & line    ) {
+void          extract_kmers::parse_line(                    string   & line  , ulong seqId ) {
     ulong ll         = line.length();
 
 #ifdef _DEBUG_
@@ -382,24 +397,30 @@ void          extract_kmers::parse_line(                    string   & line    )
           
                     //std::cout << " INSERTING" << std::endl;
                     //ScopedLock lck(lock);
-//#pragma omp critical(dbupdate)
-                    q.insert(resM);
-                     //lck.Unlock();
-                    //std::cout << " INSERTED" << std::endl;
+                    #pragma omp critical (dbupdate)
+                    {
+                        q.insert(resM);
+                        ++header.num_valid_kmers;
 
 #ifdef _DEBUG_
                     std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
 #endif
                     
-                    ++header.num_valid_kmers;
                     if (get_max_size() > 100) {
-                        if ( ( header.num_valid_kmers % 1000000 ) == 0 ) {
-                            //std::cout << "  ADDED: " << header.num_valid_kmers << " FROM WHICH " << q.size() << " WERE UNIQUE FROM THE MAXIMUM HYPOTETICAL " << get_max_size() << std::endl;
+                        if ( ( header.num_valid_kmers % COMMIT_EVERY ) == 0 ) {
+#ifdef _OPENMP
+                            std::cout << seqId << " " << (omp_get_thread_num()+1) << " / " << omp_get_num_threads() << " ADDED: " << header.num_valid_kmers << " FROM WHICH " << q.size() << " WERE UNIQUE FROM THE MAXIMUM HYPOTETICAL " << get_max_size() << std::endl;
+#else
+                            std::cout << seqId <<                                                                      " ADDED: " << header.num_valid_kmers << " FROM WHICH " << q.size() << " WERE UNIQUE FROM THE MAXIMUM HYPOTETICAL " << get_max_size() << std::endl;
+#endif
                             progressRead.print( header.num_valid_kmers );
-                            progressKmer.print( q.size()   );
+                            progressKmer.print( q.size()               );
                             std::cout << std::endl;
                         }
                     }
+                                        //lck.Unlock();
+                    //std::cout << " INSERTED" << std::endl;
+                    }//#pragma omp critical (dbupdate)
                 }// if ( valF == 0 ) {
             }//if ( i >= header.kmer_size ) {
         }//for (ulong i = 0; i < ll; i++) {
@@ -595,7 +616,7 @@ void          extract_kmers::decoder(                       T        & infhd   )
 #endif //#ifdef _NO_DIFF_ENCODING_
 }
 
-ulong         extract_kmers::get_number_key_frames()                             {
+ulong         extract_kmers::get_number_key_frames()                             const {
     return header.number_key_frames;
 }
 

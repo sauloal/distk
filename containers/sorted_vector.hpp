@@ -15,6 +15,11 @@
 #include <set>
 #include <stdint.h> // C99 or C++0x or C++ TR1 will have this header. ToDo: Change to <cstdint> when C++0x broader support gets under way.
 
+#ifndef COMMIT_EVERY
+#define COMMIT_EVERY 10000000
+#endif
+
+
 //#include "set_alloc.hpp"
 
 
@@ -113,7 +118,7 @@ private:
 
 public:
 
-    sorted_vector(): last_sort(0), buffer_size(1000000), buffer_pos(0) {
+    sorted_vector(): last_sort(0), buffer_size(COMMIT_EVERY), buffer_pos(0) {
         //buffer.resize( buffer_size );
     }
     

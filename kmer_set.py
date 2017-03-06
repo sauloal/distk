@@ -406,6 +406,9 @@ class ulongVec(_object):
 ulongVec_swigregister = _kmer_set.ulongVec_swigregister
 ulongVec_swigregister(ulongVec)
 
+
+_kmer_set.COMMIT_EVERY_swigconstant(_kmer_set)
+COMMIT_EVERY = _kmer_set.COMMIT_EVERY
 class MutexType(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, MutexType, name, value)
@@ -517,8 +520,8 @@ class extract_kmers(_object):
     def read_fastq(self, infile):
         return _kmer_set.extract_kmers_read_fastq(self, infile)
 
-    def parse_line(self, line):
-        return _kmer_set.extract_kmers_parse_line(self, line)
+    def parse_line(self, line, seqId):
+        return _kmer_set.extract_kmers_parse_line(self, line, seqId)
 
     def save_kmer_db(self, outfile):
         return _kmer_set.extract_kmers_save_kmer_db(self, outfile)

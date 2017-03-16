@@ -19,6 +19,18 @@
 #define COMMIT_EVERY 10000000
 #endif
 
+/*
+TODO:
+    TRY:
+        https://stackoverflow.com/questions/33766818/how-can-i-create-shared-stdvectorstdstring-using-mmap
+        https://gist.github.com/ADKosm/798bf4caebbc5e087d86
+        
+        http://paste.lisp.org/display/19402
+        
+        https://github.com/johannesthoma/mmap_allocator
+        
+        * https://github.com/alecbenzer/mmap-allocator
+*/
 
 //#include "set_alloc.hpp"
 
@@ -84,6 +96,9 @@ private:
             elements.resize( std::distance(elements.begin(),it) );
             
             last_sort = elements.size();
+
+            //elements.shrink_to_fit();
+            elements.reserve(last_sort + buffer_size);
             
             printf(" new size: %12lu", last_sort);
             std::cout << std::endl;
@@ -109,6 +124,9 @@ private:
             //print("after unique");
             
             last_sort = elements.size();
+            
+            //elements.shrink_to_fit();
+            elements.reserve(last_sort + buffer_size);
             
             printf(" new size: %12lu", last_sort);
             std::cout << std::endl;
@@ -378,6 +396,32 @@ public:
             }
             return true;
         }
+    }
+
+    inline void close() {
+        sort_half();
+    }
+    
+    inline
+    bool extend(sorted_vector<T> &c2) {
+        /*
+        if ( size() != c2.size() ) {
+            return false;
+        } else {
+            for ( size_t n=0; n < size(); ++n ) {
+                if( elements[n] != c2[n] ) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        */
+        c2.close();
+        close();
+        size_t leb = elements.size();
+        size_t lc2 = c2.size();
+        copy(c2.begin(), c2.end(), back_inserter(elements));
+        close();
     }
 };
 

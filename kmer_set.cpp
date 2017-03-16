@@ -235,6 +235,12 @@ void          extract_kmers::parse_line(                    string   & line  , u
     }
 #endif
 
+#ifdef _OPENMP
+    setuLongLess *r = new setuLongLess();
+#else
+    setuLongLess *r = &q;
+#endif
+
     ulong resF       = 0;
     ulong resR       = 0;
     ulong resM       = 0;
@@ -253,14 +259,18 @@ void          extract_kmers::parse_line(                    string   & line  , u
     char  c;
     int   vF;
 
+    ulong num_valid_kmers = 0;
+    ulong number_lines    = 0;
+    ulong max_size        = get_max_size();
+    
     if ( ll >= header.kmer_size ) {
         /*
          * TODO: Add mutex
          */
-        header.number_lines          += 1;
+        ++number_lines;
 
 #ifdef _PRINT_LINE_LENGTHS_
-        std::cout << " Line :: Length: " << ll << " Num: " << header.number_lines;
+        std::cout << " Line :: Length: " << ll << " Num: " << number_lines;
 #endif
 
 
@@ -396,35 +406,40 @@ void          extract_kmers::parse_line(                    string   & line  , u
                     resM = ( resF <= resR ) ? resF : resR;
           
                     //std::cout << " INSERTING" << std::endl;
-                    //ScopedLock lck(lock);
-                    #pragma omp critical (dbupdate)
-                    {
-                        q.insert(resM);
-                        ++header.num_valid_kmers;
+                    r->insert(resM);
+                    ++num_valid_kmers;
 
 #ifdef _DEBUG_
-                    std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n" << std::endl;
+                    std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n\n";
 #endif
-                    
-                    if (get_max_size() > 100) {
-                        if ( ( header.num_valid_kmers % COMMIT_EVERY ) == 0 ) {
+                    if (max_size > 100) {
+                        if ( ( num_valid_kmers % COMMIT_EVERY ) == 0 ) {
+                            std::cout << seqId;
 #ifdef _OPENMP
-                            std::cout << seqId << " " << (omp_get_thread_num()+1) << " / " << omp_get_num_threads() << " ADDED: " << header.num_valid_kmers << " FROM WHICH " << q.size() << " WERE UNIQUE FROM THE MAXIMUM HYPOTETICAL " << get_max_size() << std::endl;
-#else
-                            std::cout << seqId <<                                                                      " ADDED: " << header.num_valid_kmers << " FROM WHICH " << q.size() << " WERE UNIQUE FROM THE MAXIMUM HYPOTETICAL " << get_max_size() << std::endl;
+                            std::cout << " " << (omp_get_thread_num()+1) << " / " << omp_get_num_threads();
 #endif
-                            progressRead.print( header.num_valid_kmers );
-                            progressKmer.print( q.size()               );
+                            std::cout << " ADDED: "     << num_valid_kmers
+                                      << " FROM WHICH " << r->size()
+                                      << " WERE UNIQUE FROM THE MAXIMUM HYPOTETICAL " << max_size << "\n";
+                            
+                            progressRead.print( num_valid_kmers );
+                            progressKmer.print( r->size()       );
                             std::cout << std::endl;
                         }
                     }
-                                        //lck.Unlock();
                     //std::cout << " INSERTED" << std::endl;
-                    }//#pragma omp critical (dbupdate)
                 }// if ( valF == 0 ) {
             }//if ( i >= header.kmer_size ) {
         }//for (ulong i = 0; i < ll; i++) {
     }//if ( line.length() >= header.kmer_size ) {
+    #pragma omp critical (dbupdate)
+    {
+        header.num_valid_kmers += num_valid_kmers;
+        header.number_lines    += number_lines;
+        #ifdef _OPENMP
+        q.extend(*r);
+        #endif
+    }
 }
 
 void          extract_kmers::save_kmer_db(            const string   & outfile ) {

@@ -2,6 +2,7 @@ SHELL:=/bin/bash
 
 PYPY=$(shell command -v pypy 2> /dev/null)
 GZIP=$(shell command -v pigz 2> /dev/null)
+TIME=$(shell command -v /usr/bin/time 2> /dev/null)
 
 ifdef PYPY
 PYTHON=pypy
@@ -15,6 +16,12 @@ GUNZIP=pigz -d
 else
 GZIP=gzip
 GUNZIP=gunzip
+endif
+
+ifdef TIME
+TIME=/usr/bin/time -v
+else
+TIME=time
 endif
 
 all: run
@@ -51,38 +58,38 @@ check: check_fasta check_kmer check_index check_matrix
 
 
 test01.fasta.gz:
-	$(PYTHON) ./debruijn.py  1 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py  1 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test02.fasta.gz:
-	$(PYTHON) ./debruijn.py  3 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py  3 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test03.fasta.gz:
-	$(PYTHON) ./debruijn.py  5 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py  5 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test04.fasta.gz:
-	$(PYTHON) ./debruijn.py  7 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py  7 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test05.fasta.gz:
-	$(PYTHON) ./debruijn.py  9 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py  9 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test06.fasta.gz:
-	$(PYTHON) ./debruijn.py 11 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py 11 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test07.fasta.gz:
-	$(PYTHON) ./debruijn.py 13 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py 13 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test08.fasta.gz:
-	$(PYTHON) ./debruijn.py 15 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py 15 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 ifdef SERVER
 test09.fasta.gz:
-	$(PYTHON) ./debruijn.py 17 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py 17 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test10.fasta.gz:
-	$(PYTHON) ./debruijn.py 19 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py 19 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 
 test11.fasta.gz:
-	$(PYTHON) ./debruijn.py 21 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
+	$(TIME) $(PYTHON) ./debruijn.py 21 | $(GZIP) -1c > $@.tmp && mv $@.tmp $@
 endif
 
 test12.fasta.gz:
@@ -123,18 +130,18 @@ test19.fasta.gz:
 test01: test01.fasta.gz
 	@#debruijn - all 1 mers
 	$(eval TEST_NUM=1)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -143,18 +150,18 @@ endif
 test02: test02.fasta.gz
 	@#debruijn - all 3 mers
 	$(eval TEST_NUM=2)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -163,18 +170,18 @@ endif
 test03: test03.fasta.gz
 	@#debruijn - all 5 mers
 	$(eval TEST_NUM=3)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -183,18 +190,18 @@ endif
 test04: test04.fasta.gz
 	@#debruijn - all 7 mers
 	$(eval TEST_NUM=4)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -203,18 +210,18 @@ endif
 test05: test05.fasta.gz
 	@#debruijn - all 9 mers
 	$(eval TEST_NUM=5)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -223,18 +230,18 @@ endif
 test06: test06.fasta.gz
 	@#debruijn - all 11 mers
 	$(eval TEST_NUM=6)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -243,18 +250,18 @@ endif
 test07: test07.fasta.gz
 	@#debruijn - all 13 mers
 	$(eval TEST_NUM=7)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -264,83 +271,83 @@ ifdef SERVER
 test08: test08.fasta.gz
 	@#debruijn - all 15 mers
 	$(eval TEST_NUM=8)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 
 
 test09: test09.fasta.gz
 	@#debruijn - all 17 mers
 	$(eval TEST_NUM=9)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 
 test10: test10.fasta.gz
 	@#debruijn - all 19 mers
 	$(eval TEST_NUM=10)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 
 test11: test11.fasta.gz
 	@#debruijn - all 21 mers
 	$(eval TEST_NUM=11)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 endif
 
 
 test12: test12.fasta.gz
 	@#all triplets - one each line
 	$(eval TEST_NUM=12)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
 
 
 test13: test13.fasta.gz
 	@#short sequence
 	$(eval TEST_NUM=13)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -349,18 +356,18 @@ endif
 test14: test14.fasta.gz
 	@#short sequence 2
 	$(eval TEST_NUM=14)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -369,18 +376,18 @@ endif
 test15: test15.fasta.gz
 	@#1 N
 	$(eval TEST_NUM=15)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -389,18 +396,18 @@ endif
 test16: test16.fasta.gz
 	@#2 Ns
 	$(eval TEST_NUM=16)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -409,18 +416,18 @@ endif
 test17: test17.fasta.gz
 	@#tomato chromosome 00
 	$(eval TEST_NUM=17)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -429,18 +436,18 @@ endif
 test18: test18.fasta.gz
 	@#all tomato chromosomes as one
 	$(eval TEST_NUM=18)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif
@@ -449,18 +456,18 @@ endif
 test19: test19.fasta.gz
 	@#all tomato chromosomes - one each line
 	$(eval TEST_NUM=19)
-	./run_test.py write  "3" $(TEST_NUM) && ./run_test.py read  "3" $(TEST_NUM)
-	./run_test.py write  "5" $(TEST_NUM) && ./run_test.py read  "5" $(TEST_NUM)
-	./run_test.py write  "7" $(TEST_NUM) && ./run_test.py read  "7" $(TEST_NUM)
-	./run_test.py write  "9" $(TEST_NUM) && ./run_test.py read  "9" $(TEST_NUM)
-	./run_test.py write "11" $(TEST_NUM) && ./run_test.py read "11" $(TEST_NUM)
-	./run_test.py write "13" $(TEST_NUM) && ./run_test.py read "13" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "3" $(TEST_NUM) && $(TIME) ./run_test.py read  "3" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "5" $(TEST_NUM) && $(TIME) ./run_test.py read  "5" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "7" $(TEST_NUM) && $(TIME) ./run_test.py read  "7" $(TEST_NUM)
+	$(TIME) ./run_test.py write  "9" $(TEST_NUM) && $(TIME) ./run_test.py read  "9" $(TEST_NUM)
+	$(TIME) ./run_test.py write "11" $(TEST_NUM) && $(TIME) ./run_test.py read "11" $(TEST_NUM)
+	$(TIME) ./run_test.py write "13" $(TEST_NUM) && $(TIME) ./run_test.py read "13" $(TEST_NUM)
 ifdef SERVER
 	@echo SERVER ENABLED. CALCULATING KMERS 17-21 FOR TEST $(TEST_NUM)
-	./run_test.py write "15" $(TEST_NUM) && ./run_test.py read "15" $(TEST_NUM)
-	./run_test.py write "17" $(TEST_NUM) && ./run_test.py read "17" $(TEST_NUM)
-	./run_test.py write "19" $(TEST_NUM) && ./run_test.py read "19" $(TEST_NUM)
-	./run_test.py write "21" $(TEST_NUM) && ./run_test.py read "21" $(TEST_NUM)
+	$(TIME) ./run_test.py write "15" $(TEST_NUM) && $(TIME) ./run_test.py read "15" $(TEST_NUM)
+	$(TIME) ./run_test.py write "17" $(TEST_NUM) && $(TIME) ./run_test.py read "17" $(TEST_NUM)
+	$(TIME) ./run_test.py write "19" $(TEST_NUM) && $(TIME) ./run_test.py read "19" $(TEST_NUM)
+	$(TIME) ./run_test.py write "21" $(TEST_NUM) && $(TIME) ./run_test.py read "21" $(TEST_NUM)
 else
 	@echo SERVER DISABLED. SKIPPING KMERS 17-21 FOR TEST $(TEST_NUM)
 endif

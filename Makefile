@@ -70,7 +70,7 @@ LIBS+=$(OBJ_FOLDER)/gzstream.o
 all:_$(BASE).so
 
 clean:
-	rm -v $(BASE)_wrap.* $(BASE).py $(BASE).pyc _$(BASE).so $(OBJ_FOLDER)/*.o core || true
+	rm -v $(SRC_FOLDER)/$(BASE)_wrap.* $(BASE).py $(BASE).pyc _$(BASE).so $(OBJ_FOLDER)/*.o core || true
 
 print:
 	@echo "PROG_VERSION        '$(__PROG_VERSION__)'"
@@ -94,8 +94,8 @@ test:
 debug:
 	./debug.sh
 
-$(BASE)_wrap.cpp: $(BASE).i $(BASE).cpp $(BASE).hpp
-	swig -c++ -python -outdir $(PWD) -I$(PWD) -o $@ $(BASE).i
+$(SRC_FOLDER)/$(BASE)_wrap.cpp: $(SRC_FOLDER)/$(BASE).i $(SRC_FOLDER)/$(BASE).cpp $(SRC_FOLDER)/$(BASE).hpp
+	swig -c++ -python -outdir $(PWD) -I$(PWD) -I$(SRC_FOLDER) -o $@ $(SRC_FOLDER)/$(BASE).i
 
 $(OBJ_FOLDER)/%.o: $(SRC_FOLDER)/%.cpp
 	$(CPP) $(CPP_OPTS_F) $(CPP_INCL_F) $(CPP_VARS_F) -c $< -o $@

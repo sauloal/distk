@@ -278,24 +278,24 @@ void          extract_kmers::parse_line(                    string   & line  , u
         std::cout << " Line Loaded" << std::endl;
 #endif
 
-        for ( long i = 0; i < ll; i++ ) {
+        for ( unsigned long i = 0; i < ll; i++ ) {
             c        = line[i];
             vF       = dictF[c];
             line[i]  = vF;
 
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
             std::cout << "i " << i << " c " << c << " (" << (int)c << ") "<< " vF " << vF << std::endl;
-#endif
+//#endif
 
             if ( vF == 78 ) {
                 valid = false;
 
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                 if ( line.length() <= 100 ) {
                     std::cout << " BAD"                          << std::endl;
                     //std::cout << "  VALS  :           " << valsF << std::endl;
                 }
-#endif
+//#endif
                 long js = i - header.kmer_size + 1;
                 long je = i + header.kmer_size;
 
@@ -303,9 +303,9 @@ void          extract_kmers::parse_line(                    string   & line  , u
                 if ( js >= ll ) { js =  0; }
                 if ( je >= ll ) { je = ll; }
 
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                 std::cout << "   js " << js << " je " << je << std::endl;
-#endif
+//#endif
 
                 tainted = je;
             }//if ( vF == 78 ) {
@@ -313,51 +313,51 @@ void          extract_kmers::parse_line(                    string   & line  , u
 
             if ( i < ( header.kmer_size-1 ) ) {
                 valid = false;
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                 std::cout << " seq too small  : " << i << " <  " << (header.kmer_size-1) << std::endl;
-#endif
+//#endif
             } else {
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                 std::cout << " seq long enough: " << i << " >= " << (header.kmer_size-1) << std::endl;
-#endif
+//#endif
                 bool valF = (i < tainted);
 
                 if ( valF ) {
                     valid = false;
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                     std::cout << "  position not valid. i: " << i << " tainted: " << tainted << std::endl;
-#endif
+//#endif
 
                 } else {
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                     std::cout << "  position valid" << std::endl;
-#endif
+//#endif
 
                     if ( valid ) {
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                         std::cout << " VALID :: B :: resF: " << resF << " resR: " << resR << std::endl;
-#endif //_DEBUG_
+//#endif //_DEBUG_
 
                         resF &= clean;
                             //resR &= clean;
 
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                         std::cout << " VALID :: & :: resF: " << resF << " resR: " << resR << std::endl;
-#endif //_DEBUG_
+//#endif //_DEBUG_
 
                         resF = ( resF << 2 );
                         resR = ( resR >> 2 );
 
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                         std::cout << " VALID :: S :: resF: " << resF << " resR: " << resR << " vF: " << vF << std::endl;
-#endif //_DEBUG_
+//#endif //_DEBUG_
 
                         resF += (    vF                              );
                         resR += ( (3-vF) << ((header.kmer_size-1)*2) );
 
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
                         std::cout << " VALID :: R :: resF: " << resF << " resR: " << resR << std::endl;
-#endif //_DEBUG_
+//#endif //_DEBUG_
 
                     } else { //if ( valid ) {
                         valid = true;
@@ -385,21 +385,40 @@ void          extract_kmers::parse_line(                    string   & line  , u
                             cvF   = (kcF << ((header.kmer_size - pos - 1)*2));
                             cvR   = (kcR << (                    pos     *2));
 
-#ifdef _DEBUG_
+//#ifdef _DEBUG_
+/*
                             std::cout << "  I: "     << i    << " POS : "   << (pos+1)
                                       << " VALID: "  << valF
                                       << " SUM BF: " << resF << " SUM BR: " << resR
                                       << " KCF: "    << kcF  << " KCR: "    << kcR
                                       << " VALF: "   << cvF  << " VALR: "   << cvR
                                       << " PVF: "    << pvF  << " PVR: "    << pvR;
-#endif
+*/
+                            printf (
+                                "\
+  I     : %12lu POS   : %12lu VALID: %5s\n\
+  SUM BF: %12lu SUM BR: %12lu\n\
+  KCF   : %12lu KCR   : %12lu\n\
+  VALF  : %12lu VALR  : %12lu\n\
+  PVF   : %12lu PVR   : %12lu\n",
+                                        i, (pos+1),  (valF ? "true" : "false"), resF, resR, kcF,   kcR,      cvF,      cvR,     pvF,     pvR
+                            );
+                                      
+
+//#endif
 
                             resF += cvF;
                             resR += cvR;
 
-#ifdef _DEBUG_
-                            std::cout << " SUM AF: " << resF << " SUM AR: " << resR << std::endl;
-#endif
+//#ifdef _DEBUG_
+                            //std::cout << " SUM AF: " << resF << " SUM AR: " << resR << std::endl;
+                            printf(
+                                "\
+  SUM AF: %12lu SUM AR: %12lu\n",
+                                         resF,       resR
+                            );
+                            std::cout << std::endl;
+//#endif
                         } //for ( unsigned int pos = 0; pos < header.kmer_size; pos++ ) {
                     } // else if ( valid ) {
 
@@ -409,9 +428,15 @@ void          extract_kmers::parse_line(                    string   & line  , u
                     r->insert(resM);
                     ++num_valid_kmers;
 
-#ifdef _DEBUG_
-                    std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n\n";
-#endif
+//#ifdef _DEBUG_
+                    //std::cout << "  RESF: " << resF  << " RESR  : " << resR << " RESM : " << resM << "\n\n";
+                    printf(
+                        "\
+  RESF  : %12lu RESR  : %12lu RESM : %lu\n\n",
+                                resF,       resR,      resM
+                    );
+                    std::cout << std::endl;
+//#endif
                     if (max_size > 100) {
                         if ( ( num_valid_kmers % COMMIT_EVERY ) == 0 ) {
                             std::cout << seqId;

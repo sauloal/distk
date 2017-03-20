@@ -4,6 +4,8 @@ __PROG_VERSION__=$(shell git rev-list --all --count && git describe --tags --alw
 __COMPILE_DATE__=$(shell date)
 
 CPP:=g++
+OBJ_FOLDER:=obj
+SRC_FOLDER:=src
 
 
 CPP_VARS_F=$(CPP_VARS) -D__COMPILE_DATE__="$(__COMPILE_DATE__)"
@@ -54,13 +56,13 @@ else
 CPP_OPTS_F+=-Og -g -D_DEBUG_
 endif
 
-LIBS=$(BASE).o
-LIBS+=$(BASE)_wrap.o
-LIBS+=kmer_set_compression.o
-LIBS+=fileholder.o
-LIBS+=merger.o
-LIBS+=tools.o
-LIBS+=gzstream.o
+LIBS=$(OBJ_FOLDER)/$(BASE).o
+LIBS+=$(OBJ_FOLDER)/$(BASE)_wrap.o
+LIBS+=$(OBJ_FOLDER)/kmer_set_compression.o
+LIBS+=$(OBJ_FOLDER)/fileholder.o
+LIBS+=$(OBJ_FOLDER)/merger.o
+LIBS+=$(OBJ_FOLDER)/tools.o
+LIBS+=$(OBJ_FOLDER)/gzstream.o
 
 
 
@@ -68,7 +70,7 @@ LIBS+=gzstream.o
 all:_$(BASE).so
 
 clean:
-	rm -v $(BASE)_wrap.* $(BASE).py $(BASE).pyc _$(BASE).so *.o core || true
+	rm -v $(BASE)_wrap.* $(BASE).py $(BASE).pyc _$(BASE).so $(OBJ_FOLDER)/*.o core || true
 
 print:
 	@echo "PROG_VERSION        '$(__PROG_VERSION__)'"
@@ -95,10 +97,10 @@ debug:
 $(BASE)_wrap.cpp: $(BASE).i $(BASE).cpp $(BASE).hpp
 	swig -c++ -python -outdir $(PWD) -I$(PWD) -o $@ $(BASE).i
 
-%.o: %.cpp
+$(OBJ_FOLDER)/%.o: $(SRC_FOLDER)/%.cpp
 	$(CPP) $(CPP_OPTS_F) $(CPP_INCL_F) $(CPP_VARS_F) -c $< -o $@
 
-gzstream.o: gzstream/gzstream/gzstream.C
+$(OBJ_FOLDER)/gzstream.o: gzstream/gzstream/gzstream.C
 	$(CPP) $(CPP_OPTS_F) $(CPP_INCL_F) $(CPP_VARS_F) -c $< -o $@
 
 _$(BASE).so: $(LIBS)
